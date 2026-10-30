@@ -417,6 +417,39 @@ public final class Conjugator: @unchecked Sendable {
         return result
     }
 
+    // MARK: - Raw Inference Adapter
+
+    /// Shared locked inference path; nonpersonal forms use the model's "-" key.
+    func rawInferredForm(
+        _ input: String, voice: Voice, mode: Mode, tense: Tense,
+        person: Person?, homonymIndex: Int?
+    ) -> String? {
+        let input = input.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !input.isEmpty else { return nil }
+        lock.lock()
+        defer { lock.unlock() }
+        let key = resolveKey(input, homonymIndex: homonymIndex)
+        let personKey: String
+        if mode == .participe {
+            guard person == nil else { return nil }
+            personKey = "-"
+        } else {
+            guard let person = person else { return nil }
+            personKey = person.rawValue
+        }
+        let slot = "\(voice.rawValue)|\(mode.rawValue)|\(tense.rawValue)|\(personKey)"
+        guard engine.supportedGuessForms.contains(slot),
+              key.allSatisfy({ engine.charToIdx[$0] != nil }) else { return nil }
+        let cacheKey = "rawInference|" + slot
+        if let cached = cache.get(verb: key, formKey: cacheKey) { return cached }
+        guard let prediction = engine.predict(
+            infinitive: key, voice: voice.rawValue, mode: mode.rawValue,
+            tense: tense.rawValue, person: personKey, useExceptions: false
+        ), !prediction.isEmpty else { return nil }
+        cache.set(verb: key, formKey: cacheKey, value: prediction)
+        return prediction
+    }
+
     // MARK: - Form Splitting
 
     /// Extract the primary (first) form from a raw prediction that may
@@ -1120,7 +1153,7 @@ public final class Conjugator: @unchecked Sendable {
     // MARK: - Gérondif
 
     /// The gérondif tense → source participle tense mapping.
-    private static let gerondifSourceTense: [Tense: Tense] = [
+    static let gerondifSourceTense: [Tense: Tense] = [
         .gerondifPresent:                .present,
         .gerondifPasseMasculinSingulier: .passeCompoundMasculinSingulier,
         .gerondifPasseFemininSingulier:  .passeCompoundFemininSingulier,

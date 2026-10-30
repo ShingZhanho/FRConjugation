@@ -158,6 +158,72 @@ let all: [Mode: [Tense: [Person: String]]] = fr.conjugate("aller",
 let full: [Voice: [Mode: [Tense: [Person: String]]]]? = fr.conjugate("battre")
 ```
 
+#### Experimental inference and guessing
+
+Each family has a raw neural API and a catalogue-first fallback API:
+
+| Catalogue API | Raw prediction | Catalogue-first guess |
+|---|---|---|
+| `conjugate()` | `rawInferredConjugation()` | `guessConjugation()` |
+| `participle()` | `rawInferredParticiple()` | `guessParticiple()` |
+| `participles()` | `rawInferredParticiples()` | `guessParticiples()` |
+| `gerondif()` | `rawInferredGerondif()` | `guessGerondif()` |
+
+Raw methods bypass per-verb availability checks and correction exceptions. They
+accept any nonempty model-supported text, lowercase it, and trim surrounding
+whitespace. Unsupported input or globally unsupported form combinations return
+`nil` (or an empty collection). Predictions can contain `;` alternatives,
+incorrect French, or truncated output under the existing 50-step decoder limit.
+
+Guess methods call the matching catalogue API first and preserve every available
+primary/corrected answer. They infer only missing entries. This also applies to
+bulk collections, so a known defective verb can gain inferred forms absent from
+its catalogue entry. Use catalogue methods when source-attested availability is
+required. All existing catalogue methods remain unchanged.
+
+```swift
+// Finite forms retain conjugate's signatures and Person argument.
+fr.guessConjugation("télétravailler", voice: .activeAvoir, mode: .indicatif,
+                    tense: .present, person: .firstSingularMasculine)
+fr.rawInferredConjugation("faire", voice: .pronominal, mode: .subjonctif,
+                          tense: .present, person: .thirdPluralFeminine)
+
+// Participle gender/number is encoded in Tense; no Person is required.
+fr.guessParticiple("enquêter", voice: .activeAvoir, tense: .passeFemininSingulier)
+// -> "enquêtée", preserving the catalogue correction
+let rawParts = fr.rawInferredParticiples("blorper", voice: .activeAvoir)
+let parts = fr.guessParticiples("enquêter", voice: .activeAvoir)
+
+// Gérondifs use the existing gerondifPresent / gerondifPasse... tense cases.
+fr.guessGerondif("parler", voice: .activeAvoir, tense: .gerondifPresent)
+// -> "en parlant"
+fr.rawInferredGerondif("blorper", voice: .activeAvoir,
+                       tense: .gerondifPasseFemininPluriel)
+
+// Async single-form overloads also match each catalogue family.
+let guessedPart = await fr.guessParticiple("podcaster", voice: .activeAvoir,
+                                          tense: .passeMasculinSingulier)
+```
+
+The conjugation inference APIs have all five synchronous and two asynchronous
+`conjugate` overloads, including `homonymIndex`. They handle finite forms only:
+`.participe` requests return `nil`/empty, and their bulk results contain no
+participles or gérondifs. Nonpersonal collections use `[Tense: String]`, matching
+`participles()`, and never duplicate values under person keys. The single-form
+participle/gérondif APIs have sync and async variants; participle collections
+have the existing synchronous collection shape. Raw gérondifs prepend `en ` to
+every alternative in their raw source participle.
+
+Catalogue lookup retains the matching catalogue method's exact input and primary
+answer semantics. Only raw fallback normalizes input; known homonyms follow the
+same index resolution as catalogue methods. Raw caches remain separate from
+corrected catalogue predictions, and inference does not change verb membership
+or source structure queries.
+
+See the [evaluation, references and reproduction commands](Evaluations/GuessConjugation/README.md)
+for measured accuracy and its limits. Raw inference has no general accuracy
+guarantee on unknown text.
+
 #### Variant (Alternative) Forms
 
 Some conjugated forms have alternative spellings (e.g. 1990 reform
@@ -228,6 +294,11 @@ fr.conjugateAlternativeWithPronoun("abreger", voice: .activeAvoir,
 // -> "j'abregeai"  (alternative spelling with pronoun)
 ```
 
+`blocksElisionAndLiaison()` reports lexical blocking separately from
+`isHAspire()`, including the non-h initials *ululer* and *yoyoter*. Pronoun
+construction preserves `je ulule` / `je yoyote` while allowing auxiliary elision
+in `j'ai ululé` / `j'ai yoyoté` and passive `j'étais haché`.
+
 All pronoun methods have async overloads.
 
 #### Homonyms
@@ -278,6 +349,11 @@ let parts: [Tense: String] = fr.participles("prendre", voice: .activeAvoir)
 //  .passeFemininSingulier: "prise", ...]
 ```
 
+Passive present participles use the gendered `.presentMasculinSingulier`,
+`.presentFemininSingulier`, `.presentMasculinPluriel`, and
+`.presentFemininPluriel` tenses. A generic `.present` request returns `nil` when
+that voice has only gendered present slots.
+
 #### Gérondif
 
 The gérondif is derived from participles by prepending *en*.  Use the
@@ -295,6 +371,10 @@ fr.gerondif("parler", voice: .activeAvoir, tense: .gerondifPasseMasculinSingulie
 fr.gerondif("xyzzy", voice: .activeAvoir, tense: .gerondifPresent)
 // -> nil
 ```
+
+When a voice has only gendered present participles and no generic `.present`
+slot, `.gerondifPresent` returns `nil`; no default gender is inferred by the
+catalogue API.
 
 Five gérondif tenses are available:
 `.gerondifPresent`, `.gerondifPasseMasculinSingulier`,
@@ -356,27 +436,6 @@ share a single cache slot.  Pass `cacheSize: 0` at init to disable.
 | `Person` | `.firstSingularMasculine` `.firstSingularFeminine` `.secondSingularMasculine` `.secondSingularFeminine` `.thirdSingularMasculine` `.thirdSingularFeminine` `.thirdSingularNeutral` `.firstPluralMasculine` `.firstPluralFeminine` `.secondPluralMasculine` `.secondPluralFeminine` `.thirdPluralMasculine` `.thirdPluralFeminine` |
 
 Each `Person` case has a `.pronoun` property (`"je"`, `"tu"`, `"il"`, ...) and a `.shortLabel` (`"1sm"`, `"3pf"`, ...).
-
----
-
-## Breaking Changes in v4.0.0
-
-This release adds new enum cases, which is a **source-breaking change**
-for any code that uses exhaustive `switch` statements over `Person` or
-`Tense`.
-
-**New `Person` case:**
-- `.thirdSingularNeutral` (`"3sn"`) -- the pronoun *on* in reciprocal
-  verbs.
-
-**New `Tense` cases** (gendered present participles, passive voice):
-- `.presentMasculinSingulier` (`"present_sm"`)
-- `.presentFemininSingulier` (`"present_sf"`)
-- `.presentMasculinPluriel` (`"present_pm"`)
-- `.presentFemininPluriel` (`"present_pf"`)
-
-Add a `default` branch (or handle the new cases) to fix any exhaustive
-`switch` compiler errors.
 
 ---
 
@@ -461,7 +520,7 @@ No LibTorch, no C library, no linker flags.
     +-- build_final_model.py         Exception-table builder
     +-- export_weights.py            Export to portable format
     +-- test_model.py                Unit tests
-    +-- full_test_model.py           Full-DB validation (2,553,802 forms)
+    +-- full_test_model.py           Full-DB validation
     +-- README.md                    Python component docs
 ```
 
@@ -479,37 +538,12 @@ No LibTorch, no C library, no linker flags.
 | Decoder | GRU with attention over encoder states |
 | Conditioning | Voice + mode + tense + person embeddings (32-dim each) |
 | Bridge | Linear + tanh: encoder hidden + 4 conditioning embeddings -> decoder initial state |
-| Exception table | 187 corrections in the imported v0.5.0-dataset model |
+| Exception table | 187 corrections in the bundled metadata |
 | Parameters | ~1,540,000 |
 | Accuracy | **100%** on 6,358 verbs (5 voices) |
-| Model size | ~6 MB (weights.bin) + ~474 KB (model.json) |
+| Model size | ~5.9 MiB FP32 weights + ~0.3 MiB JSON metadata |
 
 ---
-
-## v4.3.0 integration
-
-The bundled resources now target dataset [v0.5.0](https://github.com/ShingZhanho/verbe-conjugaison-academie-francaise/releases/tag/v0.5.0).
-Existing signatures and enums remain available. `blocksElisionAndLiaison` is an
-additive query; `isHAspire` remains specific to h-initial verbs. Blocking applies
-to the lexical verb: `je ulule`, `je yoyote`, but `j'ai ululé`, `j'ai yoyoté` and
-passive auxiliary forms such as `j'étais haché` retain elision. The flag reports
-a lexical property, not whether liaison occurs in every grammatical context.
-
-Data availability changes for passive *devoir/redevoir*: request gendered
-`.presentMasculinSingulier` / `.presentFemininSingulier` / plural forms instead
-of the former generic `.present`. That generic request, and the current derived
-`.gerondifPresent` request for those two passive voices, now return `nil`. No
-compatibility alias invents a default gender. Corrected answers and newly exposed
-alternatives can also change the primary or alternative string returned.
-
-Verification on 2026-10-30: the imported final Python report records
-2,572,183/2,572,183 forms correct (zero errors); that full evaluation was not
-rerun locally. After integrating the flag, 31 focused release-configuration
-Swift pronoun/elision checks and two Python metadata checks passed. The new
-list contains 53 entries, including the non-h exceptions *ululer/yoyoter*.
-The integration preserved the imported weights SHA-256
-`f7361c2f13052b5c1e38f11a7d94b67e24a1faf8ae895592e7d466b86b1254b0`.
-See [CHANGELOG.md](CHANGELOG.md) for the release notes.
 
 ## Data Source
 

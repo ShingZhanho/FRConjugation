@@ -30,6 +30,9 @@ final class InferenceEngine: @unchecked Sendable {
     let tenseToIdx: [String: Int]
     let personToIdx: [String: Int]
 
+    /// Form combinations represented anywhere in the model, independent of input.
+    let supportedGuessForms: Set<String>
+
     // ── Metadata ─────────────────────────────────────────────────────────
 
     let exceptions: [String: String]
@@ -153,6 +156,19 @@ final class InferenceEngine: @unchecked Sendable {
             }
         }
         self.verbStructure = verbStructure
+        var supportedGuessForms = Set<String>()
+        for template in templates {
+            for (voice, modes) in template {
+                for (mode, tenses) in modes {
+                    for (tense, persons) in tenses {
+                        for person in persons {
+                            supportedGuessForms.insert("\(voice)|\(mode)|\(tense)|\(person)")
+                        }
+                    }
+                }
+            }
+        }
+        self.supportedGuessForms = supportedGuessForms
 
         // ── Load binary weights ──────────────────────────────────────────
         let binData = try Data(contentsOf: binURL)
@@ -231,6 +247,7 @@ final class InferenceEngine: @unchecked Sendable {
     /// Run a single neural prediction: infinitive + voice/mode/tense/person -> conjugated form.
     ///
     /// Checks the exception table first, then falls back to greedy decoding.
+    /// Guessing passes `useExceptions: false` for a raw neural prediction.
     ///
     /// - Returns: The predicted string, or `nil` if any character is out of vocabulary.
     func predict(
@@ -238,11 +255,12 @@ final class InferenceEngine: @unchecked Sendable {
         voice: String,
         mode: String,
         tense: String,
-        person: String
+        person: String,
+        useExceptions: Bool = true
     ) -> String? {
         // Check exception table (v2 key includes voice)
         let excKey = "\(infinitive)|\(voice)|\(mode)|\(tense)|\(person)"
-        if let exc = exceptions[excKey] {
+        if useExceptions, let exc = exceptions[excKey] {
             return exc
         }
 

@@ -1,0 +1,1706 @@
+{
+  "date": "2026-10-30",
+  "method": "Fixed before running predictions. Unseen inputs are absent from known_verbs; supplied pretrained weights are unchanged. This is not a retrained held-out experiment. Reference forms are curated from the linked publisher tables; subject pronouns/que are omitted to match the API. The spoiler URL currently presents divulgâcher, which is the input tested. Controls are seeded samples from the source database and correction table.",
+  "cases": [
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "télétravaille",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "télétravaillons",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "télétravaillent",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "télétravaillions",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "télétravaillâmes",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "télétravaillera",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "télétravaillerais",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "télétravaillions",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "télétravaille",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "ai télétravaillé",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "télétravaillant",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "télétravailler",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sm",
+      "person": null,
+      "expected": "télétravaillé",
+      "source": "https://www.larousse.fr/conjugaison/francais/t%C3%A9l%C3%A9travailler/11752",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "podcaste",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "podcastons",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "podcastent",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "podcastions",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "podcastâmes",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "podcastera",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "podcasterais",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "podcastions",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "podcaste",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "ai podcasté",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "podcastant",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "podcaster",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sm",
+      "person": null,
+      "expected": "podcasté",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/podcaster",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "covoiture",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "covoiturons",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "covoiturent",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "covoiturions",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "covoiturâmes",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "covoiturera",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "covoiturerais",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "covoiturions",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "covoiture",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "ai covoituré",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "covoiturant",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "covoiturer",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sm",
+      "person": null,
+      "expected": "covoituré",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/covoiturer/11683",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "ubérise",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "ubérisons",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "ubérisent",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "ubérisions",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "ubérisâmes",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "ubérisera",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "ubériserais",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "ubérisions",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "ubérise",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "ai ubérisé",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "ubérisant",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "ubériser",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sm",
+      "person": null,
+      "expected": "ubérisé",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/ub%C3%A9riser/11568",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "divulgâche",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "divulgâchons",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "divulgâchent",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "divulgâchions",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "divulgâchâmes",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "divulgâchera",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "divulgâcherais",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "divulgâchions",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "divulgâche",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "ai divulgâché",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "divulgâchant",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "divulgâcher",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sm",
+      "person": null,
+      "expected": "divulgâché",
+      "source": "https://dictionnaire.lerobert.com/conjugaison/spoiler",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "streame",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "streamons",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "streament",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "streamions",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "streamâmes",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "streamera",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "3pm",
+      "expected": "streamaient",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "3sm",
+      "expected": "streama",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "1sm",
+      "expected": "streamerai",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1sm",
+      "expected": "streamais",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "2pm",
+      "expected": "streamâtes",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "streamer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "1pm",
+      "expected": "streamerons",
+      "source": "https://dictionnaire.lerobert.com/definition/streamer",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "like",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "likons",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "likent",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "likions",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "likâmes",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "likera",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "3pm",
+      "expected": "likaient",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "3sm",
+      "expected": "lika",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "1sm",
+      "expected": "likerai",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1sm",
+      "expected": "likais",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "2pm",
+      "expected": "likâtes",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "liker",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "1pm",
+      "expected": "likerons",
+      "source": "https://dictionnaire.lerobert.com/definition/liker",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "survends",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "survendons",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "survendent",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "survendions",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "1pm",
+      "expected": "survendîmes",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "survendra",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "survendrais",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "1pm",
+      "expected": "survendions",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "survends",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "ai survendu",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "survendant",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "survendre",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sm",
+      "person": null,
+      "expected": "survendu",
+      "source": "https://www.larousse.fr/fr/conjugaison/francais/survendre/8808",
+      "category": "unseen_dictionary"
+    },
+    {
+      "input": "pleurnicher",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "imparfait",
+      "person": "3pm",
+      "expected": "pleurnichassent",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "béer",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "imparfait",
+      "person": "1pm",
+      "expected": "béassions",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "ahaner",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "passe_anterieur",
+      "person": "3sm",
+      "expected": "eut ahané",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "repasser",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "plus_que_parfait",
+      "person": "3pm",
+      "expected": "eussent repassé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "déféquer",
+      "voice": "voix_active_avoir",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "1sm",
+      "expected": "déféquerai;défèquerai",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "débuter",
+      "voice": "voix_active_avoir",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "1sm",
+      "expected": "débuterais",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "disculper",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "disculpent",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "chauler",
+      "voice": "voix_active_avoir",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "2pm",
+      "expected": "chauliez",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "disconvenir",
+      "voice": "voix_active_etre",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "2pm",
+      "expected": "disconvîntes",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "descendre",
+      "voice": "voix_active_etre",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1sm",
+      "expected": "suis descendu",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "retomber",
+      "voice": "voix_active_etre",
+      "mode": "indicatif",
+      "tense": "passe_anterieur",
+      "person": "1sm",
+      "expected": "fus retombé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "apparaitre",
+      "voice": "voix_active_etre",
+      "mode": "subjonctif",
+      "tense": "plus_que_parfait",
+      "person": "2pf",
+      "expected": "fussiez apparues",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "apparaitre",
+      "voice": "voix_active_etre",
+      "mode": "indicatif",
+      "tense": "plus_que_parfait",
+      "person": "1sm",
+      "expected": "étais apparu",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "devenir",
+      "voice": "voix_active_etre",
+      "mode": "indicatif",
+      "tense": "passe_anterieur",
+      "person": "1sf",
+      "expected": "fus devenue",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "intervenir",
+      "voice": "voix_active_etre",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2pm",
+      "expected": "intervenez",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "mourir",
+      "voice": "voix_active_etre",
+      "mode": "conditionnel",
+      "tense": "passe",
+      "person": "3pf",
+      "expected": "seraient mortes",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "seoir",
+      "voice": "voix_active",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3sm",
+      "expected": "sied",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "sourdre",
+      "voice": "voix_active",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "3sm",
+      "expected": "sourdra",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "chaloir",
+      "voice": "voix_active",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "3sm",
+      "expected": "chaut",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "sourdre",
+      "voice": "voix_active",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "sourdraient",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "gésir",
+      "voice": "voix_active",
+      "mode": "indicatif",
+      "tense": "present",
+      "person": "2pm",
+      "expected": "gisez",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "sourdre",
+      "voice": "voix_active",
+      "mode": "indicatif",
+      "tense": "passe_simple",
+      "person": "3pm",
+      "expected": "sourdirent",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "seoir",
+      "voice": "voix_active",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "3sm",
+      "expected": "siée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "seoir",
+      "voice": "voix_active",
+      "mode": "conditionnel",
+      "tense": "present",
+      "person": "3sm",
+      "expected": "siérait",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "décomprimer",
+      "voice": "voix_passive",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1pf",
+      "expected": "avons été décomprimées",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "instrumenter",
+      "voice": "voix_passive",
+      "mode": "imperatif",
+      "tense": "present",
+      "person": "2sm",
+      "expected": "sois instrumenté",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "racler",
+      "voice": "voix_passive",
+      "mode": "subjonctif",
+      "tense": "plus_que_parfait",
+      "person": "1sm",
+      "expected": "eusse été raclé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "désembourgeoiser",
+      "voice": "voix_passive",
+      "mode": "indicatif",
+      "tense": "futur_anterieur",
+      "person": "3sf",
+      "expected": "aura été désembourgeoisée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "égoutter",
+      "voice": "voix_passive",
+      "mode": "indicatif",
+      "tense": "futur_simple",
+      "person": "1pm",
+      "expected": "serons égouttés",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "accompagner",
+      "voice": "voix_passive",
+      "mode": "conditionnel",
+      "tense": "passe",
+      "person": "3sf",
+      "expected": "aurait été accompagnée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "tournebouler",
+      "voice": "voix_passive",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "2sm",
+      "expected": "as été tourneboulé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "écrouter",
+      "voice": "voix_passive",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "1pf",
+      "expected": "avons été écroutées;avons été écroûtées",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "démocratiser",
+      "voice": "voix_prono",
+      "mode": "subjonctif",
+      "tense": "plus_que_parfait",
+      "person": "1sf",
+      "expected": "me fusse démocratisée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "remplir",
+      "voice": "voix_prono",
+      "mode": "conditionnel",
+      "tense": "passe",
+      "person": "3pf",
+      "expected": "se seraient remplies",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "nominaliser",
+      "voice": "voix_prono",
+      "mode": "subjonctif",
+      "tense": "passe",
+      "person": "3sf",
+      "expected": "se soit nominalisée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "guêtrer",
+      "voice": "voix_prono",
+      "mode": "subjonctif",
+      "tense": "plus_que_parfait",
+      "person": "1pm",
+      "expected": "nous fussions guêtrés",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "délover",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "plus_que_parfait",
+      "person": "2sm",
+      "expected": "t'étais délové",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "engraver",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "plus_que_parfait",
+      "person": "3pf",
+      "expected": "s'étaient engravées",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "méprendre",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "plus_que_parfait",
+      "person": "2sm",
+      "expected": "t'étais mépris",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "consulter",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "imparfait",
+      "person": "2pm",
+      "expected": "vous consultiez",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "bouillonner",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "passe_compound_sm",
+      "person": null,
+      "expected": "ayant été bouillonné",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "estampiller",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "passe_compound_sm",
+      "person": null,
+      "expected": "ayant été estampillé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "brandir",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sf",
+      "person": null,
+      "expected": "brandie",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "ennoblir",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_pf",
+      "person": null,
+      "expected": "ennoblies",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "voguer",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_pm",
+      "person": null,
+      "expected": "ayant vogué",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "encorder",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "passe_compound_pm",
+      "person": null,
+      "expected": "ayant été encordés",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "poétiser",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_sm",
+      "person": null,
+      "expected": "ayant poétisé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "délurer",
+      "voice": "voix_prono",
+      "mode": "participe",
+      "tense": "passe_pf",
+      "person": null,
+      "expected": "délurées",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "texturer",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "present_sm",
+      "person": null,
+      "expected": "étant texturé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "antidater",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_pf",
+      "person": null,
+      "expected": "ayant antidaté",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "régionaliser",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_sm",
+      "person": null,
+      "expected": "ayant régionalisé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "hypostasier",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_sf",
+      "person": null,
+      "expected": "hypostasiée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "municipaliser",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_sf",
+      "person": null,
+      "expected": "ayant municipalisé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "centrifuger",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "passe_compound_pm",
+      "person": null,
+      "expected": "ayant été centrifugés",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "essarter",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_sf",
+      "person": null,
+      "expected": "ayant essarté",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "barrer",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_pf",
+      "person": null,
+      "expected": "barrées",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "négocier",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "present",
+      "person": null,
+      "expected": "négociant",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "désamidonner",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_pf",
+      "person": null,
+      "expected": "ayant désamidonné",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "trépigner",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_sf",
+      "person": null,
+      "expected": "ayant trépigné",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "rabonnir",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_pf",
+      "person": null,
+      "expected": "rabonnies",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "préserver",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "present_sf",
+      "person": null,
+      "expected": "étant préservée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "épucer",
+      "voice": "voix_active_avoir",
+      "mode": "participe",
+      "tense": "passe_compound_pm",
+      "person": null,
+      "expected": "ayant épucé",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "éclabousser",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "passe_compound_pf",
+      "person": null,
+      "expected": "ayant été éclaboussées",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "enrocher",
+      "voice": "voix_passive",
+      "mode": "participe",
+      "tense": "present_sf",
+      "person": null,
+      "expected": "étant enrochée",
+      "source": "Dataset v0.5.0 verbs.db",
+      "category": "seen_control"
+    },
+    {
+      "input": "revenir",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "plus_que_parfait",
+      "person": "2pm",
+      "expected": "vous en étiez revenus",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "enchaîner",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "passe_anterieur",
+      "person": "2sm",
+      "expected": "te fus enchaîné;te fus enchainé",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "venir",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "passe_compose",
+      "person": "2pf",
+      "expected": "vous en êtes venues",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "aller",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "plus_que_parfait",
+      "person": "2sm",
+      "expected": "t'en étais allé",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "aller",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "passe_anterieur",
+      "person": "3sm",
+      "expected": "s'en fut allé",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "traîner",
+      "voice": "voix_prono",
+      "mode": "indicatif",
+      "tense": "passe_anterieur",
+      "person": "2sf",
+      "expected": "te fus traînée;te fus trainée",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "enquêter",
+      "voice": "voix_prono",
+      "mode": "participe",
+      "tense": "passe_pm",
+      "person": null,
+      "expected": "enquêtés",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "faire",
+      "voice": "voix_prono",
+      "mode": "subjonctif",
+      "tense": "present",
+      "person": "3pm",
+      "expected": "se fassent",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "aller",
+      "voice": "voix_prono",
+      "mode": "subjonctif",
+      "tense": "passe",
+      "person": "1sf",
+      "expected": "m'en sois allée",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    },
+    {
+      "input": "enquêter",
+      "voice": "voix_prono",
+      "mode": "participe",
+      "tense": "passe_sf",
+      "person": null,
+      "expected": "enquêtée",
+      "source": "Bundled correction table",
+      "category": "seen_exception"
+    }
+  ]
+}
