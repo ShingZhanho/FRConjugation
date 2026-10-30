@@ -35,6 +35,7 @@ final class InferenceEngine: @unchecked Sendable {
     let exceptions: [String: String]
     let knownVerbs: Set<String>
     let hAspire: Set<String>
+    let elisionLiaisonBlocks: Set<String>
     let reform1990Verbs: Set<String>
     let reformVariantes: [String: String]
 
@@ -105,6 +106,9 @@ final class InferenceEngine: @unchecked Sendable {
         // ── Parse metadata ───────────────────────────────────────────────
         self.exceptions = (root["exceptions"] as? [String: String]) ?? [:]
         self.hAspire = Set((root["h_aspire"] as? [String]) ?? [])
+        // Older exports carry only the h-aspiré subset.
+        self.elisionLiaisonBlocks = Set((root["bloque_elision_liaison"] as? [String])
+                                       ?? (root["h_aspire"] as? [String]) ?? [])
         self.reform1990Verbs = Set((root["reform_1990_verbs"] as? [String]) ?? [])
         self.reformVariantes = (root["reform_variantes"] as? [String: String]) ?? [:]
 

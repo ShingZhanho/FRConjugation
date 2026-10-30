@@ -335,12 +335,12 @@ Bahdanau attention, built in PyTorch:
   via four learned embeddings (32-dim each)
 - **Bridge:** Linear + tanh combining encoder final hidden + 4 conditioning
   embeddings into the decoder initial hidden state
-- **Exception table:** A small lookup (771 entries) embedded in the
+- **Exception table:** A small lookup (187 entries in the imported v0.5.0-dataset model) embedded in the
   checkpoint to guarantee 100% accuracy on the training vocabulary
 
 The model has approximately **1,540,000 parameters**, is approximately
 **6 MB**, and covers **6,298 French verbs** across **5 voices** --
-**2,553,802 conjugated forms** at **100% accuracy**.
+**2,572,183 conjugation/participle examples** at **100% accuracy**.
 
 ---
 
@@ -357,3 +357,12 @@ The model has approximately **1,540,000 parameters**, is approximately
 | `test_model.py`                  | Unit tests                                                 |
 | `full_test_model.py`             | Full dataset test against `verbs.db`                       |
 | `verbs.db`                       | SQLite database of 6,298 French verbs (source of truth)    |
+
+## Lexical elision/liaison blocking
+
+`model.blocks_elision_and_liaison(infinitive)` reports the checkpoint's
+`bloque_elision_liaison` list. This is separate from `is_h_aspire`: *ululer* and
+*yoyoter* block elision/liaison without beginning with h. It describes the lexical
+verb, not whether every context triggers or blocks liaison. Older checkpoints
+without this field fall back to their h-only metadata; exporting with a matching
+`--database` refreshes the Swift metadata without modifying that checkpoint.

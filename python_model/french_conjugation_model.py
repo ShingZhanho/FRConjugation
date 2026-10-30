@@ -274,6 +274,8 @@ class ConjugationModel:
         # metadata
         self._known_verbs = sorted(checkpoint.get("known_verbs", []))
         self._h_aspire = set(checkpoint.get("h_aspire", []))
+        self._elision_liaison_blocks = set(checkpoint.get(
+            "bloque_elision_liaison", self._h_aspire))
         self._reform_1990 = set(checkpoint.get("reform_1990_verbs", []))
         self._reform_variantes = checkpoint.get("reform_variantes", {})
 
@@ -337,6 +339,10 @@ class ConjugationModel:
 
     def is_h_aspire(self, infinitive):
         return infinitive in self._h_aspire
+
+    def blocks_elision_and_liaison(self, infinitive):
+        """Whether the source marks lexical blocking, including non-h initials."""
+        return infinitive in self._elision_liaison_blocks
 
     def is_1990_reform(self, infinitive):
         return infinitive in self._reform_1990

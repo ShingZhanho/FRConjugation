@@ -14,7 +14,7 @@ training scripts, evaluation tools, and a reusable Python module.
 | `full_test_model.py` | Full-DB validation |
 | `export_weights.py` | Export to portable format for the Swift package |
 | `USAGE.md` | Detailed Python API reference (voices, modes, tenses, persons, aliases) |
-| `conjugation_model_final.pt` | Final checkpoint -- ML + 771 exceptions (100%) |
+| `conjugation_model_final.pt` | Final checkpoint -- ML + 187 exceptions (100%) |
 | `conjugation_model.pt` | ML-only checkpoint (~99.97%) |
 | `verbs.db` | SQLite database (6,358 verbs incl. homonyms, 5 voices) |
 
@@ -38,8 +38,8 @@ python3 train_model.py
 # -> conjugation_model.pt (~6 MB, ~99.97% accuracy)
 
 # 2. Run full database test to identify remaining errors
-python3 full_test_model.py
-# -> full_test_errors.json (771 errors)
+python3 full_test_model.py "$PWD/conjugation_model.pt"
+# -> full_test_errors.json (raw errors)
 
 # 3. Build the final model with an exception table for 100% accuracy
 python3 build_final_model.py
@@ -83,7 +83,7 @@ voice, mode, tense, and person values with aliases.
 # Unit tests
 python3 test_model.py
 
-# Full database validation (2,553,802 forms)
+# Full database validation (2,572,183 forms)
 python3 full_test_model.py [path/to/model.pt]
 ```
 
@@ -96,6 +96,40 @@ python3 full_test_model.py [path/to/model.pt]
 | Decoder | GRU conditioned on voice + mode + tense + person embeddings (32-dim each) |
 | Bridge | Linear + tanh: encoder hidden + 4 conditioning embeddings -> decoder initial hidden |
 | Parameters | ~1,540,000 |
-| Exception table | 771 hard-coded corrections for 100% accuracy |
+| Exception table | 187 corrections in the imported model for 100% accuracy |
 | Accuracy | **100%** on 6,358 verbs (5 voices) |
 | Size | ~6 MB |
+
+## Lexical blocking metadata
+
+Training reads `bloque_elision_liaison` from dataset v0.5.0 and saves it in the
+checkpoint. Legacy databases/checkpoints retain their h-only fallback.
+`ConjugationModel.blocks_elision_and_liaison(infinitive)` reports the checkpoint's
+list independently of `is_h_aspire`. A legacy checkpoint without the list cannot
+report the non-h exceptions through that query.
+
+Export a previously trained checkpoint with metadata from its matching database:
+
+```bash
+# From the repository root; requires the training/export Python environment.
+python3 python_model/export_weights.py --database python_model/verbs.db
+```
+
+For an already exported Swift model, refresh just its blocking metadata without
+PyTorch or another training run:
+
+```bash
+python3 python_model/lexical_metadata.py python_model/verbs.db \
+  swift_lib/Sources/FRConjugation/Resources/model.json
+```
+
+This changes `model.json` only; it does not rewrite checkpoints or neural weights.
+A mismatched verb catalogue is rejected. The optional list keeps export format 2
+compatible with older Swift loaders; updated loaders fall back to `h_aspire` when
+loading an older export without the list.
+
+Run the lightweight metadata checks with:
+
+```bash
+python3 -m unittest discover -s python_model -p test_lexical_metadata.py -v
+```

@@ -32,6 +32,8 @@ if not _CI:
 else:
     tqdm = None
 
+from lexical_metadata import read_elision_liaison_blocks
+
 from french_conjugation_model import (
     EOS_IDX,
     PAD_IDX,
@@ -118,6 +120,7 @@ def load_training_data():
     cur.execute("SELECT id, infinitif, h_aspire, rectification_1990, "
                 "rectification_1990_variante FROM verbes")
     verb_rows = cur.fetchall()
+    elision_liaison_blocks = read_elision_liaison_blocks(conn)
     id_to_inf = {r[0]: r[1] for r in verb_rows}
     h_aspire = sorted({r[1] for r in verb_rows if r[2]})
     reform_1990_verbs = sorted({r[1] for r in verb_rows if r[3]})
@@ -225,6 +228,7 @@ def load_training_data():
 
     metadata = {
         "h_aspire": h_aspire,
+        "bloque_elision_liaison": elision_liaison_blocks,
         "reform_1990_verbs": reform_1990_verbs,
         "reform_variantes": reform_variantes,
         "known_verbs": known_verbs,
@@ -481,7 +485,7 @@ def train():
 
     print("=" * 60)
     print("  French Verb Conjugation -- Model Training (v4)")
-    print("  verbs.db v0.4.0: homonym verbs, all voices")
+    print("  verbs.db: homonym verbs, all voices")
     print("=" * 60)
 
     # check for resume checkpoint before loading data
@@ -734,6 +738,7 @@ def train():
         # metadata
         "known_verbs": metadata["known_verbs"],
         "h_aspire": metadata["h_aspire"],
+        "bloque_elision_liaison": metadata["bloque_elision_liaison"],
         "reform_1990_verbs": metadata["reform_1990_verbs"],
         "reform_variantes": metadata["reform_variantes"],
     }

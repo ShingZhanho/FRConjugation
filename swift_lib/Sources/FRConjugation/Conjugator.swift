@@ -266,6 +266,16 @@ public final class Conjugator: @unchecked Sendable {
         return engine.hAspire.contains(infinitive)
     }
 
+    /// Whether the source marks this verb as blocking elision and liaison.
+    ///
+    /// This lexical property includes non-h initials such as ululer and yoyoter.
+    /// Auxiliary forms can still trigger elision (for example, j'ai ululé).
+    public func blocksElisionAndLiaison(_ infinitive: String, homonymIndex: Int? = nil) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return engine.elisionLiaisonBlocks.contains(resolveKey(infinitive, homonymIndex: homonymIndex))
+    }
+
     /// Whether a verb has 1990 reform spelling changes.
     public func is1990Reform(_ infinitive: String) -> Bool {
         lock.lock()
@@ -834,9 +844,18 @@ public final class Conjugator: @unchecked Sendable {
     /// Whether a conjugated form starts with a sound that triggers elision.
     ///
     /// **Must be called while `lock` is held.**
-    private func formStartsWithVowelSound(_ form: String, infinitive: String) -> Bool {
+    private func formStartsWithVowelSound(
+        _ form: String, infinitive: String, voice: Voice, tense: Tense
+    ) -> Bool {
         guard let first = form.first else { return false }
         let lower = Character(first.lowercased())
+        // In passive or compound tenses the first word can be an auxiliary:
+        // lexical blocking must not turn j'étais / j'ai into je étais / je ai.
+        let simpleTense = tense == .present || tense == .imparfait
+            || tense == .passeSimple || tense == .futurSimple
+        if voice != .passive && simpleTense && engine.elisionLiaisonBlocks.contains(infinitive) {
+            return false
+        }
         if lower == "h" {
             return !engine.hAspire.contains(infinitive)
         }
@@ -892,15 +911,19 @@ public final class Conjugator: @unchecked Sendable {
         ) else { return nil }
 
         let form = Self.primaryForm(raw)
-        return pronounString(person: person, mode: mode, form: form, infinitive: infinitive)
+        return pronounString(person: person, mode: mode, form: form,
+                             infinitive: key, voice: voice, tense: tense)
     }
 
     /// Build the pronoun string for a given person, mode, and conjugated form.
     ///
     /// **Must be called while `lock` is held.**
-    private func pronounString(person: Person, mode: Mode, form: String, infinitive: String) -> String {
+    private func pronounString(
+        person: Person, mode: Mode, form: String, infinitive: String, voice: Voice, tense: Tense
+    ) -> String {
         let base = person.pronoun
-        let vowelSound = formStartsWithVowelSound(form, infinitive: infinitive)
+        let vowelSound = formStartsWithVowelSound(form, infinitive: infinitive,
+                                                 voice: voice, tense: tense)
 
         // Determine the subject pronoun (with possible elision)
         let subject: String
@@ -982,7 +1005,8 @@ public final class Conjugator: @unchecked Sendable {
         ) else { return nil }
 
         let form = Self.primaryForm(raw)
-        let pronoun = pronounString(person: person, mode: mode, form: form, infinitive: infinitive)
+        let pronoun = pronounString(person: person, mode: mode, form: form,
+                             infinitive: key, voice: voice, tense: tense)
         return pronoun + form
     }
 
@@ -1032,7 +1056,8 @@ public final class Conjugator: @unchecked Sendable {
         ) else { return nil }
 
         let form = Self.alternativeForm(raw)
-        let pronoun = pronounString(person: person, mode: mode, form: form, infinitive: infinitive)
+        let pronoun = pronounString(person: person, mode: mode, form: form,
+                             infinitive: key, voice: voice, tense: tense)
         return pronoun + form
     }
 

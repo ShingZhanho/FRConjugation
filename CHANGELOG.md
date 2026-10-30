@@ -1,0 +1,12 @@
+# Changelog
+
+## v4.3.0 — 2026-10-30
+
+- Adopt the fixed dataset v0.5.0, including corrected forms, spelling alternatives, participles and variant references.
+- Add `blocksElisionAndLiaison(_:homonymIndex:)`.
+- Correct `je ulule` / `je yoyote` without breaking auxiliary elision in `j'ai ululé` / `j'ai yoyoté` or passive `j'étais haché`.
+- The new public query is additive; source changes are not required.
+
+### Observable data changes
+
+Passive present participles for `devoir` and `redevoir` now use the existing four gendered present-participle tenses. Their former generic `.present` request, including its derived `.gerondifPresent`, returns `nil`; callers must select the appropriate gendered participle. Corrected strings and primary / alternative ordering may change.

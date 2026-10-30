@@ -13,11 +13,14 @@ from __future__ import annotations
 
 import json
 import os
-import sys
+import argparse
+import warnings
 from collections import OrderedDict
 
 import numpy as np
 import torch
+
+from lexical_metadata import export_elision_liaison_blocks
 
 
 def _build_homonym_map(known_verbs):
@@ -41,10 +44,15 @@ def _build_homonym_map(known_verbs):
     return hmap
 
 
-def export(checkpoint_path, output_dir):
+def export(checkpoint_path, output_dir, database_path=None):
     os.makedirs(output_dir, exist_ok=True)
 
     cp = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+
+    blocks = export_elision_liaison_blocks(cp, database_path)
+    if database_path is None and "bloque_elision_liaison" not in cp:
+        warnings.warn("Checkpoint lacks non-h blocking metadata; pass --database with "
+                      "the matching v0.5.0 verbs.db to include it.")
 
     # -- weight manifest and binary blob --
     state_dict = cp["model_state_dict"]
@@ -94,6 +102,7 @@ def export(checkpoint_path, output_dir):
         "exceptions": cp.get("exceptions", {}),
         "known_verbs": sorted(cp.get("known_verbs", [])),
         "h_aspire": sorted(cp.get("h_aspire", [])),
+        "bloque_elision_liaison": blocks,
         "reform_1990_verbs": sorted(cp.get("reform_1990_verbs", [])),
         "reform_variantes": cp.get("reform_variantes", {}),
         "verb_structure_templates": cp.get("verb_structure_templates", []),
@@ -112,8 +121,9 @@ def export(checkpoint_path, output_dir):
 
 
 if __name__ == "__main__":
-    checkpoint = (sys.argv[1] if len(sys.argv) > 1
-                  else "python_model/conjugation_model_final.pt")
-    outdir = (sys.argv[2] if len(sys.argv) > 2
-              else "swift_lib/Sources/FRConjugation/Resources")
-    export(checkpoint, outdir)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("checkpoint", nargs="?", default="python_model/conjugation_model_final.pt")
+    parser.add_argument("output", nargs="?", default="swift_lib/Sources/FRConjugation/Resources")
+    parser.add_argument("--database", help="Matching verbs.db to refresh lexical blocking metadata")
+    arguments = parser.parse_args()
+    export(arguments.checkpoint, arguments.output, arguments.database)

@@ -13,6 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Test lexical metadata helpers
+        run: python3 -m unittest discover -s python_model -p test_lexical_metadata.py -v
+
       - name: Build Swift package
         run: swift build
 
@@ -39,6 +42,7 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
+          body_path: releases/${{ github.ref_name }}.md
+          generate_release_notes: false
           files: |
             release/model-weights.tar.gz

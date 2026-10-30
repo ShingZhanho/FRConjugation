@@ -65,6 +65,8 @@ fr.participle("prendre", voice: .activeAvoir, tense: .passeFemininPluriel)
 - **1990 reform** -- query whether a verb has reform spellings and get
   the variant form.
 - **H-aspire** -- correctly detects aspirate-h verbs.
+- **Elision/liaison blocking** -- reports the source's lexical blocking flag,
+  including non-h initials, and preserves auxiliary elision in compound forms.
 - **Pure Swift** -- no C library, no LibTorch, no external ML framework.
 - **Lightweight** -- ~6 MB model, character-level neural network with
   Accelerate-backed inference.
@@ -92,7 +94,7 @@ Add the package dependency in your `Package.swift`:
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/ShingZhanho/FRConjugation.Swift.git", from: "4.2.2"),
+  .package(url: "https://github.com/ShingZhanho/FRConjugation.Swift.git", from: "4.3.0"),
 ]
 ```
 
@@ -321,7 +323,8 @@ fr.persons("aller", voice: .activeEtre, mode: .indicatif, tense: .present)
 
 ```swift
 fr.hasVerb("parler")            // true
-fr.isHAspire("hair")            // true
+fr.isHAspire("haïr")            // true
+fr.blocksElisionAndLiaison("ululer") // true; isHAspire("ululer") is false
 fr.is1990Reform("ceder")        // true
 fr.reformVariante("ceder")      // Optional("ceder")
 fr.verbCount                    // 6298 (homonym groups counted once)
@@ -390,7 +393,7 @@ Download it and place it in `python_model/`.
 ```bash
 cd python_model
 python3 train_model.py              # -> conjugation_model.pt
-python3 full_test_model.py          # -> full_test_errors.json
+python3 full_test_model.py "$PWD/conjugation_model.pt" # -> full_test_errors.json
 python3 build_final_model.py        # -> conjugation_model_final.pt (100%)
 ```
 
@@ -399,10 +402,27 @@ See [python_model/README.md](python_model/README.md) for details.
 ### 3. Export weights to portable format
 
 ```bash
-python3 python_model/export_weights.py
+python3 python_model/export_weights.py --database python_model/verbs.db
 ```
 
 Produces `model.json` and `weights.bin` in `swift_lib/Sources/FRConjugation/Resources/`.
+
+New training checkpoints preserve `bloque_elision_liaison`. For an older
+checkpoint, `--database` refreshes that list from the matching database; it does
+not retrain the network. The database and checkpoint must have matching verb
+catalogues. Without the flag or a supplied database, legacy exports retain the
+h-only behavior and emit a warning.
+
+To refresh only metadata after weights have already been exported (no PyTorch
+required):
+
+```bash
+python3 python_model/lexical_metadata.py python_model/verbs.db \
+  swift_lib/Sources/FRConjugation/Resources/model.json
+```
+
+This keeps all other model metadata and `weights.bin` unchanged. Swift accepts
+older format-2 exports without the new list by falling back to `h_aspire`.
 
 ### 4. Build & test the Swift package
 
@@ -459,12 +479,37 @@ No LibTorch, no C library, no linker flags.
 | Decoder | GRU with attention over encoder states |
 | Conditioning | Voice + mode + tense + person embeddings (32-dim each) |
 | Bridge | Linear + tanh: encoder hidden + 4 conditioning embeddings -> decoder initial state |
-| Exception table | 771 hard-coded corrections embedded in model metadata |
+| Exception table | 187 corrections in the imported v0.5.0-dataset model |
 | Parameters | ~1,540,000 |
 | Accuracy | **100%** on 6,358 verbs (5 voices) |
 | Model size | ~6 MB (weights.bin) + ~474 KB (model.json) |
 
 ---
+
+## v4.3.0 integration
+
+The bundled resources now target dataset [v0.5.0](https://github.com/ShingZhanho/verbe-conjugaison-academie-francaise/releases/tag/v0.5.0).
+Existing signatures and enums remain available. `blocksElisionAndLiaison` is an
+additive query; `isHAspire` remains specific to h-initial verbs. Blocking applies
+to the lexical verb: `je ulule`, `je yoyote`, but `j'ai ululé`, `j'ai yoyoté` and
+passive auxiliary forms such as `j'étais haché` retain elision. The flag reports
+a lexical property, not whether liaison occurs in every grammatical context.
+
+Data availability changes for passive *devoir/redevoir*: request gendered
+`.presentMasculinSingulier` / `.presentFemininSingulier` / plural forms instead
+of the former generic `.present`. That generic request, and the current derived
+`.gerondifPresent` request for those two passive voices, now return `nil`. No
+compatibility alias invents a default gender. Corrected answers and newly exposed
+alternatives can also change the primary or alternative string returned.
+
+Verification on 2026-10-30: the imported final Python report records
+2,572,183/2,572,183 forms correct (zero errors); that full evaluation was not
+rerun locally. After integrating the flag, 31 focused release-configuration
+Swift pronoun/elision checks and two Python metadata checks passed. The new
+list contains 53 entries, including the non-h exceptions *ululer/yoyoter*.
+The integration preserved the imported weights SHA-256
+`f7361c2f13052b5c1e38f11a7d94b67e24a1faf8ae895592e7d466b86b1254b0`.
+See [CHANGELOG.md](CHANGELOG.md) for the release notes.
 
 ## Data Source
 

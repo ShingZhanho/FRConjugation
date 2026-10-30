@@ -703,6 +703,41 @@ final class ConjugationTests: XCTestCase {
                                         tense: .present, person: .thirdSingularNeutral), "on ")
     }
 
+    func testLexicalElisionBlockingPreservesAuxiliaryElision() throws {
+        let conj = try c
+        for (verb, present, past) in [("ululer", "ulule", "ululé"),
+                                      ("yoyoter", "yoyote", "yoyoté")] {
+            XCTAssertTrue(conj.blocksElisionAndLiaison(verb))
+            XCTAssertFalse(conj.isHAspire(verb))
+            XCTAssertEqual(conj.conjugateWithPronoun(verb, voice: .activeAvoir,
+                mode: .indicatif, tense: .present, person: .firstSingularMasculine),
+                "je " + present)
+            XCTAssertEqual(conj.conjugateAlternativeWithPronoun(verb, voice: .activeAvoir,
+                mode: .indicatif, tense: .present, person: .firstSingularFeminine),
+                "je " + present)
+            XCTAssertEqual(conj.getPronoun(verb, voice: .activeAvoir, mode: .conditionnel,
+                tense: .present, person: .firstSingularMasculine), "je ")
+            XCTAssertEqual(conj.getPronoun(verb, voice: .activeAvoir, mode: .indicatif,
+                tense: .futurSimple, person: .firstSingularMasculine), "je ")
+            XCTAssertEqual(conj.conjugateWithPronoun(verb, voice: .activeAvoir,
+                mode: .indicatif, tense: .passeCompose, person: .firstSingularMasculine),
+                "j'ai " + past)
+            XCTAssertEqual(conj.getPronoun(verb, voice: .activeAvoir, mode: .subjonctif,
+                tense: .present, person: .firstSingularMasculine), "que je ")
+            XCTAssertEqual(conj.getPronoun(verb, voice: .activeAvoir, mode: .subjonctif,
+                tense: .passe, person: .firstSingularMasculine), "que j'")
+        }
+        XCTAssertTrue(conj.blocksElisionAndLiaison("hacher"))
+        XCTAssertFalse(conj.blocksElisionAndLiaison("aimer"))
+        XCTAssertFalse(conj.blocksElisionAndLiaison("unknown-verb"))
+        XCTAssertEqual(conj.getPronoun("hacher", voice: .activeAvoir, mode: .indicatif,
+            tense: .present, person: .firstSingularMasculine), "je ")
+        XCTAssertEqual(conj.getPronoun("hacher", voice: .passive, mode: .indicatif,
+            tense: .imparfait, person: .firstSingularMasculine), "j'")
+        XCTAssertEqual(conj.getPronoun("hacher", voice: .activeAvoir, mode: .indicatif,
+            tense: .passeCompose, person: .firstSingularMasculine), "j'")
+    }
+
     // MARK: - conjugateWithPronoun
 
     func testConjugateWithPronounBasic() throws {

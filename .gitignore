@@ -45,4 +45,5 @@ python_model/verbs.db
 # ── Temporary / generated ─────────────────────────────
 *.log
 full_test_errors.json
+full_test_errors.raw.json
 training_log.txt
