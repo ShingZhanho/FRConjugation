@@ -1,6 +1,10 @@
 // Types.swift -- Enums and value types for the FRConjugation library.
 
 import Foundation
+#if canImport(CoreVideo)
+// Preserve the Apple SDK extensions on the public RawRepresentable enums.
+import CoreVideo
+#endif
 
 // MARK: - Voice
 
@@ -154,7 +158,7 @@ public enum Person: String, CaseIterable, Sendable, Hashable {
 
 /// Errors thrown by ``Conjugator``.
 public enum ConjugationError: Error, LocalizedError {
-    /// The model directory could not be loaded.
+    /// The bundled conjugation catalogue could not be loaded.
     case modelLoadFailed(path: String)
 
     public var errorDescription: String? {

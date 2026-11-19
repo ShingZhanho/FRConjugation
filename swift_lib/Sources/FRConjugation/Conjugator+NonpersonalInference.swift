@@ -1,7 +1,7 @@
 import Foundation
 
 extension Conjugator {
-    /// Infer a participle without catalogue validation or correction exceptions.
+    /// Infer a participle using the learned spelling rules.
     /// Gender/number is selected by tense; no grammatical person is required.
     /// Invalid or unsupported participle tenses return nil. Alternatives are
     /// returned as a semicolon-separated string, as in raw finite inference.
@@ -12,7 +12,7 @@ extension Conjugator {
                         person: nil, homonymIndex: homonymIndex)
     }
 
-    /// Prefer participle's corrected primary answer; infer only when it is nil.
+    /// Prefer the catalogue’s primary participle; infer only when it is nil.
     public func guessParticiple(
         _ infinitive: String, voice: Voice, tense: Tense, homonymIndex: Int? = nil
     ) -> String? {
@@ -63,7 +63,7 @@ extension Conjugator {
         }.joined(separator: ";")
     }
 
-    /// Prefer gerondif's corrected answer; derive a raw guess only when it is nil.
+    /// Prefer the catalogue’s gérondif; derive a raw guess only when it is nil.
     public func guessGerondif(
         _ infinitive: String, voice: Voice, tense: Tense, homonymIndex: Int? = nil
     ) -> String? {

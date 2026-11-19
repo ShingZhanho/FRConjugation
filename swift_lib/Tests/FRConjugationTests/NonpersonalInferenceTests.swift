@@ -1,5 +1,5 @@
 import XCTest
-@testable import FRConjugation
+import FRConjugation
 
 final class NonpersonalInferenceTests: XCTestCase {
     func testUnknownParticiplesAndGerondifsNeedNoPerson() throws {

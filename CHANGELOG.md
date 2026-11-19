@@ -1,19 +1,15 @@
 # Changelog
 
-## Unreleased
+## v5.0.0 — 2026-11-19
 
-- Add raw neural prediction and catalogue-first guessing families for finite
-  conjugations, participles and gérondifs. Each guess method preserves its matching
-  catalogue API's answers and infers only missing forms.
-- Match `conjugate` overloads with `rawInferredConjugation` / `guessConjugation`,
-  `participle` with `rawInferredParticiple` / `guessParticiple`, `participles` with
-  `rawInferredParticiples` / `guessParticiples`, and `gerondif` with
-  `rawInferredGerondif` / `guessGerondif`. Retain homonym selection and async
-  single-form variants. Existing catalogue APIs are unchanged.
-- Keep conjugation inference finite-only. Nonpersonal forms use gendered tenses
-  and `[Tense: String]` collections without dummy Person arguments or duplicates.
-- Add regression checks and a reproducible 170-case evaluation, plus raw output
-  coverage for all 820 model-supported base form combinations across the families.
+- Conjugation now uses bundled spelling rules learned from the v0.5.0 catalogue.
+- Custom model loaders are unavailable at compile time. Use `Conjugator()`,
+  `Conjugator.getShared()`, or `try await Conjugator.load()`.
+- Cache settings and controls are deprecated. Cache sizes are ignored,
+  `cacheCount` and `cacheCapacity` return zero, and `clearCache()` has no effect.
+- Python tooling learns and compiles the rules. The Python neural inference module has been removed.
+- Added raw inference and catalogue-first guessing for finite forms,
+  participles and gérondifs. Guessing fills missing slots, including on defective verbs.
 
 ## v4.3.0 — 2026-10-30
 

@@ -1,14 +1,30 @@
 import Foundation
 
 extension Conjugator {
-    // MARK: - Raw Neural Inference
+    // The input vocabulary matches the original Swift inference API.
+    private static let inferenceAlphabet = Set(" '-12;_abcdefghijklmnopqrstuvwxyzâçèéêîïôûœ")
 
-    /// Infer a form without catalogue validation or correction-table exceptions.
+    func rawInferredForm(
+        _ input: String, voice: Voice, mode: Mode, tense: Tense, person: Person?, homonymIndex: Int?
+    ) -> String? {
+        let slot = RuleCatalogue.Slot(voice: voice, mode: mode, tense: tense, person: person)
+        guard catalogue.slotIDs[slot] != nil else { return nil }
+        let normalized = input.trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased().precomposedStringWithCanonicalMapping
+        guard !normalized.isEmpty else { return nil }
+        let key = resolveKey(normalized, homonymIndex: homonymIndex)
+        guard key.allSatisfy(Self.inferenceAlphabet.contains) else { return nil }
+        return catalogue.infer(key, slot: slot)
+    }
+
+    // MARK: - Raw Rule Inference
+
+    /// Apply the learned spelling rules to a supported input and form.
     ///
     /// Accepts any nonempty model-supported string, lowercasing and trimming it.
     /// Known homonyms follow the same homonymIndex resolution as conjugate.
     /// Unsupported input or global form combinations return nil. Output can
-    /// contain semicolon alternatives, mistakes, or truncated predictions.
+    /// contain semicolon alternatives or grammatically unattested predictions.
     /// Finite forms only; use rawInferredParticiple or rawInferredGerondif otherwise.
     public func rawInferredConjugation(
         _ infinitive: String, voice: Voice, mode: Mode, tense: Tense,
@@ -53,8 +69,8 @@ extension Conjugator {
 
     // MARK: - Catalogue With Inference Fallback
 
-    /// Return conjugate's primary/corrected answer unchanged when available;
-    /// otherwise return a raw neural prediction for the requested form.
+    /// Return the catalogue’s primary answer when available,
+    /// otherwise return a raw rule prediction for the requested form.
     ///
     /// Catalogue lookup uses conjugate's exact input semantics. Only the raw
     /// fallback normalizes input. Inferred answers can include alternatives and
@@ -115,9 +131,10 @@ extension Conjugator {
         _ input: String, voice: Voice, mode: Mode, tense: Tense,
         homonymIndex: Int?, existing: [Person: String]
     ) -> [Person: String] {
-        guard mode != .participe else { return [:] }
+        guard mode != .participe, let ids = catalogue.groups[voice]?[mode]?[tense] else { return existing }
         var result = existing
-        for person in Person.allCases where result[person] == nil {
+        for id in ids {
+            guard let person = catalogue.slots[id].person, result[person] == nil else { continue }
             if let form = rawInferredConjugation(input, voice: voice, mode: mode, tense: tense,
                                                  person: person, homonymIndex: homonymIndex) {
                 result[person] = form
@@ -131,7 +148,8 @@ extension Conjugator {
         existing: [Tense: [Person: String]]
     ) -> [Tense: [Person: String]] {
         var result = existing
-        for tense in Tense.allCases {
+        guard let tenses = catalogue.groups[voice]?[mode] else { return result }
+        for tense in tenses.keys {
             let forms = fillInferredPersons(input, voice: voice, mode: mode, tense: tense,
                                              homonymIndex: homonymIndex, existing: result[tense] ?? [:])
             if !forms.isEmpty { result[tense] = forms }

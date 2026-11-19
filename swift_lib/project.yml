@@ -5,38 +5,42 @@ options:
     macOS: "12.0"
     iOS: "15.0"
   createIntermediateGroups: true
-  xcodeVersion: "16.0"
+  xcodeVersion: "27.2"
+  postGenCommand: |
+    # XcodeGen writes the legacy definition. Convert it on every regeneration.
+    if [ -f FRConjugation.xcodeproj/project.pbxproj ]; then
+      rm -f FRConjugation.xcodeproj/project.xcproj &&
+        xcodebuild -project FRConjugation.xcodeproj -convert-project xcproj
+    fi
   generateEmptyDirectories: false
 
 settings:
   base:
-    SWIFT_VERSION: "5.9"
+    SWIFT_VERSION: "5.0"
     PRODUCT_NAME: FRConjugation
 
 targets:
   FRConjugation:
     type: framework
-    platform: [macOS, iOS]
+    platform: macOS
     sources:
       - path: Sources/FRConjugation
         excludes:
           - Resources
-    resources:
-      - path: Sources/FRConjugation/Resources
+      - path: Sources/FRConjugation/Resources/catalogue.fcr
         buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.jacobshing.FRConjugation
-        INFOPLIST_FILE: ""
         GENERATE_INFOPLIST_FILE: "YES"
         DEFINES_MODULE: "YES"
         PRODUCT_MODULE_NAME: FRConjugation
         DEAD_CODE_STRIPPING: "YES"
         ENABLE_MODULE_VERIFIER: "YES"
         MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS: "gnu11 gnu++14"
+        SUPPORTED_PLATFORMS: "macosx iphoneos iphonesimulator"
+        IPHONEOS_DEPLOYMENT_TARGET: "15.0"
         SUPPORTS_MACCATALYST: "NO"
-    frameworks:
-      - sdk: Accelerate.framework
 
   FRConjugationTests:
     type: bundle.unit-test

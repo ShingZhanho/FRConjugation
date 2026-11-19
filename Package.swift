@@ -18,8 +18,7 @@ let package = Package(
             name: "FRConjugation",
             path: "swift_lib/Sources/FRConjugation",
             resources: [
-                .copy("Resources/model.json"),
-                .copy("Resources/weights.bin")
+                .copy("Resources/catalogue.fcr")
             ]
         ),
         .testTarget(

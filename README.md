@@ -1,14 +1,11 @@
 # FRConjugation.Swift
 
-A **pure Swift** package for conjugating French verbs, powered by a character-level seq2seq
-neural network with Bahdanau attention.
+A **pure Swift** package for conjugating French verbs using spelling rules learned from the Académie française catalogue.
 
-Covers **6,358 verbs** across **5 voices**, all modes, tenses, and
-13 gender-explicit persons -- including **64 homonym groups** where the
-same infinitive conjugates differently depending on meaning.
+Covers **6,358 verb entries** across **5 voices**, all modes, tenses, and
+13 gender-explicit persons, with indexed entries for **64 homonym groups**.
 
-**Zero external dependencies.** Uses Apple's Accelerate framework for fast matrix operations.
-No LibTorch, no CoreML, no Python runtime needed.
+**Zero external dependencies.** The compiled rules are bundled with the library.
 
 ```swift
 import FRConjugation
@@ -35,8 +32,7 @@ fr.participle("prendre", voice: .activeAvoir, tense: .passeFemininPluriel)
   No raw strings.
 - **Five grammatical voices** -- active-avoir, active-etre, active,
   passive, and pronominal.
-- **Simple & compound tenses** -- all 17 tenses predicted directly by the
-  neural model (no rule-based composition).
+- **Simple & compound tenses** -- the rules produce simple and compound forms for all 17 tenses.
 - **Participles** -- present participle, 4 gendered present participle
   forms, 4 simple past participle forms, and 4 compound past participle
   forms.
@@ -49,29 +45,24 @@ fr.participle("prendre", voice: .activeAvoir, tense: .passeFemininPluriel)
 - **Variant forms** -- some forms have alternative spellings (e.g. 1990
   reform variants separated by `;` in the database).  The primary form
   is returned by default; dedicated methods expose the alternative.
-- **Homonym support** -- 64 verb groups (e.g. *ressortir*) have multiple
-  conjugation patterns.  Use `hasHomonyms`, `homonymCount`, and
+- **Homonym support** -- indexed entries distinguish meanings of verbs such as *ressortir*.  Use `hasHomonyms`, `homonymCount`, and
   `homonymIndices` to discover them; pass `homonymIndex` to any
-  conjugation method to select the pattern (defaults to 1).
+  conjugation method to select the pattern (defaults to the first available index).
 - **Pronoun generation** -- `getPronoun` returns the contextual French
   subject pronoun with correct elision (`j'` before vowels/h-muet) and
   *que*/*qu'* prefix for the subjonctif.  `conjugateWithPronoun` and
   `conjugateAlternativeWithPronoun` produce ready-to-display strings.
 - **Structure queries** -- discover available voices, modes, tenses, and
   persons for any verb dynamically.
-- **Verb listing** -- `allVerbs` returns a sorted list of all 6,358
+- **Verb listing** -- `allVerbs` returns a sorted list of all 6,298
   supported verb infinitives (homonym groups counted once).
-- **LRU cache** -- configurable per-instance verb cache for repeated lookups.
 - **1990 reform** -- query whether a verb has reform spellings and get
   the variant form.
 - **H-aspire** -- correctly detects aspirate-h verbs.
 - **Elision/liaison blocking** -- reports the source's lexical blocking flag,
   including non-h initials, and preserves auxiliary elision in compound forms.
-- **Pure Swift** -- no C library, no LibTorch, no external ML framework.
-- **Lightweight** -- ~6 MB model, character-level neural network with
-  Accelerate-backed inference.
-- **Thread-safe** -- all public methods are synchronised; `Conjugator`
-  conforms to `Sendable`.
+- **Pure Swift** -- the runtime reads the bundled rules directly.
+- **Thread-safe** -- `Conjugator` shares immutable rule data and conforms to `Sendable`.
 - **App Store ready** -- no dynamic linking concerns, no large framework bundles.
 
 ---
@@ -90,11 +81,11 @@ No other dependencies.
 
 ## Installation
 
-Add the package dependency in your `Package.swift`:
+For the 5.0 release, add the package dependency in your `Package.swift`:
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/ShingZhanho/FRConjugation.Swift.git", from: "4.3.0"),
+  .package(url: "https://github.com/ShingZhanho/FRConjugation.Swift.git", from: "5.0.0"),
 ]
 ```
 
@@ -113,24 +104,11 @@ let fr = Conjugator.getShared()
 // Shared singleton -- async (won't block the main thread)
 let fr = try await Conjugator.getShared()
 
-// Configure cache size on first call (subsequent calls ignore the parameter)
-let fr = Conjugator.getShared(cacheSize: 128)
-
 // Async factory (creates a new instance, non-blocking)
 let fr = try await Conjugator.load()
 
 // Load from bundled resources (new instance each time)
 let fr = try Conjugator()
-
-// Custom cache size (default: 64 verbs; pass 0 to disable)
-let fr = try Conjugator(cacheSize: 256)
-
-// Or load from a custom directory containing model.json + weights.bin
-let fr = try Conjugator(modelDirectory: "/path/to/model")
-let fr = try Conjugator(modelDirectory: modelURL)
-
-// Async load from a custom directory
-let fr = try await Conjugator.load(modelDirectory: "/path/to/model")
 ```
 
 #### Conjugation
@@ -160,7 +138,7 @@ let full: [Voice: [Mode: [Tense: [Person: String]]]]? = fr.conjugate("battre")
 
 #### Experimental inference and guessing
 
-Each family has a raw neural API and a catalogue-first fallback API:
+Each family supports rule inference and catalogue-first guessing.
 
 | Catalogue API | Raw prediction | Catalogue-first guess |
 |---|---|---|
@@ -169,17 +147,15 @@ Each family has a raw neural API and a catalogue-first fallback API:
 | `participles()` | `rawInferredParticiples()` | `guessParticiples()` |
 | `gerondif()` | `rawInferredGerondif()` | `guessGerondif()` |
 
-Raw methods bypass per-verb availability checks and correction exceptions. They
-accept any nonempty model-supported text, lowercase it, and trim surrounding
-whitespace. Unsupported input or globally unsupported form combinations return
-`nil` (or an empty collection). Predictions can contain `;` alternatives,
-incorrect French, or truncated output under the existing 50-step decoder limit.
+Raw methods lowercase input, trim surrounding whitespace, and try matching
+suffixes from longest to shortest. If these rules cannot supply a supported
+slot, inference uses the most common catalogue template that supplies it.
+Unsupported input or slot combinations return `nil` or an empty collection.
+Predictions may include `;` alternatives and unattested spellings.
 
-Guess methods call the matching catalogue API first and preserve every available
-primary/corrected answer. They infer only missing entries. This also applies to
-bulk collections, so a known defective verb can gain inferred forms absent from
-its catalogue entry. Use catalogue methods when source-attested availability is
-required. All existing catalogue methods remain unchanged.
+Guess methods preserve available catalogue answers and infer missing forms,
+including in bulk lookups. For defective verbs, use the catalogue methods when
+you need only attested forms.
 
 ```swift
 // Finite forms retain conjugate's signatures and Person argument.
@@ -190,7 +166,7 @@ fr.rawInferredConjugation("faire", voice: .pronominal, mode: .subjonctif,
 
 // Participle gender/number is encoded in Tense; no Person is required.
 fr.guessParticiple("enquêter", voice: .activeAvoir, tense: .passeFemininSingulier)
-// -> "enquêtée", preserving the catalogue correction
+// -> "enquêtée"
 let rawParts = fr.rawInferredParticiples("blorper", voice: .activeAvoir)
 let parts = fr.guessParticiples("enquêter", voice: .activeAvoir)
 
@@ -214,15 +190,8 @@ participle/gérondif APIs have sync and async variants; participle collections
 have the existing synchronous collection shape. Raw gérondifs prepend `en ` to
 every alternative in their raw source participle.
 
-Catalogue lookup retains the matching catalogue method's exact input and primary
-answer semantics. Only raw fallback normalizes input; known homonyms follow the
-same index resolution as catalogue methods. Raw caches remain separate from
-corrected catalogue predictions, and inference does not change verb membership
-or source structure queries.
-
-See the [evaluation, references and reproduction commands](Evaluations/GuessConjugation/README.md)
-for measured accuracy and its limits. Raw inference has no general accuracy
-guarantee on unknown text.
+Catalogue lookups use the exact input. Inference normalizes the spelling and
+resolves known homonyms using the same `homonymIndex`.
 
 #### Variant (Alternative) Forms
 
@@ -417,14 +386,9 @@ fr.homonymIndices("ressortir")  // [1, 2]
 
 #### Caching
 
-```swift
-fr.cacheCapacity    // 64 (default)
-fr.cacheCount       // number of verbs currently cached
-fr.clearCache()     // evict all entries
-```
-
-The LRU cache is measured in **verbs** -- all forms for the same verb
-share a single cache slot.  Pass `cacheSize: 0` at init to disable.
+The rule engine stores no prediction cache. The legacy `cacheSize:` argument
+is deprecated and ignored. `cacheCount` and `cacheCapacity` return zero,
+and `clearCache()` has no effect.
 
 ### Enums
 
@@ -441,107 +405,37 @@ Each `Person` case has a `.pronoun` property (`"je"`, `"tu"`, `"il"`, ...) and a
 
 ## Building
 
-### 1. Get the dataset
+The compiled catalogue is included. Run these commands from the repository root.
 
-The `verbs.db` SQLite database is a release artefact of
-[**ShingZhanho/verbe-conjugaison-academie-francaise**](https://github.com/ShingZhanho/verbe-conjugaison-academie-francaise).
-Download it and place it in `python_model/`.
-
-### 2. Train the model (or use a pre-trained checkpoint)
-
-```bash
-cd python_model
-python3 train_model.py              # -> conjugation_model.pt
-python3 full_test_model.py "$PWD/conjugation_model.pt" # -> full_test_errors.json
-python3 build_final_model.py        # -> conjugation_model_final.pt (100%)
-```
-
-See [python_model/README.md](python_model/README.md) for details.
-
-### 3. Export weights to portable format
-
-```bash
-python3 python_model/export_weights.py --database python_model/verbs.db
-```
-
-Produces `model.json` and `weights.bin` in `swift_lib/Sources/FRConjugation/Resources/`.
-
-New training checkpoints preserve `bloque_elision_liaison`. For an older
-checkpoint, `--database` refreshes that list from the matching database; it does
-not retrain the network. The database and checkpoint must have matching verb
-catalogues. Without the flag or a supplied database, legacy exports retain the
-h-only behavior and emit a warning.
-
-To refresh only metadata after weights have already been exported (no PyTorch
-required):
-
-```bash
-python3 python_model/lexical_metadata.py python_model/verbs.db \
-  swift_lib/Sources/FRConjugation/Resources/model.json
-```
-
-This keeps all other model metadata and `weights.bin` unchanged. Swift accepts
-older format-2 exports without the new list by falling back to `h_aspire`.
-
-### 4. Build & test the Swift package
-
-```bash
-cd swift_lib
+```sh
 swift build
-swift test
+swift test -c release
 ```
 
-No LibTorch, no C library, no linker flags.
+The standalone `swift_lib/FRConjugation.xcodeproj` uses Xcode 27’s JSON project format. To regenerate it from `project.yml`, run `xcodegen generate --spec swift_lib/project.yml` with Xcode 27.2 or later.
+
+To regenerate the model from `verbs.db`, see the [rule build instructions](rules/README.md).
 
 ---
 
 ## Repository Structure
 
+```text
+Package.swift                       Swift package manifest
+swift_lib/Sources/FRConjugation/     Swift API and rule reader
+    Resources/catalogue.fcr         Bundled rules
+swift_lib/Tests/                    Package and compiler tests
+rules/                              Readable rules, learner, compiler and verifier
 ```
-.
-+-- swift_lib/                       The Swift Package (FRConjugation)
-|   +-- Package.swift
-|   +-- Sources/FRConjugation/
-|   |   +-- Conjugator.swift         Main API + LRU-cached conjugation
-|   |   +-- VerbCache.swift          LRU cache (verb-keyed, O(1))
-|   |   +-- InferenceEngine.swift    Model loader + greedy decoder
-|   |   +-- Layers.swift             GRU, attention, encoder, decoder, bridge
-|   |   +-- Tensor.swift             Accelerate-backed dense tensor
-|   |   +-- Types.swift              Voice, Mode, Tense, Person enums
-|   |   +-- Resources/
-|   |       +-- model.json           Vocabulary, metadata, weight manifest
-|   |       +-- weights.bin          Raw float32 weight data (~6 MB)
-|   +-- Tests/
-|       +-- FRConjugationTests/      Unit tests
-|
-+-- python_model/                    ML model training & Python API
-    +-- french_conjugation_model.py  Python conjugation module
-    +-- train_model.py               Training script
-    +-- build_final_model.py         Exception-table builder
-    +-- export_weights.py            Export to portable format
-    +-- test_model.py                Unit tests
-    +-- full_test_model.py           Full-DB validation
-    +-- README.md                    Python component docs
-```
-
-> Model files (`*.pt`), `verbs.db`, and build artefacts are git-ignored.
-> Exported weights (`model.json`, `weights.bin`) are committed in Resources/.
-
----
 
 ## Model Architecture
 
-| Component | Detail |
-|:----------|:-------|
-| Type | Character-level seq2seq with Bahdanau attention |
-| Encoder | Bidirectional GRU, 256 hidden, 64-dim char embeddings |
-| Decoder | GRU with attention over encoder states |
-| Conditioning | Voice + mode + tense + person embeddings (32-dim each) |
-| Bridge | Linear + tanh: encoder hidden + 4 conditioning embeddings -> decoder initial state |
-| Exception table | 187 corrections in the bundled metadata |
-| Parameters | ~1,540,000 |
-| Accuracy | **100%** on 6,358 verbs (5 voices) |
-| Model size | ~5.9 MiB FP32 weights + ~0.3 MiB JSON metadata |
+The longest matching suffix of an infinitive selects a template. Each
+voice, mood, tense and person combination selects a spelling edit in that
+template. An edit trims the infinitive and adds a prefix and ending. A slot
+can contain several spellings or be absent.
+
+Version 4.3.0 and earlier used a neural model. [Browse the source at the v4.3.0 tag](https://github.com/ShingZhanho/FRConjugation.Swift/tree/5707eac18bcc748d911ca9f7375317ed563bc6ae).
 
 ---
 

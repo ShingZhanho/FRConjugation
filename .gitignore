@@ -36,11 +36,9 @@ xcuserdata/
 *.xcscmblueprint
 DerivedData/
 
-# ── Large binary files (use Git LFS or download separately) ──
-# PyTorch model checkpoints
-python_model/*.pt
-# SQLite database (213 MB — too large for git)
-python_model/verbs.db
+# Source catalogue and local build inputs
+verbs.db
+*.pt
 
 # ── Temporary / generated ─────────────────────────────
 *.log

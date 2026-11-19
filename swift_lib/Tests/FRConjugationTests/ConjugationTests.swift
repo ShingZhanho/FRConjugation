@@ -1,63 +1,9 @@
-// ConjugationTests.swift -- Unit tests for the FRConjugation Swift library.
-//
-// The model is now bundled as Swift package resources (model.json + weights.bin).
-// No external model directory or C library required.
-//
-// Run:  cd swift_lib && swift test
-
 import XCTest
-@testable import FRConjugation
+import FRConjugation
 
 final class ConjugationTests: XCTestCase {
-
-    /// Resolve model directory: environment override or Resources/ via #filePath.
-    static var modelDir: String? {
-        if let env = ProcessInfo.processInfo.environment["MODEL_DIR"] {
-            return env
-        }
-        let swiftLib = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()  // FRConjugationTests/
-            .deletingLastPathComponent()  // Tests/
-            .deletingLastPathComponent()  // swift_lib/
-        let candidate = swiftLib
-            .appendingPathComponent("Sources")
-            .appendingPathComponent("FRConjugation")
-            .appendingPathComponent("Resources")
-        if FileManager.default.fileExists(atPath: candidate.appendingPathComponent("model.json").path) {
-            return candidate.path
-        }
-        return nil
-    }
-
-    static var conjugator: Conjugator?
-
-    override class func setUp() {
-        super.setUp()
-        do {
-            conjugator = try Conjugator()
-            return
-        } catch {
-            // Bundle.module may not work during development builds -- fall back
-        }
-        guard let dir = modelDir else {
-            print("[WARNING]  Could not find model files -- skipping tests")
-            return
-        }
-        do {
-            conjugator = try Conjugator(modelDirectory: dir)
-        } catch {
-            XCTFail("Failed to load model: \(error)")
-        }
-    }
-
-    private var c: Conjugator {
-        get throws {
-            guard let conj = Self.conjugator else {
-                throw XCTSkip("Model not available")
-            }
-            return conj
-        }
-    }
+    private var c: Conjugator { get throws { try Self.bundled.get() } }
+    private static let bundled = Result { try Conjugator() }
 
     // MARK: - Basic Queries
 
@@ -405,112 +351,6 @@ final class ConjugationTests: XCTestCase {
                                      tense: .present, person: .firstSingularMasculine)
         XCTAssertNil(result)
     }
-
-    // MARK: - LRU Cache
-
-    func testCacheDefaultCapacity() throws {
-        let conj = try c
-        XCTAssertEqual(conj.cacheCapacity, Conjugator.defaultCacheSize)
-    }
-
-    func testCacheCustomCapacity() throws {
-        let conj = try Conjugator(cacheSize: 128)
-        XCTAssertEqual(conj.cacheCapacity, 128)
-        XCTAssertEqual(conj.cacheCount, 0)
-    }
-
-    func testCacheDisabled() throws {
-        let conj = try Conjugator(cacheSize: 0)
-        XCTAssertEqual(conj.cacheCapacity, 0)
-        // Conjugation should still work
-        XCTAssertEqual(
-            conj.conjugate("parler", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine),
-            "parle"
-        )
-        XCTAssertEqual(conj.cacheCount, 0)
-    }
-
-    func testCachePopulatesOnConjugate() throws {
-        let conj = try Conjugator(cacheSize: 16)
-        XCTAssertEqual(conj.cacheCount, 0)
-
-        // First call populates the cache
-        _ = conj.conjugate("parler", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine)
-        XCTAssertEqual(conj.cacheCount, 1)
-
-        // Same verb, different form: still 1 verb in cache
-        _ = conj.conjugate("parler", voice: .activeAvoir, mode: .indicatif,
-                           tense: .imparfait, person: .firstSingularMasculine)
-        XCTAssertEqual(conj.cacheCount, 1)
-
-        // Different verb: now 2
-        _ = conj.conjugate("finir", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine)
-        XCTAssertEqual(conj.cacheCount, 2)
-    }
-
-    func testCacheHitReturnsSameResult() throws {
-        let conj = try Conjugator(cacheSize: 16)
-        let first = conj.conjugate("aller", voice: .activeEtre, mode: .indicatif,
-                                    tense: .present, person: .firstSingularMasculine)
-        let second = conj.conjugate("aller", voice: .activeEtre, mode: .indicatif,
-                                     tense: .present, person: .firstSingularMasculine)
-        XCTAssertEqual(first, second)
-        XCTAssertEqual(first, "vais")
-    }
-
-    func testCacheEvictsLRU() throws {
-        let conj = try Conjugator(cacheSize: 2)
-
-        // Fill cache: parler, finir
-        _ = conj.conjugate("parler", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine)
-        _ = conj.conjugate("finir", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine)
-        XCTAssertEqual(conj.cacheCount, 2)
-
-        // Adding a 3rd verb should evict the LRU ("parler")
-        _ = conj.conjugate("avoir", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine)
-        XCTAssertEqual(conj.cacheCount, 2)
-    }
-
-    func testClearCache() throws {
-        let conj = try Conjugator(cacheSize: 16)
-
-        _ = conj.conjugate("parler", voice: .activeAvoir, mode: .indicatif,
-                           tense: .present, person: .firstSingularMasculine)
-        XCTAssertGreaterThan(conj.cacheCount, 0)
-
-        conj.clearCache()
-        XCTAssertEqual(conj.cacheCount, 0)
-    }
-
-    func testCachePopulatesOnParticiple() throws {
-        let conj = try Conjugator(cacheSize: 16)
-        _ = conj.participle("parler", voice: .activeAvoir, tense: .passeMasculinSingulier)
-        XCTAssertEqual(conj.cacheCount, 1)
-    }
-
-    func testSharedInstanceCacheSize() throws {
-        // Reset the shared singleton so we can configure it
-        Conjugator._resetShared()
-
-        let shared = Conjugator.getShared(cacheSize: 32)
-        XCTAssertEqual(shared.cacheCapacity, 32)
-
-        // Second call ignores the parameter
-        let shared2 = Conjugator.getShared(cacheSize: 999)
-        XCTAssertTrue(shared === shared2)
-        XCTAssertEqual(shared2.cacheCapacity, 32)
-
-        // Reset so other tests get default
-        Conjugator._resetShared()
-    }
-
-    // MARK: - Variant Forms (Spelling Alternatives)
 
     func testConjugateReturnsPrimaryForm() throws {
         let conj = try c
@@ -954,14 +794,5 @@ final class ConjugationTests: XCTestCase {
             XCTAssertFalse(gerondifTenses.contains(t),
                            "tenses() should not return gérondif tense \(t)")
         }
-    }
-
-    func testGerondifUsesCache() throws {
-        let conj = try c
-        conj.clearCache()
-        _ = conj.gerondif("manger", voice: .activeAvoir, tense: .gerondifPresent)
-        // The underlying participle call should have populated the cache
-        XCTAssertGreaterThan(conj.cacheCount, 0,
-                             "gerondif() should populate the cache via participle()")
     }
 }

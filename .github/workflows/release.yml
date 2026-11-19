@@ -6,23 +6,24 @@ on:
       - 'v*'
 
 jobs:
-  # ── Job 1: Build & test the Swift package ──────────────────────────────────
   build-and-test:
     name: Build & Test Swift Package
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
-      - name: Test lexical metadata helpers
-        run: python3 -m unittest discover -s python_model -p test_lexical_metadata.py -v
+      - name: Check the bundled catalogue
+        run: |
+          python3 rules/compile.py rules/catalogue.rules "$RUNNER_TEMP/catalogue.fcr"
+          cmp "$RUNNER_TEMP/catalogue.fcr" swift_lib/Sources/FRConjugation/Resources/catalogue.fcr
 
-      - name: Build Swift package
-        run: swift build
+      - name: Test Swift package and public loading API
+        run: |
+          swift test -c release
+          bin_dir="$(swift build -c release --show-bin-path)"
+          swiftc -typecheck -Xfrontend -verify -Xfrontend -verify-ignore-unrelated \
+            -I "$bin_dir" -I "$bin_dir/Modules" swift_lib/Tests/Compiler/BundledModelOnly.swift
 
-      - name: Test Swift package
-        run: swift test
-
-  # ── Job 2: Create GitHub Release ───────────────────────────────────────────
   release:
     name: Publish Release
     runs-on: ubuntu-latest
@@ -32,17 +33,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Package release assets
-        run: |
-          mkdir -p release
-          tar czf release/model-weights.tar.gz \
-            -C swift_lib/Sources/FRConjugation/Resources \
-            model.json weights.bin
-
       - name: Create release
         uses: softprops/action-gh-release@v3
         with:
           body_path: releases/${{ github.ref_name }}.md
           generate_release_notes: false
+          fail_on_unmatched_files: true
           files: |
-            release/model-weights.tar.gz
+            swift_lib/Sources/FRConjugation/Resources/catalogue.fcr
+            rules/catalogue.rules
