@@ -4,6 +4,15 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to test and publish
+        type: string
+        required: true
+
+env:
+  RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
 
 jobs:
   build-and-test:
@@ -11,6 +20,8 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
 
       - name: Check the bundled catalogue
         run: |
@@ -21,7 +32,11 @@ jobs:
         run: |
           swift test -c release
           bin_dir="$(swift build -c release --show-bin-path)"
-          swiftc -typecheck -Xfrontend -verify -Xfrontend -verify-ignore-unrelated \
+          verify_flags=(-Xfrontend -verify)
+          if [[ "$(swiftc -frontend -help-hidden)" == *-verify-ignore-unrelated* ]]; then
+            verify_flags+=(-Xfrontend -verify-ignore-unrelated)
+          fi
+          swiftc -typecheck "${verify_flags[@]}" \
             -I "$bin_dir" -I "$bin_dir/Modules" swift_lib/Tests/Compiler/BundledModelOnly.swift
 
   release:
@@ -32,11 +47,14 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
 
       - name: Create release
         uses: softprops/action-gh-release@v3
         with:
-          body_path: releases/${{ github.ref_name }}.md
+          tag_name: ${{ env.RELEASE_TAG }}
+          body_path: releases/${{ env.RELEASE_TAG }}.md
           generate_release_notes: false
           fail_on_unmatched_files: true
           files: |
