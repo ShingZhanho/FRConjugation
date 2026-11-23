@@ -1,13 +1,15 @@
 # TypeScript / JavaScript
 
 Native TypeScript reader for browsers and Node.js 20+, with no runtime dependencies.
-The npm package identity is `@jacobshing/frconjugation`; it has not yet been published.
+The npm package identity is `@jacobshing/frconjugation`.
 It ships ES modules, type declarations, API comments, and the bundled rules.
 No separate data download, custom binary, or server is required.
 
 ## Build and install
 
-From the repository root:
+Install with `npm install @jacobshing/frconjugation`.
+
+To build from the repository root:
 
 ```sh
 cd typescript

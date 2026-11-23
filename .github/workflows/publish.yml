@@ -14,13 +14,8 @@ on:
       target:
         description: Distribution target
         type: choice
-        options: [all, github, pypi, nuget, npm, maven]
+        options: [all, github, pypi, nuget, npm, maven, npm-trust]
         default: all
-      npm_auth:
-        description: npm bootstrap token for first publication; trusted after configuring npm OIDC
-        type: choice
-        options: [bootstrap, trusted]
-        default: bootstrap
 permissions:
   contents: read
 concurrency:
@@ -50,12 +45,13 @@ jobs:
             const validate = require('./.github/scripts/validate-publish.cjs');
             await validate({ core, context, github });
   build:
+    if: inputs.target != 'npm-trust'
     needs: validate
     uses: ./.github/workflows/packages.yml
     with:
       ref: ${{ needs.validate.outputs.sha }}
   signing-check:
-    if: github.ref == 'refs/heads/main' && (inputs.ref == 'main' || inputs.publish)
+    if: inputs.target != 'npm-trust' && github.ref == 'refs/heads/main' && (inputs.ref == 'main' || inputs.publish)
     needs: validate
     runs-on: ubuntu-latest
     environment: maven
@@ -140,17 +136,32 @@ jobs:
           registry-url: https://registry.npmjs.org
       - name: Ensure npm supports trusted publishing
         run: npm install --global npm@11
-      - name: Publish initial package with bootstrap token
-        if: inputs.npm_auth == 'bootstrap'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_DIST_TAG: ${{ needs.validate.outputs.prerelease == 'true' && 'next' || 'latest' }}
-        run: npm publish ./dist/*.tgz --access public --provenance --tag "$NPM_DIST_TAG"
       - name: Publish with trusted publishing
-        if: inputs.npm_auth == 'trusted'
         env:
           NPM_DIST_TAG: ${{ needs.validate.outputs.prerelease == 'true' && 'next' || 'latest' }}
         run: npm publish ./dist/*.tgz --access public --tag "$NPM_DIST_TAG"
+  npm-trust:
+    if: inputs.publish && inputs.target == 'npm-trust'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+      - run: npm install --global npm@11
+      - name: Verify trusted publishing with the existing distribution tag
+        env:
+          VERSION: ${{ needs.validate.outputs.version }}
+          NPM_DIST_TAG: ${{ needs.validate.outputs.prerelease == 'true' && 'next' || 'latest' }}
+        run: |
+          current="$(npm view @jacobshing/frconjugation dist-tags --json | node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>console.log(JSON.parse(s)[process.env.NPM_DIST_TAG]));')"
+          test "$current" = "$VERSION"
+          npm dist-tag add "@jacobshing/frconjugation@$VERSION" "$NPM_DIST_TAG"
   maven:
     if: inputs.publish && (inputs.target == 'all' || inputs.target == 'maven')
     needs: [validate, build, signing-check]
