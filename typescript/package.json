@@ -1,6 +1,6 @@
 {
     "name": "@jacobshing/frconjugation",
-    "version": "5.1.0",
+    "version": "5.1.1",
     "description": "French conjugation with bundled spelling rules, for browsers and Node.js",
     "type": "module",
     "exports": {

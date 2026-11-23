@@ -7,7 +7,7 @@
     <WarningsAsErrors>$(WarningsAsErrors);CS1591</WarningsAsErrors>
     <PackageId>ShingZhanho.FRConjugation</PackageId>
     <RootNamespace>ShingZhanho.FRConjugation</RootNamespace>
-    <Version>5.1.0</Version>
+    <Version>5.1.1</Version>
     <Authors>ShingZhanho</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/ShingZhanho/FRConjugation</RepositoryUrl>

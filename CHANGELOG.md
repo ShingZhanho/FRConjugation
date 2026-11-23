@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.1.1 — 2026-11-24
+
+- Corrected registry installation instructions and removed unpublished/local-only wording from package documentation. No library or catalogue changes. [Release notes](releases/v5.1.1.md).
+
 ## v5.1.0 — 2026-11-24
 
 - Added C/C++, Kotlin/JVM, C#, Python, and TypeScript/JavaScript distributions with Swift API parity and a shared bundled catalogue.

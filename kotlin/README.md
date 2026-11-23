@@ -14,7 +14,7 @@ cd kotlin
 
 Install from [Maven Central](https://central.sonatype.com/artifact/com.jacobshing/frconjugation)
 by configuring `mavenCentral()` and
-`implementation("com.jacobshing:frconjugation:5.1.0")` in the consuming project.
+`implementation("com.jacobshing:frconjugation:5.1.1")` in the consuming project.
 Use `mavenLocal()` instead when testing a locally published build.
 
 ```kotlin
