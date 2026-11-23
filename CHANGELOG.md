@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.1.0 — 2026-11-24
+
+- Added C/C++, Kotlin/JVM, C#, Python, and TypeScript/JavaScript distributions with Swift API parity and a shared bundled catalogue.
+- Added registry publishing and native macOS/Linux build validation. Swift public APIs remain unchanged. [Release and development-port migration details](releases/v5.1.0.md).
+
 ## v5.0.1 — 2026-11-23
 
 - Added catalogue, raw-inferred, and hybrid common-prefix queries with async overloads.

@@ -5,7 +5,7 @@ Swift 5.6+, macOS 10.15+ or iOS 13+. No external dependencies.
 Add the package in Xcode or your manifest:
 
 ```swift
-.package(url: "https://github.com/ShingZhanho/FRConjugation.git", from: "5.0.1")
+.package(url: "https://github.com/ShingZhanho/FRConjugation.git", from: "5.1.0")
 ```
 
 Import `FRConjugation`. Run builds from the repository root:

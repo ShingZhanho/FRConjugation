@@ -13,7 +13,7 @@ cd kotlin
 ```
 
 For a locally published build, configure `mavenLocal()` and
-`implementation("com.jacobshing:frconjugation:5.0.1")` in the consuming project.
+`implementation("com.jacobshing:frconjugation:5.1.0")` in the consuming project.
 These coordinates do not imply publication to Maven Central.
 
 ```kotlin
