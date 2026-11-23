@@ -145,12 +145,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_DIST_TAG: ${{ needs.validate.outputs.prerelease == 'true' && 'next' || 'latest' }}
-        run: npm publish dist/*.tgz --access public --provenance --tag "$NPM_DIST_TAG"
+        run: npm publish ./dist/*.tgz --access public --provenance --tag "$NPM_DIST_TAG"
       - name: Publish with trusted publishing
         if: inputs.npm_auth == 'trusted'
         env:
           NPM_DIST_TAG: ${{ needs.validate.outputs.prerelease == 'true' && 'next' || 'latest' }}
-        run: npm publish dist/*.tgz --access public --tag "$NPM_DIST_TAG"
+        run: npm publish ./dist/*.tgz --access public --tag "$NPM_DIST_TAG"
   maven:
     if: inputs.publish && (inputs.target == 'all' || inputs.target == 'maven')
     needs: [validate, build, signing-check]
