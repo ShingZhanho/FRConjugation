@@ -1,4 +1,5 @@
 """Compile the JSON Lines spelling rules into language-independent FCR1 tables."""
+
 import argparse
 import collections
 import json
@@ -25,14 +26,22 @@ def compile_rules(source):
         name, row = json.loads(line)
         records[name].append(row)
     if records.pop("format") != [1] or set(records) != {
-            "slot", "verb", "suffix", "template", "block", "program"}:
+        "slot",
+        "verb",
+        "suffix",
+        "template",
+        "block",
+        "program",
+    }:
         raise ValueError("Invalid rule syntax/version")
     pool = {}
+
     def sid(value):
         return pool.setdefault(value, len(pool))
+
     slots = records["slot"]
     assert slots == sorted(set(slots))
-    missing = 0xffffffff
+    missing = 0xFFFFFFFF
     sections = [b"", words([sid(s) for s in slots])]
     for name in ("verb", "suffix"):
         rows = records[name]
@@ -42,13 +51,15 @@ def compile_rules(source):
         for key, value, *extra in rows:
             entries.extend((sid(key), value))
             if name == "verb":
-                variant, = extra
+                (variant,) = extra
                 entries.append(missing if variant is None else sid(variant))
             else:
                 assert 0 <= value < len(records["template"])
         sections.append(words(entries))
-    for name, width, limit in (("template", (len(slots)+15)//16, len(records["block"])),
-                               ("block", 16, len(records["program"]))):
+    for name, width, limit in (
+        ("template", (len(slots) + 15) // 16, len(records["block"])),
+        ("block", 16, len(records["program"])),
+    ):
         rows = records[name]
         assert all(len(r) == width and all(0 <= i < limit for i in r) for r in rows)
         sections.append(b"".join(words(r) for r in rows))

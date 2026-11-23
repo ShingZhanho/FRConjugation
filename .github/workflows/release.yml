@@ -15,9 +15,9 @@ env:
   RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
 
 jobs:
-  build-and-test:
-    name: Build & Test Swift Package
-    runs-on: macos-15
+  validate-catalogue:
+    name: Verify shared catalogue provenance
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,7 +26,15 @@ jobs:
       - name: Check the bundled catalogue
         run: |
           python3 rules/compile.py rules/catalogue.rules "$RUNNER_TEMP/catalogue.fcr"
-          cmp "$RUNNER_TEMP/catalogue.fcr" swift_lib/Sources/FRConjugation/Resources/catalogue.fcr
+          cmp "$RUNNER_TEMP/catalogue.fcr" catalogue/catalogue.fcr
+
+  build-and-test:
+    name: Build & Test Swift Package
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
 
       - name: Test Swift package and public loading API
         run: |
@@ -37,12 +45,12 @@ jobs:
             verify_flags+=(-Xfrontend -verify-ignore-unrelated)
           fi
           swiftc -typecheck "${verify_flags[@]}" \
-            -I "$bin_dir" -I "$bin_dir/Modules" swift_lib/Tests/Compiler/BundledModelOnly.swift
+            -I "$bin_dir" -I "$bin_dir/Modules" swift/Tests/Compiler/BundledModelOnly.swift
 
   release:
     name: Publish Release
     runs-on: ubuntu-latest
-    needs: build-and-test
+    needs: [validate-catalogue, build-and-test]
     permissions:
       contents: write
     steps:
@@ -59,5 +67,5 @@ jobs:
           generate_release_notes: false
           fail_on_unmatched_files: true
           files: |
-            swift_lib/Sources/FRConjugation/Resources/catalogue.fcr
+            catalogue/catalogue.fcr
             rules/catalogue.rules

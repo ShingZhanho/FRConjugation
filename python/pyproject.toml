@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jacobs-frconjugation"
+version = "5.0.1"
+description = "French conjugation with bundled spelling rules"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "JacobS"}]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+frconjugation = ["catalogue.fcr", "py.typed"]

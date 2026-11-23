@@ -1,4 +1,5 @@
 """Learn an exact paradigm classifier and spelling edits from a SQLite catalogue."""
+
 import argparse
 import collections
 import json
@@ -17,8 +18,7 @@ def split_key(key):
 def edit(lemma, alternative):
     """Keep the longest initial stem shared with the last lexical word."""
     start = alternative.rfind(" ") + 1
-    positions = [start] + [i + 1 for i in range(start, len(alternative))
-                           if alternative[i] in "'’"]
+    positions = [start] + [i + 1 for i in range(start, len(alternative)) if alternative[i] in "'’"]
     best_length = 0
     best_start = start
     for position in positions:
@@ -31,8 +31,11 @@ def edit(lemma, alternative):
             best_length, best_start = length, position
     if not best_length:
         return ("", None, alternative)
-    return (alternative[:best_start], len(lemma) - best_length,
-            alternative[best_start + best_length:])
+    return (
+        alternative[:best_start],
+        len(lemma) - best_length,
+        alternative[best_start + best_length :],
+    )
 
 
 def suffix_decisions(assignments):
@@ -42,10 +45,12 @@ def suffix_decisions(assignments):
         marked = "^" + homonym + "|" + lemma
         for i in range(len(marked) + 1):
             votes[marked[i:]][template] += 1
-    best = {suffix: min(counts, key=lambda t: (-counts[t], t))
-            for suffix, counts in votes.items()}
-    return sorted((suffix, winner) for suffix, winner in best.items()
-                  if not suffix or winner != best[suffix[1:]])
+    best = {suffix: min(counts, key=lambda t: (-counts[t], t)) for suffix, counts in votes.items()}
+    return sorted(
+        (suffix, winner)
+        for suffix, winner in best.items()
+        if not suffix or winner != best[suffix[1:]]
+    )
 
 
 def write_rules(path, sections):
@@ -53,18 +58,22 @@ def write_rules(path, sections):
     with path.open("w", encoding="utf-8", newline="\n") as out:
         for name, records in sections:
             for value in records:
-                print(json.dumps([name, value], ensure_ascii=False,
-                                 separators=(",", ":")), file=out)
+                print(
+                    json.dumps([name, value], ensure_ascii=False, separators=(",", ":")), file=out
+                )
 
 
 def learn(db, output):
     con = sqlite3.connect(db.resolve().as_uri() + "?mode=ro", uri=True)
-    verbs = list(con.execute("""
+    verbs = list(
+        con.execute("""
         SELECT id, infinitif, h_aspire, bloque_elision_liaison, rectification_1990,
-               rectification_1990_variante FROM verbes ORDER BY infinitif"""))
+               rectification_1990_variante FROM verbes ORDER BY infinitif""")
+    )
     observed = set()
     for voice, mood, tense, persons in con.execute(
-            "SELECT DISTINCT voix, mode, temps, personne FROM conjugaisons"):
+        "SELECT DISTINCT voix, mode, temps, personne FROM conjugaisons"
+    ):
         observed.update("|".join((voice, mood, tense, p)) for p in persons.split(";"))
     for voice, tense in con.execute("SELECT DISTINCT voix, forme FROM participes"):
         observed.add("|".join((voice, "participe", tense, "-")))
@@ -78,10 +87,13 @@ def learn(db, output):
         row = [0] * (16 * ((len(slots) + 15) // 16))
         # Forms frequently repeat across persons and compound tenses within a verb.
         local = {}
-        for voice, mood, tense, persons, output_text in con.execute("""
+        for voice, mood, tense, persons, output_text in con.execute(
+            """
                 SELECT voix, mode, temps, personne, conjugaison FROM conjugaisons
                 WHERE verbe_id=? UNION ALL SELECT voix, 'participe', forme, '-', participe
-                FROM participes WHERE verbe_id=?""", (ident, ident)):
+                FROM participes WHERE verbe_id=?""",
+            (ident, ident),
+        ):
             if output_text not in local:
                 code = tuple(edit(lemma, alt) for alt in output_text.split(";"))
                 local[output_text] = programs.setdefault(code, len(programs) + 1)
@@ -90,22 +102,42 @@ def learn(db, output):
                 if row[slot] not in (0, local[output_text]):
                     raise ValueError(f"Conflicting forms for {key}, {slots[slot]}")
                 row[slot] = local[output_text]
-        block_ids = tuple(blocks.setdefault(tuple(row[i:i+16]), len(blocks))
-                          for i in range(0, len(row), 16))
+        block_ids = tuple(
+            blocks.setdefault(tuple(row[i : i + 16]), len(blocks)) for i in range(0, len(row), 16)
+        )
         template = templates.setdefault(block_ids, len(templates))
         lexicon.append([key, h + 2 * blocking + 4 * reform, variant])
         assignments.append((key, template))
         counts[template] += 1
     decisions = suffix_decisions(assignments)
-    write_rules(output, [("format", [1]), ("slot", slots), ("verb", lexicon),
-                         ("suffix", decisions), ("template", templates.keys()),
-                         ("block", blocks.keys()), ("program", [(), *programs.keys()])])
-    print(json.dumps(dict(verbs=len(verbs), slots=len(slots), templates=len(templates),
-                          singleton_templates=sum(n == 1 for n in counts.values()),
-                          largest_template=max(counts.values()), suffixes=len(decisions),
-                          blocks=len(blocks), programs=len(programs),
-                          all_literal_programs=sum(all(t is None for _, t, _ in p)
-                                                   for p in programs)), indent=2))
+    write_rules(
+        output,
+        [
+            ("format", [1]),
+            ("slot", slots),
+            ("verb", lexicon),
+            ("suffix", decisions),
+            ("template", templates.keys()),
+            ("block", blocks.keys()),
+            ("program", [(), *programs.keys()]),
+        ],
+    )
+    print(
+        json.dumps(
+            dict(
+                verbs=len(verbs),
+                slots=len(slots),
+                templates=len(templates),
+                singleton_templates=sum(n == 1 for n in counts.values()),
+                largest_template=max(counts.values()),
+                suffixes=len(decisions),
+                blocks=len(blocks),
+                programs=len(programs),
+                all_literal_programs=sum(all(t is None for _, t, _ in p) for p in programs),
+            ),
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

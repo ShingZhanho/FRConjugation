@@ -1,0 +1,29 @@
+name: TypeScript
+on:
+  push:
+    paths: ['typescript/**', 'catalogue/catalogue.fcr', 'tests/*.tsv', '.github/workflows/typescript.yml']
+  pull_request:
+    paths: ['typescript/**', 'catalogue/catalogue.fcr', 'tests/*.tsv', '.github/workflows/typescript.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: typescript/package-lock.json
+      - run: npm ci
+        working-directory: typescript
+      - run: npm test
+        working-directory: typescript
+      - run: npm run verify:catalogue
+        working-directory: typescript
+      - run: npm pack --dry-run
+        working-directory: typescript

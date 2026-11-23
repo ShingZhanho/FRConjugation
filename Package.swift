@@ -5,7 +5,7 @@ let package = Package(
     name: "FRConjugation",
     platforms: [
         .macOS(.v10_15),
-        .iOS(.v13)
+        .iOS(.v13),
     ],
     products: [
         .library(
@@ -16,7 +16,7 @@ let package = Package(
     targets: [
         .target(
             name: "FRConjugation",
-            path: "swift_lib/Sources/FRConjugation",
+            path: "swift/Sources/FRConjugation",
             resources: [
                 .copy("Resources/catalogue.fcr")
             ]
@@ -24,7 +24,8 @@ let package = Package(
         .testTarget(
             name: "FRConjugationTests",
             dependencies: ["FRConjugation"],
-            path: "swift_lib/Tests/FRConjugationTests"
-        )
+            path: "swift/Tests/FRConjugationTests",
+            resources: [.copy("Fixtures/conformance.tsv"), .copy("Fixtures/typed-api.tsv")]
+        ),
     ]
 )

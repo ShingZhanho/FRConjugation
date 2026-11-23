@@ -1,0 +1,39 @@
+{
+    "name": "@jacobs/frconjugation",
+    "version": "5.0.1",
+    "description": "French conjugation with bundled spelling rules, for browsers and Node.js",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "engines": {
+        "node": ">=20"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ShingZhanho/FRConjugation.git",
+        "directory": "typescript"
+    },
+    "scripts": {
+        "build": "node scripts/embed.mjs && tsc",
+        "test": "npm run build && node --test test/*.test.mjs && tsc -p test/tsconfig.json",
+        "prepack": "npm run build",
+        "format": "prettier --write src scripts test package.json tsconfig.json",
+        "test:browser": "npm run build && node test/browser.mjs",
+        "verify:catalogue": "npm run build && node scripts/verify-catalogue.mjs"
+    },
+    "devDependencies": {
+        "@types/node": "^24.0.0",
+        "playwright": "^1.65.1",
+        "prettier": "^3.6.2",
+        "typescript": "~5.9.3"
+    }
+}

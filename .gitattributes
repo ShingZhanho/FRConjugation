@@ -1,0 +1,2 @@
+# Fixture whitespace includes empty final columns and pronoun suffix spaces.
+tests/*.tsv whitespace=-blank-at-eol

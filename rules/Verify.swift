@@ -14,12 +14,14 @@ private func verify(_ url: URL, _ gold: URL) throws {
     let model = try RuleFile(url)
     let oracle = try JSONDecoder().decode(Oracle.self, from: Data(contentsOf: gold))
     guard oracle.slots == (0..<model.slotCount).map(model.slotName),
-          model.verbCount == oracle.verbs.count else { throw InvalidFormat("Inventory mismatch") }
+        model.verbCount == oracle.verbs.count
+    else { throw InvalidFormat("Inventory mismatch") }
     var present = 0, absent = 0
     for (i, ref) in oracle.verbs.enumerated() {
         let metadata = model.metadata(at: i)
         guard metadata.0 == ref.key, metadata.1 == ref.flags, metadata.2 == ref.variant,
-              let selected = model.select(ref.key) else { throw InvalidFormat(ref.key) }
+            let selected = model.select(ref.key)
+        else { throw InvalidFormat(ref.key) }
         var row = Data()
         var count = 0
         for slot in oracle.slots.indices {
@@ -47,6 +49,8 @@ private enum CatalogueVerifier {
         guard CommandLine.arguments.count == 3 else {
             throw InvalidFormat("Usage: verify-catalogue CATALOGUE.fcr ORACLE.json")
         }
-        try verify(URL(fileURLWithPath: CommandLine.arguments[1]), URL(fileURLWithPath: CommandLine.arguments[2]))
+        try verify(
+            URL(fileURLWithPath: CommandLine.arguments[1]),
+            URL(fileURLWithPath: CommandLine.arguments[2]))
     }
 }

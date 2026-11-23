@@ -41,4 +41,4 @@ The UTF-8 source has one JSON array per line. The first element is a directive, 
 | block | 16 program IDs |
 | program | Array of alternatives, each an array of prefix string, trim integer or null, and suffix string. Program zero is empty. |
 
-The compiler interns each string once and encodes references by ID. See [compile.py](compile.py) for the writer and [RuleFile.swift](../swift_lib/Sources/FRConjugation/RuleFile.swift) for the reader.
+The compiler interns each string once and encodes references by ID. See [compile.py](compile.py) for the writer and [RuleFile.swift](../swift/Sources/FRConjugation/RuleFile.swift) for the reader.

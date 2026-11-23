@@ -21,7 +21,7 @@ jobs:
           python3 "$GITHUB_WORKSPACE/rules/learn.py" verbs.db catalogue.rules
           python3 "$GITHUB_WORKSPACE/rules/compile.py" catalogue.rules catalogue.fcr
           python3 "$GITHUB_WORKSPACE/rules/oracle.py" verbs.db oracle.json
-          swiftc -O "$GITHUB_WORKSPACE/swift_lib/Sources/FRConjugation/RuleFile.swift" \
+          swiftc -O "$GITHUB_WORKSPACE/swift/Sources/FRConjugation/RuleFile.swift" \
             "$GITHUB_WORKSPACE/rules/Verify.swift" -o verify-catalogue
           ./verify-catalogue catalogue.fcr oracle.json
 

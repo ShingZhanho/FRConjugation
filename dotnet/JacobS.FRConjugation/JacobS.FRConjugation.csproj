@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <WarningsAsErrors>$(WarningsAsErrors);CS1591</WarningsAsErrors>
+    <PackageId>JacobS.FRConjugation</PackageId>
+    <RootNamespace>JacobS.FRConjugation</RootNamespace>
+    <Version>5.0.1</Version>
+    <Authors>JacobS</Authors>
+    <Description>French conjugation using a bundled catalogue of spelling rules.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../catalogue/catalogue.fcr" LogicalName="JacobS.FRConjugation.catalogue.fcr" />
+  </ItemGroup>
+</Project>
