@@ -3,12 +3,16 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "jacobs-frconjugation"
+name = "jacobszh-frconjugation"
 version = "5.0.1"
 description = "French conjugation with bundled spelling rules"
 readme = "README.md"
 requires-python = ">=3.10"
-authors = [{name = "JacobS"}]
+authors = [{name = "jacobszh"}]
+
+[project.urls]
+Homepage = "https://github.com/ShingZhanho/FRConjugation"
+Repository = "https://github.com/ShingZhanho/FRConjugation"
 
 [tool.setuptools.packages.find]
 where = ["src"]

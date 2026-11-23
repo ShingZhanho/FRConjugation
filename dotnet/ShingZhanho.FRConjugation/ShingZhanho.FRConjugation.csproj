@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <WarningsAsErrors>$(WarningsAsErrors);CS1591</WarningsAsErrors>
+    <PackageId>ShingZhanho.FRConjugation</PackageId>
+    <RootNamespace>ShingZhanho.FRConjugation</RootNamespace>
+    <Version>5.0.1</Version>
+    <Authors>ShingZhanho</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/ShingZhanho/FRConjugation</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/ShingZhanho/FRConjugation</PackageProjectUrl>
+    <Description>French conjugation using a bundled catalogue of spelling rules.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <EmbeddedResource Include="../../catalogue/catalogue.fcr" LogicalName="ShingZhanho.FRConjugation.catalogue.fcr" />
+  </ItemGroup>
+</Project>

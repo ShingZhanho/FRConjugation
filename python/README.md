@@ -1,6 +1,6 @@
 # Python
 
-Distribution identity: **jacobs-frconjugation**. Import name: **frconjugation**.
+Distribution identity: **jacobszh-frconjugation**. Import name: **frconjugation**.
 Requires Python 3.10+; no runtime dependencies or other language toolchains.
 
 From the repository root:

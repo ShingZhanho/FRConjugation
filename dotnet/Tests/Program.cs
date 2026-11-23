@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using JacobS.FRConjugation;
+using ShingZhanho.FRConjugation;
 
 static class Program {
     static void Equal<T>(T actual, T expected) {

@@ -1,7 +1,7 @@
 # TypeScript / JavaScript
 
 Native TypeScript reader for browsers and Node.js 20+, with no runtime dependencies.
-The npm package identity is `@jacobs/frconjugation`; it has not yet been published.
+The npm package identity is `@jacobshing/frconjugation`; it has not yet been published.
 It ships ES modules, type declarations, API comments, and the bundled rules.
 No separate data download, custom binary, or server is required.
 
@@ -22,7 +22,7 @@ JavaScript before compiling. Node.js is the only language toolchain needed.
 The package is ESM; use `import`, or dynamic `import()` from CommonJS.
 
 ```ts
-import { Conjugator, Voice, Mode, Tense, Person } from "@jacobs/frconjugation";
+import { Conjugator, Voice, Mode, Tense, Person } from "@jacobshing/frconjugation";
 
 const c = Conjugator.getShared();
 c.conjugate("manger", Voice.ActiveAvoir, Mode.Indicatif,
@@ -89,7 +89,7 @@ Synchronous construction and queries run on the caller thread.
 ## Worker-backed asynchronous API
 
 ```ts
-import { AsyncConjugator, Voice, Mode, Tense, Person } from "@jacobs/frconjugation";
+import { AsyncConjugator, Voice, Mode, Tense, Person } from "@jacobshing/frconjugation";
 
 const c = await AsyncConjugator.load();
 try {

@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 import java.io.BufferedOutputStream
 import java.io.DataOutputStream

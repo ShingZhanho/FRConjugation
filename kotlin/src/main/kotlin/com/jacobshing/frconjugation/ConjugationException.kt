@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 /** The bundled catalogue could not be loaded; [cause] preserves the resource/decoder failure. */
 class ConjugationException internal constructor(

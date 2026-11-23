@@ -1,4 +1,4 @@
-namespace JacobS.FRConjugation {
+namespace ShingZhanho.FRConjugation {
     /// <summary>French grammatical voice; use Label() for catalogue spelling.</summary>
     public enum Voice {
         /// <summary>voix_active_avoir.</summary>

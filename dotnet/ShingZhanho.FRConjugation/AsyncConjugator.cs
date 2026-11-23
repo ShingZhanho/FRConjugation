@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
-namespace JacobS.FRConjugation {
+namespace ShingZhanho.FRConjugation {
     public sealed partial class Conjugator {
         /// <summary>Run Conjugate off the calling thread. Work is not cancellable.</summary>
         public Task<Dictionary<Voice, Dictionary<Mode, Dictionary<Tense, Dictionary<Person, string>>>>?> ConjugateAsync(string verb, int? homonymIndex = null) => Task.Run(() => Conjugate(verb, homonymIndex));

@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 import java.util.Locale
 
@@ -27,7 +27,7 @@ internal class Catalogue {
     init {
         val bytes =
             requireNotNull(
-                javaClass.getResourceAsStream("/com/jacobs/frconjugation/catalogue.fcr"),
+                javaClass.getResourceAsStream("/com/jacobshing/frconjugation/catalogue.fcr"),
             ) {
                 "Bundled catalogue is missing"
             }.use { it.readBytes() }

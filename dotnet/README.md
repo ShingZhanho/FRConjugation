@@ -1,13 +1,13 @@
 # C# / .NET
 
-Package and namespace: `JacobS.FRConjugation`. Targets .NET Standard 2.1;
+Package and namespace: `ShingZhanho.FRConjugation`. Targets .NET Standard 2.1;
 the test executable requires .NET 10. The rules are embedded without runtime
 package dependencies. Run from the repository root:
 
 ```sh
-dotnet build dotnet/JacobS.FRConjugation -c Release
+dotnet build dotnet/ShingZhanho.FRConjugation -c Release
 dotnet run --project dotnet/Tests -c Release
-dotnet pack dotnet/JacobS.FRConjugation -c Release
+dotnet pack dotnet/ShingZhanho.FRConjugation -c Release
 ```
 
 Reference the project locally or install the resulting NuGet package from a local
@@ -15,7 +15,7 @@ feed. Building a package does not publish it to nuget.org. XML API documentation
 is included in the package; missing public documentation fails the build.
 
 ```csharp
-using JacobS.FRConjugation;
+using ShingZhanho.FRConjugation;
 
 var c = Conjugator.GetShared();
 var form = c.Conjugate("manger", Voice.ActiveAvoir, Mode.Indicatif,

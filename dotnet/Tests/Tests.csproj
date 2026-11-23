@@ -7,6 +7,6 @@
   <ItemGroup>
     <None Include="../../tests/typed-api.tsv" Link="typed-api.tsv" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tests/conformance.tsv" Link="conformance.tsv" CopyToOutputDirectory="PreserveNewest" />
-    <ProjectReference Include="../JacobS.FRConjugation/JacobS.FRConjugation.csproj" />
+    <ProjectReference Include="../ShingZhanho.FRConjugation/ShingZhanho.FRConjugation.csproj" />
   </ItemGroup>
 </Project>

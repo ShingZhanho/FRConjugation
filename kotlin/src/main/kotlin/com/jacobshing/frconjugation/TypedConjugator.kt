@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 import java.text.Normalizer
 

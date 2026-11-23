@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace JacobS.FRConjugation {
+namespace ShingZhanho.FRConjugation {
     /// <summary>Selects catalogue lookup, raw rule inference, or catalogue-first guessing.</summary>
     public enum Prediction {
         /// <summary>Exact NFC catalogue lookup without trimming or case folding.</summary>

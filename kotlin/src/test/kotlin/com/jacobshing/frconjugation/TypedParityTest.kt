@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -29,7 +29,7 @@ class TypedParityTest {
     ): Any? {
         val extension =
             Class
-                .forName("com.jacobs.frconjugation.TypedConjugatorKt")
+                .forName("com.jacobshing.frconjugation.TypedConjugatorKt")
                 .methods
                 .firstOrNull { method ->
                     method.name == name && method.parameterCount == args.size + 1 &&
@@ -266,7 +266,7 @@ class TypedParityTest {
             val c = Conjugator.load()
             for (method in Class
                 .forName(
-                    "com.jacobs.frconjugation.AsyncConjugatorKt",
+                    "com.jacobshing.frconjugation.AsyncConjugatorKt",
                 ).methods
                 .filter {
                     it.name.endsWith("Async") &&

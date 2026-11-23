@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Text;
-namespace JacobS.FRConjugation {
+namespace ShingZhanho.FRConjugation {
     public sealed partial class Conjugator {
         private static readonly Lazy<Conjugator> Shared = new Lazy<Conjugator>(() => new Conjugator());
         /// <summary>Return the shared bundled reader; loading exceptions propagate.</summary>

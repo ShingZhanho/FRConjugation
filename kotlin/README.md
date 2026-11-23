@@ -1,7 +1,7 @@
 # Kotlin/JVM
 
-Package identity: `com.jacobs:frconjugation`. Import
-`com.jacobs.frconjugation.*` to include the typed extension methods.
+Package identity: `com.jacobshing:frconjugation`. Import
+`com.jacobshing.frconjugation.*` to include the typed extension methods.
 The library emits Java 8 bytecode and bundles its rules without runtime dependencies.
 Use a JDK supported by Gradle 9.9.2 to build (locally validated with JDK 27).
 
@@ -13,11 +13,11 @@ cd kotlin
 ```
 
 For a locally published build, configure `mavenLocal()` and
-`implementation("com.jacobs:frconjugation:5.0.1")` in the consuming project.
+`implementation("com.jacobshing:frconjugation:5.0.1")` in the consuming project.
 These coordinates do not imply publication to Maven Central.
 
 ```kotlin
-import com.jacobs.frconjugation.*
+import com.jacobshing.frconjugation.*
 
 val c = Conjugator.getShared()
 val form = c.conjugate("manger", Voice.ACTIVE_AVOIR, Mode.INDICATIF,

@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 /** French grammatical voice.
  * @property label Stable catalogue spelling, corresponding to Swift rawValue.

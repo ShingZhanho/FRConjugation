@@ -35,7 +35,7 @@ usage, result conventions, and language-specific requirements.
 | [Swift](swift/README.md) | Swift 5.6+ | `swift build -c release` | `swift test -c release` |
 | [C/C++](native/README.md) | C++17, Make, pkg-config, ICU; C11 for C tests | `make -C native` | `make -C native test` |
 | [Kotlin/JVM](kotlin/README.md) | JDK compatible with bundled Gradle | `cd kotlin && ./gradlew build` | Included in build |
-| [C#](dotnet/README.md) | .NET SDK; .NET 10 for tests | `dotnet build dotnet/JacobS.FRConjugation -c Release` | `dotnet run --project dotnet/Tests -c Release` |
+| [C#](dotnet/README.md) | .NET SDK; .NET 10 for tests | `dotnet build dotnet/ShingZhanho.FRConjugation -c Release` | `dotnet run --project dotnet/Tests -c Release` |
 | [TypeScript/JavaScript](typescript/README.md) | Node.js 20+ | `cd typescript && npm ci && npm run build` | `cd typescript && npm test` |
 | [Python](python/README.md) | Python 3.10+ | `python3 -m pip install ./python` | `python3 -m unittest discover -s python/tests` |
 
@@ -43,6 +43,17 @@ Keep symlinks intact in source checkouts. Shared behavioral fixtures live in
 [`tests/`](tests/README.md); each implementation reads them using its own
 toolchain. Local validation has covered macOS; other platforms require their
 own verification.
+
+## Packages
+
+| Language | Package |
+| --- | --- |
+| Swift | [FRConjugation](https://github.com/ShingZhanho/FRConjugation/releases/latest) |
+| C/C++ | [Native archives and source](https://github.com/ShingZhanho/FRConjugation/releases/latest) |
+| Kotlin/JVM | [com.jacobshing:frconjugation](https://central.sonatype.com/artifact/com.jacobshing/frconjugation) |
+| C# | [ShingZhanho.FRConjugation](https://www.nuget.org/packages/ShingZhanho.FRConjugation) |
+| Python | [jacobszh-frconjugation](https://pypi.org/project/jacobszh-frconjugation/) (import `frconjugation`) |
+| TypeScript/JavaScript | [@jacobshing/frconjugation](https://www.npmjs.com/package/@jacobshing/frconjugation) |
 
 ## Rules and data
 

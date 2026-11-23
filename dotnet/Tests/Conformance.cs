@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using JacobS.FRConjugation;
+using ShingZhanho.FRConjugation;
 
 static class Conformance {
     internal static string? Decode(string text) {

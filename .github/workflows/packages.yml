@@ -1,0 +1,155 @@
+name: Build distribution packages
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        default: ''
+permissions:
+  contents: read
+jobs:
+  swift:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - name: Test Swift and bundled-only API
+        shell: bash
+        run: |
+          swift test -c release
+          bin_dir="$(swift build -c release --show-bin-path)"
+          verify_flags=(-Xfrontend -verify)
+          if [[ "$(swiftc -frontend -help-hidden)" == *-verify-ignore-unrelated* ]]; then
+            verify_flags+=(-Xfrontend -verify-ignore-unrelated)
+          fi
+          swiftc -typecheck "${verify_flags[@]}" -I "$bin_dir" -I "$bin_dir/Modules" swift/Tests/Compiler/BundledModelOnly.swift
+      - name: Archive SwiftPM source distribution
+        run: |
+          mkdir -p artifacts
+          git archive --format=tar.gz --prefix=FRConjugation/ -o artifacts/FRConjugation-source.tar.gz HEAD
+          cp catalogue/catalogue.fcr rules/catalogue.rules artifacts/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source
+          path: artifacts/*
+          if-no-files-found: error
+  catalogue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python rules/compile.py rules/catalogue.rules "$RUNNER_TEMP/catalogue.fcr"
+          cmp "$RUNNER_TEMP/catalogue.fcr" catalogue/catalogue.fcr
+  native:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - name: Install Linux ICU
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libicu-dev pkg-config
+      - name: Install macOS ICU
+        if: runner.os == 'macOS'
+        run: brew install icu4c pkg-config
+      - name: Build, test and stage native libraries
+        shell: bash
+        run: |
+          make -C native test
+          make -C native install DESTDIR="$RUNNER_TEMP/native-package" PREFIX=/
+          cp native/README.md "$RUNNER_TEMP/native-package/README.md"
+          mkdir -p artifacts
+          tar -czf "artifacts/FRConjugation-native-${RUNNER_OS}-${RUNNER_ARCH}.tar.gz" -C "$RUNNER_TEMP/native-package" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ runner.os }}-${{ runner.arch }}
+          path: artifacts/*
+          if-no-files-found: error
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build and test installed Python distribution
+        run: |
+          python -m pip install build twine
+          python -m build python
+          python -m twine check python/dist/*
+          python -m pip install --no-deps python/dist/*.whl
+          python -I -m unittest discover -s python/tests
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pypi
+          path: python/dist/*
+          if-no-files-found: error
+  dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet run --project dotnet/Tests -c Release
+      - run: dotnet pack dotnet/ShingZhanho.FRConjugation -c Release -o artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nuget
+          path: artifacts/*.nupkg
+          if-no-files-found: error
+  kotlin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew build publishToMavenLocal --no-daemon
+        working-directory: kotlin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maven-unsigned
+          path: |
+            kotlin/build/libs/*.jar
+            kotlin/build/publications/**/pom-default.xml
+          if-no-files-found: error
+  npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+        working-directory: typescript
+      - run: npm test && npm run verify:catalogue && npm pack
+        working-directory: typescript
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm
+          path: typescript/*.tgz
+          if-no-files-found: error

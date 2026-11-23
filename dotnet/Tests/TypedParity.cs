@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using JacobS.FRConjugation;
+using ShingZhanho.FRConjugation;
 
 static class TypedParity {
     static string Label(object value) => value switch { Voice v => v.Label(), Mode m => m.Label(), Tense t => t.Label(), Person p => p.Label(), _ => value.ToString()! };

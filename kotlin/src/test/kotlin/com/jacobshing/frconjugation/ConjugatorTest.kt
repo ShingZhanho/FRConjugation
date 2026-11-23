@@ -1,4 +1,4 @@
-package com.jacobs.frconjugation
+package com.jacobshing.frconjugation
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

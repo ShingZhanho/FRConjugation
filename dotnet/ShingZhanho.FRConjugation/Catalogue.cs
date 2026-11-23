@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace JacobS.FRConjugation {
+namespace ShingZhanho.FRConjugation {
     internal sealed class Catalogue {
         internal sealed class Entry {
             internal VerbEntry Metadata {
@@ -33,7 +33,7 @@ namespace JacobS.FRConjugation {
         private readonly int[] fallbacks;
 
         internal Catalogue() {
-            using var stream = typeof(Catalogue).Assembly.GetManifestResourceStream("JacobS.FRConjugation.catalogue.fcr")
+            using var stream = typeof(Catalogue).Assembly.GetManifestResourceStream("ShingZhanho.FRConjugation.catalogue.fcr")
                 ?? throw new InvalidDataException("Bundled catalogue is missing");
             using var memory = new MemoryStream();
             stream.CopyTo(memory);
