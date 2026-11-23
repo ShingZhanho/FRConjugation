@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.0.1-beta.1 — 2026-11-23
+
+Removed the deprecated cache APIs and the unavailable custom-model loaders. Callers using cache controls must update their code. [Migration details](releases/v5.0.1-beta.1.md).
+
 ## v5.0.0 — 2026-11-19
 
 - Conjugation now uses bundled spelling rules learned from the v0.5.0 catalogue.

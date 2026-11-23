@@ -384,12 +384,6 @@ fr.homonymCount("ressortir")    // 2
 fr.homonymIndices("ressortir")  // [1, 2]
 ```
 
-#### Caching
-
-The rule engine stores no prediction cache. The legacy `cacheSize:` argument
-is deprecated and ignored. `cacheCount` and `cacheCapacity` return zero,
-and `clearCache()` has no effect.
-
 ### Enums
 
 | Enum | Cases |
