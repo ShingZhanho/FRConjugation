@@ -1,5 +1,6 @@
 #include "frconjugation.hpp"
 #include "fixtures.hpp"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
