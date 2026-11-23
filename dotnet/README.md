@@ -2,7 +2,10 @@
 
 Package and namespace: `ShingZhanho.FRConjugation`. Targets .NET Standard 2.1;
 the test executable requires .NET 10. The rules are embedded without runtime
-package dependencies. Run from the repository root:
+package dependencies. Install from [NuGet](https://www.nuget.org/packages/ShingZhanho.FRConjugation)
+with `dotnet add package ShingZhanho.FRConjugation`.
+
+To build and test from the repository root:
 
 ```sh
 dotnet build dotnet/ShingZhanho.FRConjugation -c Release
@@ -10,9 +13,8 @@ dotnet run --project dotnet/Tests -c Release
 dotnet pack dotnet/ShingZhanho.FRConjugation -c Release
 ```
 
-Reference the project locally or install the resulting NuGet package from a local
-feed. Building a package does not publish it to nuget.org. XML API documentation
-is included in the package; missing public documentation fails the build.
+You can also reference the project locally or install a locally built package.
+XML API documentation is included; missing public documentation fails the build.
 
 ```csharp
 using ShingZhanho.FRConjugation;

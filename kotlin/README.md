@@ -12,9 +12,10 @@ cd kotlin
 ./gradlew publishToMavenLocal
 ```
 
-For a locally published build, configure `mavenLocal()` and
+Install from [Maven Central](https://central.sonatype.com/artifact/com.jacobshing/frconjugation)
+by configuring `mavenCentral()` and
 `implementation("com.jacobshing:frconjugation:5.1.0")` in the consuming project.
-These coordinates do not imply publication to Maven Central.
+Use `mavenLocal()` instead when testing a locally published build.
 
 ```kotlin
 import com.jacobshing.frconjugation.*

@@ -3,7 +3,10 @@
 Distribution identity: **jacobszh-frconjugation**. Import name: **frconjugation**.
 Requires Python 3.10+; no runtime dependencies or other language toolchains.
 
-From the repository root:
+Install from [PyPI](https://pypi.org/project/jacobszh-frconjugation/) with
+`python3 -m pip install jacobszh-frconjugation`.
+
+To build and test from the repository root:
 
 ```sh
 python3 -m pip install ./python
