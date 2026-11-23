@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.0.1 — 2026-11-23
+
+- Added catalogue, raw-inferred, and hybrid common-prefix queries with async overloads.
+- Removed deprecated cache APIs and unavailable custom-model loaders. [Migration details](releases/v5.0.1.md).
+
 ## v5.0.1-beta.1 — 2026-11-23
 
 Removed the deprecated cache APIs and the unavailable custom-model loaders. Callers using cache controls must update their code. [Migration details](releases/v5.0.1-beta.1.md).

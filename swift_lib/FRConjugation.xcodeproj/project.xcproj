@@ -22,6 +22,7 @@
             { "path": "Conjugator.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
             { "path": "Conjugator+Async.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
             { "path": "Conjugator+Catalogue.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
+            { "path": "Conjugator+CommonPrefix.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
             { "path": "Conjugator+Inference.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
             { "path": "Conjugator+Nonpersonal.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
             { "path": "Conjugator+NonpersonalInference.swift", "target-membership": [ "FRConjugation/compile-sources" ] },
@@ -48,6 +49,7 @@
           "kind": "group",
           "path": "FRConjugationTests",
           "children": [
+            { "path": "CommonPrefixTests.swift", "target-membership": [ "FRConjugationTests/compile-sources" ] },
             { "path": "ConjugationTests.swift", "target-membership": [ "FRConjugationTests/compile-sources" ] },
             { "path": "GuessConjugationTests.swift", "target-membership": [ "FRConjugationTests/compile-sources" ] },
             { "path": "NonpersonalInferenceTests.swift", "target-membership": [ "FRConjugationTests/compile-sources" ] },

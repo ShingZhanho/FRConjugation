@@ -85,7 +85,7 @@ For the 5.0 release, add the package dependency in your `Package.swift`:
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/ShingZhanho/FRConjugation.Swift.git", from: "5.0.0"),
+  .package(url: "https://github.com/ShingZhanho/FRConjugation.Swift.git", from: "5.0.1"),
 ]
 ```
 
@@ -136,6 +136,31 @@ let all: [Mode: [Tense: [Person: String]]] = fr.conjugate("aller",
 let full: [Voice: [Mode: [Tense: [Person: String]]]]? = fr.conjugate("battre")
 ```
 
+#### Shared spelling for highlighting
+
+```swift
+fr.commonPrefix("manger")             // "mang"
+fr.commonPrefix("finir")              // "fin", including finîmes
+fr.commonPrefix("aller")              // ""
+fr.commonPrefix("blorper")            // nil
+fr.rawInferredCommonPrefix("blorper") // computed from predictions
+fr.guessCommonPrefix("pleuvoir")      // catalogue plus inferred missing slots
+```
+
+These methods return the longest common prefix across all available voices,
+moods, tenses, participles, and spelling alternatives. They exclude auxiliaries,
+leading pronouns, and attached imperative pronouns. Gérondifs use the same
+lexical forms as their underlying participles. Accents are significant and
+canonical Unicode spellings are normalized. The result describes shared
+spelling for display, rather than a grammatical stem.
+
+All three accept `homonymIndex: Int? = nil` and have synchronous and asynchronous
+overloads. Catalogue lookup uses exact input. Raw inference normalizes and
+validates input like `rawInferredConjugation()`. Guessing preserves all catalogue
+alternatives and infers each missing slot, including those of defective verbs.
+`nil` means no usable forms, while `""` means a valid empty prefix. Predictions
+for arbitrary supported strings remain experimental.
+
 #### Experimental inference and guessing
 
 Each family supports rule inference and catalogue-first guessing.
@@ -146,6 +171,7 @@ Each family supports rule inference and catalogue-first guessing.
 | `participle()` | `rawInferredParticiple()` | `guessParticiple()` |
 | `participles()` | `rawInferredParticiples()` | `guessParticiples()` |
 | `gerondif()` | `rawInferredGerondif()` | `guessGerondif()` |
+| `commonPrefix()` | `rawInferredCommonPrefix()` | `guessCommonPrefix()` |
 
 Raw methods lowercase input, trim surrounding whitespace, and try matching
 suffixes from longest to shortest. If these rules cannot supply a supported
