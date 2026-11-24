@@ -14,7 +14,7 @@ cd kotlin
 
 Install from [Maven Central](https://central.sonatype.com/artifact/com.jacobshing/frconjugation)
 by configuring `mavenCentral()` and
-`implementation("com.jacobshing:frconjugation:5.1.1")` in the consuming project.
+`implementation("com.jacobshing:frconjugation:5.2.0")` in the consuming project.
 Use `mavenLocal()` instead when testing a locally published build.
 
 ```kotlin
@@ -50,3 +50,7 @@ Suspend functions ending in `Async`, plus `Conjugator.load()` and
 not require kotlinx.coroutines or interrupt running work on cancellation.
 Resource failures throw `ConjugationException`. Synchronous calls run on the caller.
 KDoc in the sources JAR documents individual signatures and contracts.
+
+Guess APIs use catalogue data exclusively for known infinitives, preserving missing
+forms. Only unknown infinitives use raw inference. Membership uses the same exact
+lookup semantics as catalogue queries; only inference trims and lowercases input.

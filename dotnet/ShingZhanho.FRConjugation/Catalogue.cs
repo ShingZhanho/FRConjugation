@@ -168,7 +168,7 @@ namespace ShingZhanho.FRConjugation {
                     if (value != null)
                         return value;
                 }
-                if (prediction == Prediction.Catalogue)
+                if (prediction == Prediction.Catalogue || Entries.ContainsKey(Resolve(input.Normalize(NormalizationForm.FormC), null)))
                     return null;
             }
             string normalized = input.Trim().ToLowerInvariant().Normalize(NormalizationForm.FormC);

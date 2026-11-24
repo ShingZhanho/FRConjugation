@@ -5,7 +5,7 @@ Swift 5.6+, macOS 10.15+ or iOS 13+. No external dependencies.
 Add the package in Xcode or your manifest:
 
 ```swift
-.package(url: "https://github.com/ShingZhanho/FRConjugation.git", from: "5.1.1")
+.package(url: "https://github.com/ShingZhanho/FRConjugation.git", from: "5.2.0")
 ```
 
 Import `FRConjugation`. Run builds from the repository root:
@@ -70,7 +70,7 @@ fr.commonPrefix("finir")              // "fin", including finîmes
 fr.commonPrefix("aller")              // ""
 fr.commonPrefix("blorper")            // nil
 fr.rawInferredCommonPrefix("blorper") // computed from predictions
-fr.guessCommonPrefix("pleuvoir")      // catalogue plus inferred missing slots
+fr.guessCommonPrefix("pleuvoir")      // same prefix as the catalogue for this known verb
 ```
 
 These methods return the longest common prefix across all available voices,
@@ -82,8 +82,8 @@ spelling for display, rather than a grammatical stem.
 
 All three accept `homonymIndex: Int? = nil` and have synchronous and asynchronous
 overloads. Catalogue lookup uses exact input. Raw inference normalizes and
-validates input like `rawInferredConjugation()`. Guessing preserves all catalogue
-alternatives and infers each missing slot, including those of defective verbs.
+validates input like `rawInferredConjugation()`. Guessing uses catalogue alternatives for known infinitives and infers only unknown
+infinitives. Missing forms of known defective verbs remain missing.
 `nil` means no usable forms, while `""` means a valid empty prefix. Predictions
 for arbitrary supported strings remain experimental.
 
@@ -105,9 +105,8 @@ slot, inference uses the most common catalogue template that supplies it.
 Unsupported input or slot combinations return `nil` or an empty collection.
 Predictions may include `;` alternatives and unattested spellings.
 
-Guess methods preserve available catalogue answers and infer missing forms,
-including in bulk lookups. For defective verbs, use the catalogue methods when
-you need only attested forms.
+Guess methods return catalogue results for known infinitives, including missing
+forms, in both single and bulk queries. Only unknown infinitives use raw inference.
 
 ```swift
 // Finite forms retain conjugate's signatures and Person argument.

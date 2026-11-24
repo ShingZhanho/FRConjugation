@@ -137,7 +137,11 @@ export class Catalogue {
                 const result = this.render(entry[2], slot, lemmaIndex(key)[0]);
                 if (result !== null) return result;
             }
-            if (mode === Prediction.Catalogue) return null;
+            if (
+                mode === Prediction.Catalogue ||
+                this.entries.has(this.resolve(nfc(value), undefined))
+            )
+                return null;
         }
         value = nfc(value.replace(/^\p{White_Space}+|\p{White_Space}+$/gu, "").toLowerCase());
         if (!value || /[^ '\-12;_abcdefghijklmnopqrstuvwxyzâçèéêîïôûœ]/u.test(value)) return null;

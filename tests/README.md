@@ -3,7 +3,8 @@
 `conformance.tsv` is the language-independent test specification. Its expected
 answers are fixed data, never computed by the implementation under test. The
 initial 72 prefix expectations were captured from the validated Swift public
-APIs; other cases consolidate the existing per-language assertions and explicit
+APIs; known-verb guess expectations now match the existing catalogue expectations
+under the 5.2.0 contract; other cases consolidate the existing per-language assertions and explicit
 catalogue forms. These are regression/parity cases, not an independent linguistic
 audit or a replacement for the full-catalogue comparison.
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.2.0 — 2026-11-24
+
+- Guess APIs now preserve catalogue gaps for known infinitives and infer only unknown infinitives across all language ports. This intentionally changes behavior without changing signatures. [Compatibility details](releases/v5.2.0.md).
+
 ## v5.1.1 — 2026-11-24
 
 - Corrected registry installation instructions and removed unpublished/local-only wording from package documentation. No library or catalogue changes. [Release notes](releases/v5.1.1.md).

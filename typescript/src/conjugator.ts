@@ -155,7 +155,7 @@ export class Conjugator {
                       ? known.slice(index + 1)
                       : known.split(";")[0];
             }
-            if (prediction === Prediction.Catalogue) return null;
+            if (prediction === Prediction.Catalogue || this.hasVerb(verb)) return null;
         }
         return this.#catalogue.raw(verb, id, homonymIndex, Prediction.Inferred);
     }

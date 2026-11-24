@@ -38,16 +38,9 @@ final class NonpersonalInferenceTests: XCTestCase {
         XCTAssertFalse(existing.isEmpty)
         for (tense, form) in existing { XCTAssertEqual(guessed[tense], form) }
         XCTAssertNil(c.participle("entre-nuire", voice: .pronominal, tense: .present))
-        XCTAssertNotNil(guessed[.present])
-        XCTAssertEqual(
-            guessed[.present],
-            c.rawInferredParticiple(
-                "entre-nuire", voice: .pronominal,
-                tense: .present))
-        XCTAssertNil(c.gerondif("entre-nuire", voice: .pronominal, tense: .gerondifPresent))
-        XCTAssertEqual(
-            c.guessGerondif("entre-nuire", voice: .pronominal, tense: .gerondifPresent),
-            c.rawInferredGerondif("entre-nuire", voice: .pronominal, tense: .gerondifPresent))
+        XCTAssertEqual(guessed, existing)
+        XCTAssertNotNil(c.rawInferredParticiple("entre-nuire", voice: .pronominal, tense: .present))
+        XCTAssertNil(c.guessGerondif("entre-nuire", voice: .pronominal, tense: .gerondifPresent))
         XCTAssertEqual(
             c.guessGerondif(
                 "absoudre", voice: .activeAvoir,

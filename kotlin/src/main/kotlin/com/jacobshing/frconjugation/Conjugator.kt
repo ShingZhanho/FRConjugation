@@ -10,7 +10,7 @@ enum class Prediction {
     /** Trim, lowercase and infer supported input, including unknown verbs. Predictions may be unattested. */
     INFERRED,
 
-    /** Keep catalogue answers and infer missing slots, even for defective verbs. */
+    /** Use catalogue data for known infinitives; infer only unknown infinitives. */
     GUESS,
 }
 
@@ -87,7 +87,7 @@ class Conjugator {
     /** Returns one form, or null for an unknown slot, unsupported input, or unavailable catalogue form.
      * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
      * @param slot Supported voice|mode|tense|person label from [slots], with - for participles.
-     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only missing catalogue slots. Predictions can be unattested.
+     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @param spelling Catalogue spelling selection. Inferred output retains all semicolon-separated alternatives.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
@@ -104,14 +104,14 @@ class Conjugator {
         if (prediction != Prediction.INFERRED) {
             val known = catalogue.raw(verb, id, homonymIndex, Prediction.CATALOGUE)
             if (known != null) return selectSpelling(known, spelling)
-            if (prediction == Prediction.CATALOGUE) return null
+            if (prediction == Prediction.CATALOGUE || hasVerb(verb)) return null
         }
         return catalogue.raw(verb, id, homonymIndex, Prediction.INFERRED)
     }
 
     /** Returns supported slots mapped to forms; missing results are omitted. Catalogue spellings are primary.
      * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
-     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only missing catalogue slots. Predictions can be unattested.
+     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
      */
@@ -147,7 +147,7 @@ class Conjugator {
         homonymIndex: Int? = null,
     ): String? = prefix(verb, homonymIndex, Prediction.INFERRED)
 
-    /** Returns shared spelling across catalogue forms plus predictions for missing slots, including defective verbs.
+    /** Returns the catalogue prefix for known infinitives, otherwise an inferred prefix.
      * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @return null for no usable forms; empty is valid. Shared spelling is not a grammatical stem.
@@ -179,7 +179,7 @@ class Conjugator {
 
     /** Prefixes the underlying participle with en; predictions repeat en for each alternative. Missing forms return null.
      * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
-     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only missing catalogue slots. Predictions can be unattested.
+     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @param voice Catalogue voice label, such as voix_active_avoir or voix_prono.
      * @param tense gerondif_present or gerondif_passe_sm, gerondif_passe_sf, gerondif_passe_pm, gerondif_passe_pf.

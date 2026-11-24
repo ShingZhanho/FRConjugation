@@ -43,7 +43,7 @@ class Prediction(str, Enum):
     INFERRED = "inferred"
     """Normalize and predict supported input, including unknown verbs."""
     GUESS = "guess"
-    """Keep catalogue answers and infer missing slots, even for defective verbs."""
+    """Use catalogue data for known infinitives; infer only unknown infinitives."""
 
 
 class Spelling(str, Enum):
@@ -185,7 +185,7 @@ class Conjugator(_API):
         """Return a form for a slot label, or None if absent/unsupported.
 
         verb is an infinitive or exact homonym key; slot is a label from slots.
-        prediction chooses catalogue lookup, raw inference or missing-slot
+        prediction chooses catalogue lookup, raw inference or unknown-verb
         guessing. spelling applies only to catalogue results; raw predictions
         always retain semicolon-separated alternatives. See the class contract
         for homonym selection and argument errors. Invalid slot labels return None.
@@ -208,7 +208,7 @@ class Conjugator(_API):
                     if spelling == Spelling.ALTERNATIVE and separator
                     else first
                 )
-            if prediction == Prediction.CATALOGUE:
+            if prediction == Prediction.CATALOGUE or self.has_verb(verb):
                 return None
         return self._catalogue.raw(verb, ident, homonym_index, "inferred")
 
@@ -267,7 +267,7 @@ class Conjugator(_API):
         return self._prefix(verb, homonym_index, "inferred")
 
     def guess_common_prefix(self, verb: str, homonym_index: int | None = None) -> str | None:
-        """Like common_prefix, inferring each missing slot, even for defective verbs."""
+        """Use common_prefix for known infinitives, otherwise raw inference."""
         return self._prefix(verb, homonym_index, "guess")
 
     def gerondif(

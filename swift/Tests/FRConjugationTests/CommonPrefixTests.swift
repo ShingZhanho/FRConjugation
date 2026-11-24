@@ -63,7 +63,7 @@ final class CommonPrefixTests: XCTestCase {
                                             verb, voice: voice, tense: tense)
                                     }
                                 }
-                                if raw == nil {
+                                if raw == nil && (!hybrid || !conjugator.hasVerb(verb)) {
                                     if let person = person {
                                         raw = conjugator.rawInferredConjugation(
                                             verb, voice: voice,

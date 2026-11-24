@@ -118,7 +118,7 @@ export enum Prediction {
     Catalogue = "catalogue",
     /** Predict every supported slot. */
     Inferred = "inferred",
-    /** Infer only missing catalogue slots. */
+    /** Infer only infinitives absent from the catalogue. */
     Guess = "guess",
 }
 /** Which catalogue spelling to return; predictions retain all alternatives. */

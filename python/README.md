@@ -70,3 +70,7 @@ form = await c.guess_conjugation_async(
     "blorper", Voice.ACTIVE_AVOIR, Mode.INDICATIF, Tense.PRESENT, Person.FIRST_PLURAL_MASCULINE
 )
 ```
+
+Guess APIs use catalogue data exclusively for known infinitives, preserving missing
+forms. Only unknown infinitives use raw inference. Membership uses the same exact
+lookup semantics as catalogue queries; only inference trims and lowercases input.

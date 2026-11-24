@@ -33,7 +33,8 @@ typedef int32_t frc_mode;
 enum {
     FRC_CATALOGUE, /**< Exact NFC catalogue lookup; no case folding or trimming. */
     FRC_INFERRED,  /**< Trim, lowercase and infer supported strings; output may be unattested. */
-    FRC_GUESS /**< Preserve catalogue answers and infer missing slots, even for defective verbs. */
+    FRC_GUESS      /**< Preserve known infinitives including missing forms; infer only unknown
+                      infinitives. */
 };
 /** Catalogue spelling selection; inferred answers always preserve all alternatives. */
 typedef int32_t frc_spelling;

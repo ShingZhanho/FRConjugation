@@ -28,21 +28,17 @@ extension Conjugator {
         }
     }
 
-    /// Shared spelling across catalogue forms, inferring each missing slot.
-    /// Includes every catalogue spelling alternative. Missing slots on defective
-    /// verbs can introduce hypothetical forms and shorten the resulting prefix.
+    /// Use the catalogue prefix for known infinitives, preserving missing slots.
+    /// Infer a prefix only for infinitives absent from the catalogue.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
     ///   and surrounding whitespace.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func guessCommonPrefix(_ infinitive: String, homonymIndex: Int? = nil) -> String? {
-        let key = resolveKey(infinitive, homonymIndex: homonymIndex)
-        return sharedPrefix { slot in
-            catalogue.form(key, slot: slot)
-                ?? rawInferredForm(
-                    infinitive, voice: slot.voice, mode: slot.mode,
-                    tense: slot.tense, person: slot.person, homonymIndex: homonymIndex)
+        if hasVerb(infinitive) {
+            return commonPrefix(infinitive, homonymIndex: homonymIndex)
         }
+        return rawInferredCommonPrefix(infinitive, homonymIndex: homonymIndex)
     }
 
     private func sharedPrefix(form: (RuleCatalogue.Slot) -> String?) -> String? {

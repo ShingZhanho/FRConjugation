@@ -83,7 +83,7 @@ final class GuessConjugationTests: XCTestCase {
             ).isEmpty)
     }
 
-    func testCatalogueAnswersAndMissingSlotsAreMergedPerForm() throws {
+    func testKnownInfinitivesPreserveCatalogueGaps() throws {
         let c = try Conjugator()
         let existing = c.conjugate(
             "falloir", voice: .activeAvoir, mode: .indicatif, tense: .present)
@@ -92,15 +92,14 @@ final class GuessConjugationTests: XCTestCase {
         XCTAssertFalse(existing.isEmpty)
         for (person, form) in existing { XCTAssertEqual(merged[person], form) }
         XCTAssertNil(existing[.firstSingularMasculine])
-        XCTAssertNotNil(merged[.firstSingularMasculine])
-        XCTAssertEqual(
-            merged[.firstSingularMasculine],
+        XCTAssertEqual(merged, existing)
+        XCTAssertNotNil(
             c.rawInferredConjugation(
-                "falloir",
-                voice: .activeAvoir, mode: .indicatif, tense: .present,
-                person: .firstSingularMasculine))
+                "falloir", voice: .activeAvoir, mode: .indicatif,
+                tense: .present, person: .firstSingularMasculine))
         let all = try XCTUnwrap(c.conjugate("falloir"))
         let guessed = try XCTUnwrap(c.guessConjugation("falloir"))
+        XCTAssertEqual(guessed, all)
         for (voice, modes) in all {
             for (mode, tenses) in modes {
                 for (tense, persons) in tenses {

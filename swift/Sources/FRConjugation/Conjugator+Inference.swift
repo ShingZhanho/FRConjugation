@@ -104,13 +104,13 @@ extension Conjugator {
 
     // MARK: - Catalogue With Inference Fallback
 
-    /// Return the catalogue’s primary answer when available,
+    /// Return catalogue data for known infinitives, including missing answers;
     /// otherwise return a raw rule prediction for the requested form.
     ///
     /// Catalogue lookup uses conjugate's exact input semantics. Only the raw
     /// fallback normalizes input. Inferred answers can include alternatives and
-    /// are not guaranteed to be grammatical; known defective verbs can gain
-    /// inferred slots absent from their catalogue entries.
+    /// are not guaranteed to be grammatical. Known infinitives retain their
+    /// catalogue gaps; only unknown infinitives are inferred.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
     ///   and surrounding whitespace.
     /// - Parameter voice: The grammatical voice.
@@ -124,16 +124,17 @@ extension Conjugator {
         _ infinitive: String, voice: Voice, mode: Mode, tense: Tense,
         person: Person, homonymIndex: Int? = nil
     ) -> String? {
-        guard mode != .participe else { return nil }
-        return conjugate(
-            infinitive, voice: voice, mode: mode, tense: tense,
-            person: person, homonymIndex: homonymIndex)
-            ?? rawInferredConjugation(
-                infinitive, voice: voice, mode: mode, tense: tense,
-                person: person, homonymIndex: homonymIndex)
+        if hasVerb(infinitive) {
+            return conjugate(
+                infinitive, voice: voice, mode: mode, tense: tense, person: person,
+                homonymIndex: homonymIndex)
+        }
+        return rawInferredConjugation(
+            infinitive, voice: voice, mode: mode, tense: tense, person: person,
+            homonymIndex: homonymIndex)
     }
 
-    /// Preserve catalogue persons, inferring only missing person entries.
+    /// Return catalogue persons for known infinitives; infer unknown infinitives.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
     ///   and surrounding whitespace.
     /// - Parameter voice: The grammatical voice.
@@ -146,15 +147,15 @@ extension Conjugator {
         _ infinitive: String, voice: Voice, mode: Mode, tense: Tense,
         homonymIndex: Int? = nil
     ) -> [Person: String] {
-        let existing = conjugate(
-            infinitive, voice: voice, mode: mode, tense: tense,
-            homonymIndex: homonymIndex)
-        return fillInferredPersons(
-            infinitive, voice: voice, mode: mode, tense: tense,
-            homonymIndex: homonymIndex, existing: existing)
+        if hasVerb(infinitive) {
+            return conjugate(
+                infinitive, voice: voice, mode: mode, tense: tense, homonymIndex: homonymIndex)
+        }
+        return rawInferredConjugation(
+            infinitive, voice: voice, mode: mode, tense: tense, homonymIndex: homonymIndex)
     }
 
-    /// Preserve catalogue tenses/persons and infer their missing entries.
+    /// Return catalogue tenses/persons for known infinitives; infer unknown infinitives.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
     ///   and surrounding whitespace.
     /// - Parameter voice: The grammatical voice.
@@ -164,13 +165,14 @@ extension Conjugator {
     public func guessConjugation(
         _ infinitive: String, voice: Voice, mode: Mode, homonymIndex: Int? = nil
     ) -> [Tense: [Person: String]] {
-        let existing = conjugate(infinitive, voice: voice, mode: mode, homonymIndex: homonymIndex)
-        return fillInferredTenses(
-            infinitive, voice: voice, mode: mode,
-            homonymIndex: homonymIndex, existing: existing)
+        if hasVerb(infinitive) {
+            return conjugate(infinitive, voice: voice, mode: mode, homonymIndex: homonymIndex)
+        }
+        return rawInferredConjugation(
+            infinitive, voice: voice, mode: mode, homonymIndex: homonymIndex)
     }
 
-    /// Preserve catalogue modes/tenses/persons and infer their missing entries.
+    /// Return catalogue modes for known infinitives; infer unknown infinitives.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
     ///   and surrounding whitespace.
     /// - Parameter voice: The grammatical voice.
@@ -179,13 +181,13 @@ extension Conjugator {
     public func guessConjugation(
         _ infinitive: String, voice: Voice, homonymIndex: Int? = nil
     ) -> [Mode: [Tense: [Person: String]]] {
-        let existing = conjugate(infinitive, voice: voice, homonymIndex: homonymIndex)
-        return fillInferredModes(
-            infinitive, voice: voice,
-            homonymIndex: homonymIndex, existing: existing)
+        if hasVerb(infinitive) {
+            return conjugate(infinitive, voice: voice, homonymIndex: homonymIndex)
+        }
+        return rawInferredConjugation(infinitive, voice: voice, homonymIndex: homonymIndex)
     }
 
-    /// Preserve all catalogue answers and fill missing globally supported forms.
+    /// Return catalogue data for known infinitives; infer unknown infinitives.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
     ///   and surrounding whitespace.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
@@ -193,9 +195,10 @@ extension Conjugator {
     public func guessConjugation(
         _ infinitive: String, homonymIndex: Int? = nil
     ) -> [Voice: [Mode: [Tense: [Person: String]]]]? {
-        let existing = conjugate(infinitive, homonymIndex: homonymIndex) ?? [:]
-        let result = fillInferredVoices(infinitive, homonymIndex: homonymIndex, existing: existing)
-        return result.isEmpty ? nil : result
+        if hasVerb(infinitive) {
+            return conjugate(infinitive, homonymIndex: homonymIndex)
+        }
+        return rawInferredConjugation(infinitive, homonymIndex: homonymIndex)
     }
 
     // MARK: - Collection Assembly
@@ -318,7 +321,7 @@ extension Conjugator {
         }
     }
 
-    /// Use catalogue answers first, predicting missing forms on a background queue.
+    /// Use catalogue data for known infinitives; infer unknown infinitives off the calling executor.
     /// Predictions may be unattested; unsupported input returns `nil` or an empty collection.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
@@ -345,7 +348,7 @@ extension Conjugator {
         }
     }
 
-    /// Use catalogue answers first, predicting missing forms on a background queue.
+    /// Use catalogue data for known infinitives; infer unknown infinitives off the calling executor.
     /// Predictions may be unattested; unsupported input returns `nil` or an empty collection.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
     /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case

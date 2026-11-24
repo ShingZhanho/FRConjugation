@@ -91,3 +91,7 @@ identical pointer values. There is no cancellation of running work.
 
 C and C++ strings crossing the C ABI must be NUL-terminated UTF-8 without embedded
 NULs. Headers contain the complete Doxygen API contracts and status descriptions.
+
+Guess APIs use catalogue data exclusively for known infinitives, preserving missing
+forms. Only unknown infinitives use raw inference. Membership uses the same exact
+lookup semantics as catalogue queries; only inference trims and lowercases input.

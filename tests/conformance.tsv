@@ -1,10 +1,10 @@
 id	operation	mode	verb	selector	homonym	spelling	expected
 1	prefix	catalogue	manger		0	primary	mang
 2	prefix	inferred	manger		0	primary	m
-3	prefix	guess	manger		0	primary	m
+3	prefix	guess	manger		0	primary	mang
 4	prefix	catalogue	finir		0	primary	fin
 5	prefix	inferred	finir		0	primary	
-6	prefix	guess	finir		0	primary	
+6	prefix	guess	finir		0	primary	fin
 7	prefix	catalogue	aller		0	primary	
 8	prefix	inferred	aller		0	primary	
 9	prefix	guess	aller		0	primary	
@@ -16,13 +16,13 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 15	prefix	guess	pleuvoir		0	primary	pl
 16	prefix	catalogue	payer		0	primary	pa
 17	prefix	inferred	payer		0	primary	
-18	prefix	guess	payer		0	primary	
+18	prefix	guess	payer		0	primary	pa
 19	prefix	catalogue	haïr		0	primary	ha
 20	prefix	inferred	haïr		0	primary	
-21	prefix	guess	haïr		0	primary	
+21	prefix	guess	haïr		0	primary	ha
 22	prefix	catalogue	céder		0	primary	c
 23	prefix	inferred	céder		0	primary	
-24	prefix	guess	céder		0	primary	
+24	prefix	guess	céder		0	primary	c
 25	prefix	catalogue	entre-bâiller		0	primary	\N
 26	prefix	inferred	entre-bâiller		0	primary	entre-bâ
 27	prefix	guess	entre-bâiller		0	primary	entre-bâ
@@ -31,10 +31,10 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 30	prefix	guess	entr'ouvrir		0	primary	entr'o
 31	prefix	catalogue	ressortir		0	primary	ressor
 32	prefix	inferred	ressortir		0	primary	resso
-33	prefix	guess	ressortir		0	primary	resso
+33	prefix	guess	ressortir		0	primary	ressor
 34	prefix	catalogue	ressortir_2		0	primary	ressort
 35	prefix	inferred	ressortir_2		0	primary	ress
-36	prefix	guess	ressortir_2		0	primary	ress
+36	prefix	guess	ressortir_2		0	primary	ressort
 37	prefix	catalogue	blorper		0	primary	\N
 38	prefix	inferred	blorper		0	primary	bl
 39	prefix	guess	blorper		0	primary	bl
@@ -52,7 +52,7 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 51	prefix	guess	  CÉDER  		0	primary	
 52	prefix	catalogue	céder		0	primary	c
 53	prefix	inferred	céder		0	primary	
-54	prefix	guess	céder		0	primary	
+54	prefix	guess	céder		0	primary	c
 55	prefix	catalogue			0	primary	\N
 56	prefix	inferred			0	primary	\N
 57	prefix	guess			0	primary	\N
@@ -100,3 +100,6 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 99	gerondif	catalogue	blorper	voix_active_avoir|gerondif_present	0	primary	\N
 100	gerondif	inferred	blorper	voix_active_avoir|gerondif_present	0	primary	en blorpant
 101	form	catalogue	prendre	voix_active_avoir|participe|passe_pf|-	0	primary	prises
+102	form	guess	falloir	voix_active_avoir|indicatif|present|1sm	0	primary	\N
+103	form	guess	entre-nuire	voix_prono|participe|present|-	0	primary	\N
+104	gerondif	guess	entre-nuire	voix_prono|gerondif_present	0	primary	\N

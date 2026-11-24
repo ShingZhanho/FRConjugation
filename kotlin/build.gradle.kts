@@ -4,7 +4,7 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.37.0"
 }
 group = "com.jacobshing"
-version = "5.1.1"
+version = "5.2.0"
 repositories { mavenCentral() }
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

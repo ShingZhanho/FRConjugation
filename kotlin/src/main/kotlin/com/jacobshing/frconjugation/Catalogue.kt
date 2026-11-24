@@ -160,7 +160,11 @@ internal class Catalogue {
         if (prediction != Prediction.INFERRED) {
             val key = resolve(nfc(input), homonym)
             entries[key]?.let { render(it.model, slot, lemmaIndex(key).first) }?.let { return it }
-            if (prediction == Prediction.CATALOGUE) return null
+            if (prediction == Prediction.CATALOGUE ||
+                entries.containsKey(resolve(nfc(input), null))
+            ) {
+                return null
+            }
         }
         val normalized =
             nfc(

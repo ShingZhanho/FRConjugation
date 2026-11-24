@@ -12,7 +12,7 @@ namespace ShingZhanho.FRConjugation {
         Catalogue,
         /// <summary>Normalize and infer supported inputs, including unknown verbs. Results may be unattested.</summary>
         Inferred,
-        /// <summary>Use catalogue answers first and infer missing slots, even for defective verbs.</summary>
+        /// <summary>Use catalogue data for known infinitives; infer only unknown infinitives.</summary>
         Guess
     }
     /// <summary>Selects catalogue spellings; raw predictions always retain all alternatives.</summary>
@@ -119,7 +119,7 @@ namespace ShingZhanho.FRConjugation {
         /// <summary>Returns one form, or null for an unknown slot, unsupported input, or unavailable catalogue form.</summary>
         /// <param name="verb">Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.</param>
         /// <param name="slot">Supported voice|mode|tense|person label from Slots, with - for participles.</param>
-        /// <param name="prediction">Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only missing catalogue slots. Predictions can be unattested.</param>
+        /// <param name="prediction">Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.</param>
         /// <param name="homonymIndex">Positive homonym index, or null for the first available index. An exact entry key takes precedence.</param>
         /// <param name="spelling">Catalogue spelling selection. Inferred output retains all semicolon-separated alternatives.</param>
         /// <exception cref="ArgumentOutOfRangeException">A homonym index is not positive or an enum value is invalid for this operation.</exception>
@@ -137,14 +137,14 @@ namespace ShingZhanho.FRConjugation {
                 string? known = catalogue.Raw(verb, id, homonymIndex, Prediction.Catalogue);
                 if (known != null)
                     return SelectSpelling(known, spelling);
-                if (prediction == Prediction.Catalogue)
+                if (prediction == Prediction.Catalogue || HasVerb(verb))
                     return null;
             }
             return catalogue.Raw(verb, id, homonymIndex, Prediction.Inferred);
         }
         /// <summary>Returns supported slots mapped to forms; missing results are omitted. Catalogue spellings are primary.</summary>
         /// <param name="verb">Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.</param>
-        /// <param name="prediction">Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only missing catalogue slots. Predictions can be unattested.</param>
+        /// <param name="prediction">Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.</param>
         /// <param name="homonymIndex">Positive homonym index, or null for the first available index. An exact entry key takes precedence.</param>
         /// <exception cref="ArgumentOutOfRangeException">A homonym index is not positive or an enum value is invalid for this operation.</exception>
         /// <exception cref="ArgumentNullException">A required string argument is null.</exception>
@@ -171,7 +171,7 @@ namespace ShingZhanho.FRConjugation {
         /// <exception cref="ArgumentOutOfRangeException">A homonym index is not positive or an enum value is invalid for this operation.</exception>
         /// <exception cref="ArgumentNullException">A required string argument is null.</exception>
         public string? RawInferredCommonPrefix(string verb, int? homonymIndex = null) => Prefix(verb, homonymIndex, Prediction.Inferred);
-        /// <summary>Returns shared spelling across catalogue forms plus predictions for missing slots, including defective verbs.</summary>
+        /// <summary>Returns the catalogue prefix for known infinitives, otherwise an inferred prefix.</summary>
         /// <param name="verb">Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.</param>
         /// <param name="homonymIndex">Positive homonym index, or null for the first available index. An exact entry key takes precedence.</param>
         /// <returns>Null if no usable forms exist; an empty string is a valid prefix. This is a display aid, not a grammatical stem.</returns>
@@ -216,7 +216,7 @@ namespace ShingZhanho.FRConjugation {
         };
         /// <summary>Prefixes the underlying participle with en; predictions repeat en for each alternative. Missing forms return null.</summary>
         /// <param name="verb">Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.</param>
-        /// <param name="prediction">Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only missing catalogue slots. Predictions can be unattested.</param>
+        /// <param name="prediction">Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.</param>
         /// <param name="homonymIndex">Positive homonym index, or null for the first available index. An exact entry key takes precedence.</param>
         /// <param name="voice">Catalogue voice label, such as voix_active_avoir or voix_prono.</param>
         /// <param name="tense">gerondif_present or gerondif_passe_sm, gerondif_passe_sf, gerondif_passe_pm, gerondif_passe_pf.</param>

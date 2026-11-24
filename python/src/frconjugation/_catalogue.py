@@ -133,7 +133,7 @@ class Catalogue:
                 result = self.render(entry[2], slot, lemma_index(key)[0])
                 if result is not None:
                     return result
-            if mode == "catalogue":
+            if mode == "catalogue" or self.resolve(nfc(value), None) in self.entries:
                 return None
         # Unicode White_Space, excluding Python-only C0 information separators.
         value = nfc(

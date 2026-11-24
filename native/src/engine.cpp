@@ -314,7 +314,7 @@ struct Catalogue {
                 if (answer)
                     return answer;
             }
-            if (mode == FRC_CATALOGUE)
+            if (mode == FRC_CATALOGUE || entries.count(resolve(nfc(input), 0)))
                 return {};
         }
         auto normalized = normalized_input(input);

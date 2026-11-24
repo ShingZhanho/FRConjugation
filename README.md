@@ -15,7 +15,8 @@ builds require neither training nor another language's toolchain.
 - **Catalogue queries** return recorded forms and preserve missing forms of
   defective verbs.
 - **Raw inference** predicts from spelling rules, including for unknown verbs.
-- **Guessing** preserves catalogue answers and predicts only missing slots.
+- **Guessing** returns catalogue data for known infinitives, preserving missing forms,
+  and predicts only unknown infinitives.
   Predictions are experimental and may be unattested.
 - **Common prefixes** identify shared spelling for highlighting across forms,
   excluding auxiliaries and pronouns. They are not grammatical stems.
