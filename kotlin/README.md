@@ -1,21 +1,28 @@
-# Kotlin/JVM
+# FRConjugation for Kotlin/JVM
 
-Package identity: `com.jacobshing:frconjugation`. Import
-`com.jacobshing.frconjugation.*` to include the typed extension methods.
-The library emits Java 8 bytecode and bundles its rules without runtime dependencies.
-Use a JDK supported by Gradle 9.9.2 to build (locally validated with JDK 27).
+French verb conjugation using bundled spelling rules learned from the Académie
+française catalogue. Query recorded forms, predict unknown verbs, and find shared
+spelling for highlighting. Conjugation works offline without a separate model download.
 
-```sh
-cd kotlin
-./gradlew build
-./gradlew sourcesJar
-./gradlew publishToMavenLocal
+Targets JVM 8 or later. The rules are included in the JAR.
+
+## Install
+
+Add Maven Central and the dependency to your Gradle Kotlin build script:
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.jacobshing:frconjugation:5.2.0")
+}
 ```
 
-Install from [Maven Central](https://central.sonatype.com/artifact/com.jacobshing/frconjugation)
-by configuring `mavenCentral()` and
-`implementation("com.jacobshing:frconjugation:5.2.0")` in the consuming project.
-Use `mavenLocal()` instead when testing a locally published build.
+Import `com.jacobshing.frconjugation.*` to include the typed extension methods.
+
+## Quick start
 
 ```kotlin
 import com.jacobshing.frconjugation.*
@@ -26,6 +33,8 @@ val form = c.conjugate("manger", Voice.ACTIVE_AVOIR, Mode.INDICATIF,
 val forms = c.conjugate("manger")
 val prefix = c.commonPrefix("manger") // "mang"
 ```
+
+## Forms and metadata
 
 `conjugate`, `rawInferredConjugation`, and `guessConjugation` each have five
 scopes, from one person to all voices. Bulk results are nested maps ordered as
@@ -45,12 +54,28 @@ catalogue variants. Use `getPronoun`, `conjugateWithPronoun`, and
 listing and metadata. Optional `homonymIndex` selects a positive indexed entry.
 Enums expose `label` and `fromLabel`; Person also exposes `pronoun` and `shortLabel`.
 
+## Asynchronous use
+
 Suspend functions ending in `Async`, plus `Conjugator.load()` and
 `Conjugator.getSharedAsync()`, dispatch to a bounded daemon worker pool. They do
 not require kotlinx.coroutines or interrupt running work on cancellation.
 Resource failures throw `ConjugationException`. Synchronous calls run on the caller.
 KDoc in the sources JAR documents individual signatures and contracts.
 
-Guess APIs use catalogue data exclusively for known infinitives, preserving missing
-forms. Only unknown infinitives use raw inference. All verb inputs are trimmed, lowercased and NFC-normalized before catalogue
-membership is checked.
+## Catalogue and prediction
+
+Catalogue methods return recorded forms. Guess methods return exactly the same
+results for known infinitives, including missing forms of defective verbs, and
+predict only unknown infinitives. Raw inference can also predict forms for known
+verbs; predictions are experimental and may be unattested.
+
+All verb inputs are trimmed, lowercased, and NFC-normalized before lookup.
+Internal whitespace is preserved. Common prefixes describe shared spelling across
+forms, excluding auxiliaries and pronouns; they are not grammatical stems. An
+empty prefix is a valid result, distinct from a missing result.
+
+## More information
+
+See the [source and build instructions](https://github.com/ShingZhanho/FRConjugation#build-and-use) for development,
+or [report an issue](https://github.com/ShingZhanho/FRConjugation/issues).
+Provided as-is for [personal and educational use](https://github.com/ShingZhanho/FRConjugation#licence).

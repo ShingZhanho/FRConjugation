@@ -1,23 +1,51 @@
-# Swift
+# FRConjugation for Swift
 
-Swift 5.6+, macOS 10.15+ or iOS 13+. No external dependencies.
+French verb conjugation using bundled spelling rules learned from the Académie
+française catalogue. Query recorded forms, predict unknown verbs, and find shared
+spelling for highlighting. Conjugation works offline without a separate model download.
 
-Add the package in Xcode or your manifest:
+Requires Swift 5.6 or later; supports macOS 10.15+ and iOS 13+.
+No external package dependencies.
+
+## Install
+
+In Xcode, add `https://github.com/ShingZhanho/FRConjugation.git` as a package
+dependency and add the **FRConjugation** library to your app target.
+
+For Swift Package Manager, add this entry to your package's `dependencies`:
 
 ```swift
 .package(url: "https://github.com/ShingZhanho/FRConjugation.git", from: "5.2.0")
 ```
 
-Import `FRConjugation`. Run builds from the repository root:
+Then add the product to the consuming target's `dependencies`:
 
-```sh
-swift build -c release
-swift test -c release
+```swift
+.product(name: "FRConjugation", package: "FRConjugation")
 ```
 
-The root manifest points to this directory. Preserve resource symlinks when
-checking out the repository. The standalone Xcode project uses the JSON project
-format; regenerate with Xcode 27.2+ and `xcodegen generate --spec swift/project.yml`.
+## Quick start
+
+```swift
+import FRConjugation
+
+let fr = Conjugator.getShared()
+let form = fr.conjugate("manger", voice: .activeAvoir, mode: .indicatif,
+                       tense: .present, person: .firstPluralMasculine) // "mangeons"
+let prefix = fr.commonPrefix("manger") // "mang"
+```
+
+## Catalogue and prediction
+
+Catalogue methods return recorded forms. Guess methods return exactly the same
+results for known infinitives, including missing forms of defective verbs, and
+predict only unknown infinitives. Raw inference can also predict forms for known
+verbs; predictions are experimental and may be unattested.
+
+All verb inputs are trimmed, lowercased, and NFC-normalized before lookup.
+Internal whitespace is preserved. Common prefixes describe shared spelling across
+forms, excluding auxiliaries and pronouns; they are not grammatical stems. An
+empty prefix is a valid result, distinct from a missing result.
 
 ## API
 
@@ -141,8 +169,7 @@ participle/gérondif APIs have sync and async variants; participle collections
 have the existing synchronous collection shape. Raw gérondifs prepend `en ` to
 every alternative in their raw source participle.
 
-All verb lookups trim, lowercase and normalize spelling. Inference
-resolves known homonyms using the same `homonymIndex`.
+Inference resolves known homonyms using the same `homonymIndex`.
 
 #### Variant (Alternative) Forms
 
@@ -151,20 +178,18 @@ variants).  The standard `conjugate` and `participle` methods always
 return the primary form.  Use the following methods to access variants:
 
 ```swift
-// Check if a specific form has an alternative
-fr.hasAlternativeForm("abreger", voice: .activeAvoir, mode: .indicatif,
-                      tense: .present, person: .firstSingularMasculine)
-// -> true
+// Check and retrieve an alternative spelling.
+fr.hasAlternativeForm("céder", voice: .activeAvoir, mode: .indicatif,
+                      tense: .futurSimple, person: .firstSingularMasculine)
+fr.conjugateAlternative("céder", voice: .activeAvoir, mode: .indicatif,
+                        tense: .futurSimple, person: .firstSingularMasculine)
 
-// Get the alternative form
-fr.conjugateAlternative("abreger", voice: .activeAvoir, mode: .indicatif,
-                        tense: .present, person: .firstSingularMasculine)
-// -> "abrege" (1990 reform spelling)
-
-// Participle variants
-fr.hasAlternativeParticiple("verb", voice: .activeAvoir, tense: .present)
-fr.participleAlternative("verb", voice: .activeAvoir, tense: .present)
+// The same operations are available for participles.
+fr.hasAlternativeParticiple("céder", voice: .activeAvoir, tense: .present)
+fr.participleAlternative("céder", voice: .activeAvoir, tense: .present)
 ```
+
+Alternative queries fall back to the primary form when no alternative exists.
 
 All variant methods have async overloads.
 
@@ -320,8 +345,8 @@ fr.persons("aller", voice: .activeEtre, mode: .indicatif, tense: .present)
 fr.hasVerb("parler")            // true
 fr.isHAspire("haïr")            // true
 fr.blocksElisionAndLiaison("ululer") // true; isHAspire("ululer") is false
-fr.is1990Reform("ceder")        // true
-fr.reformVariante("ceder")      // Optional("ceder")
+fr.is1990Reform("céder")
+fr.reformVariante("céder")
 fr.verbCount                    // 6298 (homonym groups counted once)
 fr.allVerbs                     // ["abaisser", "abandonner", ..., "zozoter"]
 
@@ -341,4 +366,8 @@ fr.homonymIndices("ressortir")  // [1, 2]
 
 Each `Person` case has a `.pronoun` property (`"je"`, `"tu"`, `"il"`, ...) and a `.shortLabel` (`"1sm"`, `"3pf"`, ...).
 
----
+## More information
+
+See the [source and build instructions](https://github.com/ShingZhanho/FRConjugation#build-and-use) for development,
+or [report an issue](https://github.com/ShingZhanho/FRConjugation/issues).
+Provided as-is for [personal and educational use](https://github.com/ShingZhanho/FRConjugation#licence).

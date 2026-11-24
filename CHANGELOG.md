@@ -6,44 +6,39 @@
 
 ## v5.2.0 — 2026-11-24
 
-- Guess APIs now preserve catalogue gaps for known infinitives and infer only unknown infinitives across all language ports. This intentionally changes behavior without changing signatures. [Compatibility details](releases/v5.2.0.md).
+- **Breaking behavior:** guess APIs now return catalogue results for known infinitives, preserving missing forms instead of predicting them. This applies to single forms, collections, participles, gérondifs, common prefixes, and async queries across all languages.
+- Unknown infinitives still use inference. Use raw-inference APIs to predict hypothetical forms for known verbs.
 
 ## v5.1.1 — 2026-11-24
 
-- Corrected registry installation instructions and removed unpublished/local-only wording from package documentation. No library or catalogue changes. [Release notes](releases/v5.1.1.md).
+- Corrected package installation instructions and registry links. No code or catalogue changes.
 
 ## v5.1.0 — 2026-11-24
 
-- Added C/C++, Kotlin/JVM, C#, Python, and TypeScript/JavaScript distributions with Swift API parity and a shared bundled catalogue.
-- Added registry publishing and native macOS/Linux build validation. Swift public APIs remain unchanged. [Release and development-port migration details](releases/v5.1.0.md).
+- Added C/C++, Kotlin/JVM, C#, Python, and TypeScript/JavaScript packages with Swift API parity and a shared bundled catalogue.
+- Added native macOS/Linux archives and packages on Maven Central, NuGet, PyPI, and npm.
 
 ## v5.0.1 — 2026-11-23
 
-- Added catalogue, raw-inferred, and hybrid common-prefix queries with async overloads.
-- Removed deprecated cache APIs and unavailable custom-model loaders. [Migration details](releases/v5.0.1.md).
+- Added `commonPrefix()`, `rawInferredCommonPrefix()`, and `guessCommonPrefix()`, including async overloads, for highlighting shared spelling across forms.
+- **Breaking:** removed deprecated cache APIs: `cacheSize:`, `defaultCacheSize`, `cacheCount`, `cacheCapacity`, and `clearCache()`.
+- Removed the already-unavailable `modelDirectory:` loaders.
 
 ## v5.0.1-beta.1 — 2026-11-23
 
-Removed the deprecated cache APIs and the unavailable custom-model loaders. Callers using cache controls must update their code. [Migration details](releases/v5.0.1-beta.1.md).
+- **Breaking:** removed deprecated cache APIs: `cacheSize:`, `defaultCacheSize`, `cacheCount`, `cacheCapacity`, and `clearCache()`.
+- Removed the already-unavailable `modelDirectory:` loaders.
 
 ## v5.0.0 — 2026-11-19
 
-- Conjugation now uses bundled spelling rules learned from the v0.5.0 catalogue.
-- Custom model loaders are unavailable at compile time. Use `Conjugator()`,
-  `Conjugator.getShared()`, or `try await Conjugator.load()`.
-- Cache settings and controls are deprecated. Cache sizes are ignored,
-  `cacheCount` and `cacheCapacity` return zero, and `clearCache()` has no effect.
-- Python tooling learns and compiles the rules. The Python neural inference module has been removed.
-- Added raw inference and catalogue-first guessing for finite forms,
-  participles and gérondifs. Guessing fills missing slots, including on defective verbs.
+- Replaced the neural model with bundled spelling rules.
+- Added raw inference and catalogue-first guessing for finite forms, participles, and gérondifs.
+- Deprecated cache controls; cache settings now have no effect.
+- **Breaking:** custom-model loaders are unavailable at compile time. Use the bundled `Conjugator()`, `getShared()`, or `load()` loaders.
+- **Breaking:** removed the Python neural inference module.
 
 ## v4.3.0 — 2026-10-30
 
-- Adopt the fixed dataset v0.5.0, including corrected forms, spelling alternatives, participles and variant references.
-- Add `blocksElisionAndLiaison(_:homonymIndex:)`.
-- Correct `je ulule` / `je yoyote` without breaking auxiliary elision in `j'ai ululé` / `j'ai yoyoté` or passive `j'étais haché`.
-- The new public query is additive; source changes are not required.
-
-### Observable data changes
-
-Passive present participles for `devoir` and `redevoir` now use the existing four gendered present-participle tenses. Their former generic `.present` request, including its derived `.gerondifPresent`, returns `nil`; callers must select the appropriate gendered participle. Corrected strings and primary / alternative ordering may change.
+- Updated to dataset v0.5.0 and retrained the model with corrected forms, alternatives, participles, and variant references.
+- Added `blocksElisionAndLiaison(_:homonymIndex:)` and corrected pronoun elision.
+- **Breaking data change:** passive present participles of `devoir` and `redevoir` now require gendered tense selections. Generic `.present` and derived `.gerondifPresent` queries return `nil`.

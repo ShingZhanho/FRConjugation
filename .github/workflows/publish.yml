@@ -215,4 +215,5 @@ jobs:
           if [[ "$PRERELEASE" == true ]]; then args+=(--prerelease); fi
           find artifacts -type f \( -name '*.tar.gz' -o -name '*.tgz' -o -name '*.whl' -o -name '*.nupkg' -o -name '*.jar' -o -name '*.fcr' -o -name '*.rules' \) -execdir sha256sum {} \; > artifacts/SHA256SUMS
           mapfile -d '' assets < <(find artifacts -type f \( -name '*.tar.gz' -o -name '*.tgz' -o -name '*.whl' -o -name '*.nupkg' -o -name '*.jar' -o -name '*.fcr' -o -name '*.rules' \) -print0)
-          gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes-file "releases/$RELEASE_TAG.md" "${args[@]}" "${assets[@]}" artifacts/SHA256SUMS
+          node .github/scripts/release-notes.cjs "$RELEASE_TAG" > "$RUNNER_TEMP/release-notes.md"
+          gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes-file "$RUNNER_TEMP/release-notes.md" "${args[@]}" "${assets[@]}" artifacts/SHA256SUMS

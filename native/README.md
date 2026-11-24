@@ -1,19 +1,33 @@
-# C and C++
+# FRConjugation for C and C++
 
-Requires C++17, Make, pkg-config, and ICU development libraries. C tests also
-require C11. No Python, Swift, or managed runtime is needed. From the repository root:
+French verb conjugation using bundled spelling rules learned from the Académie
+française catalogue. Query recorded forms, predict unknown verbs, and find shared
+spelling for highlighting. Conjugation works offline without a separate model download.
+
+Use the C++17 interface or the C11-compatible C API. Both use the same native
+library and bundled rules; no Python, Swift, or managed runtime is needed.
+
+## Install and link
+
+Download a matching native archive from the
+[releases page](https://github.com/ShingZhanho/FRConjugation/releases/latest).
+Add its headers to your include path and its library directory to your linker
+search path. The native library requires a compatible ICU installation.
+
+To build from source, extract the full source archive, then run these commands
+from its top-level directory. You need a C++17 compiler, Make, pkg-config, and
+ICU development libraries:
 
 ```sh
 make -C native
-make -C native test
-make -C native install PREFIX=/your/prefix
+make -C native install PREFIX="$HOME/.local"
 ```
 
 Link `libfrconjugation` and ICU (`pkg-config --libs icu-uc icu-i18n`), using
-`-pthread` where required. Make discovers Homebrew ICU on macOS; elsewhere set
-`PKG_CONFIG_PATH` as needed. `CXX` selects the target compiler; `HOST_CXX` selects
-the compiler for the resource embedder. Use separate `BUILD` directories for
-configurations. Cross-compilation also requires target ICU and compiler flags.
+`-pthread` where required. Link C applications with the C++ linker to include the
+C++ runtime. For shared linking, make the library available to your platform's
+dynamic loader. Make discovers Homebrew ICU on macOS; elsewhere set
+`PKG_CONFIG_PATH` to your ICU installation as needed.
 
 ## C++
 
@@ -58,6 +72,8 @@ Include `frconjugation_api.h`. The typed API uses tagged requests and owned
 responses; `frconjugation.h` also exposes the original slot-based functions.
 
 ```c
+#include <frconjugation_api.h>
+
 frc_engine *engine = NULL;
 if (frc_create(&engine) == FRC_OK) {
     frc_request request = frc_request_init(FRC_QUERY_CONJUGATE, "manger");
@@ -92,6 +108,20 @@ identical pointer values. There is no cancellation of running work.
 C and C++ strings crossing the C ABI must be NUL-terminated UTF-8 without embedded
 NULs. Headers contain the complete Doxygen API contracts and status descriptions.
 
-Guess APIs use catalogue data exclusively for known infinitives, preserving missing
-forms. Only unknown infinitives use raw inference. All verb inputs are trimmed, lowercased and NFC-normalized before catalogue
-membership is checked.
+## Catalogue and prediction
+
+Catalogue methods return recorded forms. Guess methods return exactly the same
+results for known infinitives, including missing forms of defective verbs, and
+predict only unknown infinitives. Raw inference can also predict forms for known
+verbs; predictions are experimental and may be unattested.
+
+All verb inputs are trimmed, lowercased, and NFC-normalized before lookup.
+Internal whitespace is preserved. Common prefixes describe shared spelling across
+forms, excluding auxiliaries and pronouns; they are not grammatical stems. An
+empty prefix is a valid result, distinct from a missing result.
+
+## More information
+
+See the [source and build instructions](https://github.com/ShingZhanho/FRConjugation#build-and-use) for development,
+or [report an issue](https://github.com/ShingZhanho/FRConjugation/issues).
+Provided as-is for [personal and educational use](https://github.com/ShingZhanho/FRConjugation#licence).

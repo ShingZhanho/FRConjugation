@@ -33,7 +33,7 @@ module.exports = async ({ core, context, github }) => {
         if (sha !== tagged) throw new Error('Checkout does not match tag');
         cp.execFileSync('git', ['merge-base', '--is-ancestor', sha, 'origin/main']);
         if (['all', 'github'].includes(process.env.TARGET)) {
-            if (!fs.existsSync(`releases/${tag}.md`)) throw new Error(`Missing releases/${tag}.md`);
+            require('./release-notes.cjs')(tag);
             try {
                 await github.rest.repos.getReleaseByTag({ ...context.repo, tag });
                 throw new Error(`GitHub release ${tag} already exists; do not overwrite it`);

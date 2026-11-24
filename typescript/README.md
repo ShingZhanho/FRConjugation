@@ -1,27 +1,21 @@
-# TypeScript / JavaScript
+# FRConjugation for TypeScript and JavaScript
 
-Native TypeScript reader for browsers and Node.js 20+, with no runtime dependencies.
-The npm package identity is `@jacobshing/frconjugation`.
-It ships ES modules, type declarations, API comments, and the bundled rules.
-No separate data download, custom binary, or server is required.
+French verb conjugation using bundled spelling rules learned from the Académie
+française catalogue. Query recorded forms, predict unknown verbs, and find shared
+spelling for highlighting. Conjugation works offline without a separate model download.
 
-## Build and install
+Supports browsers and Node.js 20 or later, with no runtime dependencies.
+The package includes ES modules, TypeScript declarations, and API documentation.
 
-Install with `npm install @jacobshing/frconjugation`.
-
-To build from the repository root:
+## Install
 
 ```sh
-cd typescript
-npm ci
-npm test
-npm pack
+npm install @jacobshing/frconjugation
 ```
 
-Install the resulting `.tgz` in your application with `npm install /path/to/package.tgz`.
-`npm run build` embeds the canonical `../catalogue/catalogue.fcr` into generated
-JavaScript before compiling. Node.js is the only language toolchain needed.
-The package is ESM; use `import`, or dynamic `import()` from CommonJS.
+Use ES module imports, or dynamic `import()` from CommonJS.
+
+## Quick start
 
 ```ts
 import { Conjugator, Voice, Mode, Tense, Person } from "@jacobshing/frconjugation";
@@ -75,7 +69,8 @@ c.conjugate("ressortir", undefined, undefined, undefined, undefined, 2);
 c.conjugate("ressortir_2");
 ```
 
-All verb inputs are trimmed, lowercased and NFC-normalized before lookup. Guessing uses catalogue data for known infinitives, preserving missing forms,
+All verb inputs are trimmed, lowercased and NFC-normalized before lookup.
+Guessing uses catalogue data for known infinitives, preserving missing forms,
 and infers only unknown infinitives. Predictions may be
 unattested. Catalogue methods select primary spellings; alternative methods fall
 back to primary when no alternative exists. Raw predictions preserve semicolon
@@ -118,16 +113,12 @@ use `Conjugator` without starting a worker.
 
 ## Verification
 
-`npm test` checks all shared and typed parity cases through both
-sync and Node worker APIs, worker lifecycle behavior, and compile-time types.
+For source-build checks and browser tests, see the
+[shared test guide](https://github.com/ShingZhanho/FRConjugation/blob/main/tests/README.md)
+and [npm scripts](https://github.com/ShingZhanho/FRConjugation/blob/main/typescript/package.json).
 
-```sh
-npm run test:browser       # same fixtures in installed Chrome and its Web Worker
-npm run verify:catalogue   # all catalogue outputs and fixed inference comparison
-```
+## More information
 
-The optional browser check uses Playwright and installed Chrome; set
-`BROWSER_CHANNEL` to another installed Playwright-supported channel if needed.
-The exhaustive comparison checks the established cross-language stream hash;
-it requires no Swift or Python installation. Node.js 24 and Chrome were locally
-validated on macOS on 2026-11-24; other browsers have not been verified.
+See the [source and build instructions](https://github.com/ShingZhanho/FRConjugation#build-and-use) for development,
+or [report an issue](https://github.com/ShingZhanho/FRConjugation/issues).
+Provided as-is for [personal and educational use](https://github.com/ShingZhanho/FRConjugation#licence).

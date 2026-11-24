@@ -1,46 +1,44 @@
-# Python
+# FRConjugation for Python
 
-Distribution identity: **jacobszh-frconjugation**. Import name: **frconjugation**.
-Requires Python 3.10+; no runtime dependencies or other language toolchains.
+French verb conjugation using bundled spelling rules learned from the Académie
+française catalogue. Query recorded forms, predict unknown verbs, and find shared
+spelling for highlighting. Conjugation works offline without a separate model download.
 
-Install from [PyPI](https://pypi.org/project/jacobszh-frconjugation/) with
-`python3 -m pip install jacobszh-frconjugation`.
+Requires Python 3.10 or later. No runtime dependencies.
 
-To build and test from the repository root:
+## Install
 
 ```sh
-python3 -m pip install ./python
-python3 -m unittest discover -s python/tests
+python -m pip install jacobszh-frconjugation
 ```
 
+The distribution is named `jacobszh-frconjugation`; import it as `frconjugation`.
+The installed package includes the rules, type annotations, and `py.typed`.
+
+## Quick start
+
 ```python
-from frconjugation import Conjugator, Prediction, Voice, Mode, Tense, Person
+from frconjugation import Conjugator, Voice, Mode, Tense, Person
 
 c = Conjugator()
-c.form("manger", "voix_active_avoir|indicatif|present|1pm")  # "mangeons"
-c.form(
-    "blorper", "voix_active_avoir|indicatif|present|1pm", prediction=Prediction.GUESS
-)  # "blorpons"
-c.common_prefix("manger")  # "mang"
 c.conjugate(
     "manger", Voice.ACTIVE_AVOIR, Mode.INDICATIF, Tense.PRESENT, Person.FIRST_PLURAL_MASCULINE
 )  # "mangeons"
-c.conjugate("manger")  # nested typed dictionaries of finite forms
+c.conjugate("manger")  # nested dictionaries of finite forms
+c.common_prefix("manger")  # "mang"
+c.guess_conjugation(
+    "blorper", Voice.ACTIVE_AVOIR, Mode.INDICATIF, Tense.PRESENT, Person.FIRST_PLURAL_MASCULINE
+)  # "blorpons" (prediction)
 ```
 
-Use `slots` to discover form labels, `entries` for source metadata, and
+Use `form` and `forms` for raw slot queries, `slots` to discover form labels, `entries` for source metadata, and
 `all_verbs` for distinct infinitives. Missing results are `None`; an empty prefix
 is valid. Synchronous calls run on the caller. Methods ending in `_async` use worker
 threads through `asyncio`; cancelling an await does not interrupt worker work. Full API contracts are available through Python
 `help()` and source docstrings; the package includes type annotations and
 `py.typed`. Inference is experimental and can produce unattested forms.
 
-The checked-in resource is a symlink to the shared catalogue. Wheels and source
-distributions contain the actual resource bytes, so an installed package works
-without the repository. Preserve symlinks in a source checkout. Build packaging
-artifacts with `python3 -m build ./python` after installing the Python `build`
-frontend in your environment. Source checkout tests may instead use
-`PYTHONPATH=python/src python3 -m unittest discover -s python/tests`.
+## Forms and metadata
 
 `conjugate`, `raw_inferred_conjugation`, and `guess_conjugation` accept optional
 trailing voice/mode/tense/person selectors. Omitting selectors returns nested
@@ -58,6 +56,8 @@ and `persons` discover catalogue structure. `has_verb`, `verb_count`,
 `blocks_elision_and_liaison`, `is_1990_reform`, and `reform_variant` expose metadata.
 Pass a positive `homonym_index` where supported to select an indexed entry.
 
+## Asynchronous use
+
 `Conjugator.get_shared()` reuses a reader; `load()` and `get_shared_async()`
 initialize off the caller thread. Loading failures raise `ConjugationError`.
 Enum constructors parse catalogue labels; Person exposes `pronoun` and
@@ -71,6 +71,20 @@ form = await c.guess_conjugation_async(
 )
 ```
 
-Guess APIs use catalogue data exclusively for known infinitives, preserving missing
-forms. Only unknown infinitives use raw inference. All verb inputs are trimmed, lowercased and NFC-normalized before catalogue
-membership is checked.
+## Catalogue and prediction
+
+Catalogue methods return recorded forms. Guess methods return exactly the same
+results for known infinitives, including missing forms of defective verbs, and
+predict only unknown infinitives. Raw inference can also predict forms for known
+verbs; predictions are experimental and may be unattested.
+
+All verb inputs are trimmed, lowercased, and NFC-normalized before lookup.
+Internal whitespace is preserved. Common prefixes describe shared spelling across
+forms, excluding auxiliaries and pronouns; they are not grammatical stems. An
+empty prefix is a valid result, distinct from a missing result.
+
+## More information
+
+See the [source and build instructions](https://github.com/ShingZhanho/FRConjugation#build-and-use) for development,
+or [report an issue](https://github.com/ShingZhanho/FRConjugation/issues).
+Provided as-is for [personal and educational use](https://github.com/ShingZhanho/FRConjugation#licence).
