@@ -3,8 +3,8 @@ import Foundation
 extension Conjugator {
     /// Async variant of ``participle(_:voice:tense:homonymIndex:)-6sqv2``.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
     ///   operation.
@@ -29,8 +29,8 @@ extension Conjugator {
 
     /// Async variant of ``gerondif(_:voice:tense:homonymIndex:)-301m3``.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
     ///   operation.
@@ -55,8 +55,8 @@ extension Conjugator {
 
     /// Async variant of ``participleAlternative(_:voice:tense:homonymIndex:)-yz3f``.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
     ///   operation.
@@ -81,8 +81,8 @@ extension Conjugator {
 
     /// Async variant of ``getPronoun(_:voice:mode:tense:person:homonymIndex:)-acv8``.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -112,8 +112,8 @@ extension Conjugator {
 
     /// Async variant of ``conjugateWithPronoun(_:voice:mode:tense:person:homonymIndex:)``.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -144,8 +144,8 @@ extension Conjugator {
     /// Async variant of
     /// ``conjugateAlternativeWithPronoun(_:voice:mode:tense:person:homonymIndex:)``.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -195,8 +195,8 @@ extension Conjugator {
 
     /// Conjugate a single form asynchronously.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -226,8 +226,8 @@ extension Conjugator {
 
     /// Conjugate all persons for a given voice, mode and tense asynchronously.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -254,8 +254,8 @@ extension Conjugator {
 
     /// Return the alternative spelling for a single form asynchronously.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this

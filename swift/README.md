@@ -81,7 +81,7 @@ canonical Unicode spellings are normalized. The result describes shared
 spelling for display, rather than a grammatical stem.
 
 All three accept `homonymIndex: Int? = nil` and have synchronous and asynchronous
-overloads. Catalogue lookup uses exact input. Raw inference normalizes and
+overloads. All verb inputs are trimmed, lowercased and NFC-normalized. Raw inference
 validates input like `rawInferredConjugation()`. Guessing uses catalogue alternatives for known infinitives and infers only unknown
 infinitives. Missing forms of known defective verbs remain missing.
 `nil` means no usable forms, while `""` means a valid empty prefix. Predictions
@@ -141,7 +141,7 @@ participle/gérondif APIs have sync and async variants; participle collections
 have the existing synchronous collection shape. Raw gérondifs prepend `en ` to
 every alternative in their raw source participle.
 
-Catalogue lookups use the exact input. Inference normalizes the spelling and
+All verb lookups trim, lowercase and normalize spelling. Inference
 resolves known homonyms using the same `homonymIndex`.
 
 #### Variant (Alternative) Forms

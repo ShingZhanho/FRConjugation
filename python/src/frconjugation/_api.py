@@ -3,7 +3,7 @@
 import asyncio
 from threading import Lock
 
-from ._catalogue import nfc
+from ._catalogue import verb_key
 from .types import Mode, Person, Tense, Voice
 
 _shared_lock = Lock()
@@ -67,7 +67,7 @@ class _API:
         return len(self.homonym_indices(verb)) or 1
 
     def _metadata(self, verb, homonym=None, resolve=False):
-        key = nfc(verb)
+        key = verb_key(verb)
         if resolve:
             key = self._catalogue.resolve(key, homonym)
         return self._catalogue.entries.get(key, (0, None, 0))

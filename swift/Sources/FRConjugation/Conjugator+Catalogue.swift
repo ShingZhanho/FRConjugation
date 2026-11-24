@@ -37,8 +37,8 @@ extension Conjugator {
     ///
     /// - Returns: The conjugated form, or `nil` if the combination is
     ///   invalid or the verb is unknown.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -77,8 +77,8 @@ extension Conjugator {
     ///
     /// - Returns: The alternative (or only) conjugated form, or `nil`
     ///   if the combination is invalid.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -111,8 +111,8 @@ extension Conjugator {
     ///     // -> true
     ///
     /// - Returns: `true` if there are two spelling variants, `false` otherwise.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -140,8 +140,8 @@ extension Conjugator {
     /// Conjugate all persons for a given voice, mode and tense.
     ///
     /// - Returns: A dictionary mapping each valid person to its form.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -172,8 +172,8 @@ extension Conjugator {
     /// Conjugate all tenses and persons for a voice and mode.
     ///
     /// - Returns: A nested dictionary: tense -> person -> form.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
@@ -196,8 +196,8 @@ extension Conjugator {
     /// Conjugate all modes, tenses and persons for a voice.
     ///
     /// - Returns: A nested dictionary: mode -> tense -> person -> form.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
@@ -219,8 +219,8 @@ extension Conjugator {
     ///
     /// - Returns: A nested dictionary: voice -> mode -> tense -> person -> form,
     ///   or `nil` if the verb is unknown.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func conjugate(
@@ -276,8 +276,8 @@ extension Conjugator {
     ///
     /// If only one spelling exists, behaves identically to
     /// ``participle(_:voice:tense:homonymIndex:)-6sqv2``.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
     ///   operation.
@@ -298,8 +298,8 @@ extension Conjugator {
     }
 
     /// Whether the given participle has an alternative spelling variant.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
     ///   operation.

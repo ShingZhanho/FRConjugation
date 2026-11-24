@@ -1,4 +1,4 @@
-import { catalogue, lemmaIndex, nfc } from "./catalogue.js";
+import { catalogue, lemmaIndex, nfc, verbKey } from "./catalogue.js";
 import {
     Mode,
     Person,
@@ -35,8 +35,8 @@ const fold = (value: string): string =>
 type Nested = { [key: string]: Nested | string };
 
 /** Synchronous bundled-rule reader. Calls run on the current thread; use AsyncConjugator for workers.
- * Exact NFC lookup preserves catalogue availability. Inference trims Unicode whitespace and
- * lowercases supported strings. Exact homonym keys take precedence over a positive homonymIndex.
+ * All verb inputs are trimmed, lowercased and NFC-normalized before lookup.
+ * Exact homonym keys take precedence over a positive homonymIndex.
  * Missing single/all-voice results are null; missing scoped collections are empty objects.
  */
 export class Conjugator {
@@ -79,16 +79,16 @@ export class Conjugator {
     get verbCount(): number {
         return this.allVerbs.length;
     }
-    /** Exact NFC catalogue membership, including base homonym names. */
+    /** Normalized catalogue membership, including base homonym names. */
     hasVerb(verb: string): boolean {
         validate(verb);
-        const key = nfc(verb);
+        const key = verbKey(verb);
         return this.#catalogue.entries.has(key) || this.#catalogue.homonyms.has(key);
     }
     /** Ascending homonym indices, or an empty array. */
     homonymIndices(verb: string): readonly number[] {
         validate(verb);
-        return [...(this.#catalogue.homonyms.get(nfc(verb)) ?? [])];
+        return [...(this.#catalogue.homonyms.get(verbKey(verb)) ?? [])];
     }
     /** Whether a base infinitive has indexed homonyms. */
     hasHomonyms(verb: string): boolean {
@@ -104,7 +104,7 @@ export class Conjugator {
         resolve = false,
     ): [number, string | null, number] {
         validate(verb, homonym);
-        const key = nfc(verb);
+        const key = verbKey(verb);
         return (
             this.#catalogue.entries.get(resolve ? this.#catalogue.resolve(key, homonym) : key) ?? [
                 0,

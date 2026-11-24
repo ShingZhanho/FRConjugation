@@ -13,7 +13,7 @@ extern "C" {
  * are NULL. Query calls may overlap; destruction requires exclusive access.
  * Exceptions never cross the C ABI. No custom catalogue loading is supported.
  * Pointer arguments must be non-NULL unless explicitly documented otherwise.
- * Inference trims whitespace, lowercases and NFC-normalizes input, accepting
+ * All verb inputs are trimmed, lowercased and NFC-normalized. Inference accepts
  * space, apostrophe, hyphen, 1, 2, semicolon, underscore, a-z and âçèéêîïôûœ.
  */
 /** Opaque catalogue instance owned by the caller. */
@@ -31,7 +31,7 @@ const char *frc_status_description(frc_status status);
 typedef int32_t frc_mode;
 /** Available prediction strategies. */
 enum {
-    FRC_CATALOGUE, /**< Exact NFC catalogue lookup; no case folding or trimming. */
+    FRC_CATALOGUE, /**< Trimmed, lowercase, NFC-normalized catalogue lookup. */
     FRC_INFERRED,  /**< Trim, lowercase and infer supported strings; output may be unattested. */
     FRC_GUESS      /**< Preserve known infinitives including missing forms; infer only unknown
                       infinitives. */

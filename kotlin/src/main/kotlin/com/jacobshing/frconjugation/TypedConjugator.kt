@@ -21,7 +21,7 @@ private fun Conjugator.metadata(
     homonym: Int? = null,
     resolve: Boolean = false,
 ): VerbEntry? {
-    val key = if (resolve) catalogue.resolve(nfc(verb), homonym) else nfc(verb)
+    val key = if (resolve) catalogue.resolve(verbKey(verb), homonym) else verbKey(verb)
     return catalogue.entries[key]?.metadata
 }
 

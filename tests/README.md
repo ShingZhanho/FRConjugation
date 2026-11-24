@@ -57,7 +57,7 @@ to make a failing test pass.
 
 ## Typed API parity
 
-`typed-api.tsv` adds 218 Swift-authored expectations with columns
+`typed-api.tsv` contains Swift-authored expectations and normalized-input counterparts with columns
 `id`, `operation`, `verb`, `voice`, `mode`, `tense`, `person`, `homonym`,
 `prediction`, `expected`. `-` denotes an omitted grammatical selector. Expected
 values use the same escaping and null rules as the original fixture. Bulk finite
@@ -84,3 +84,7 @@ TypeScript reads both fixtures with Node.js and, optionally, Chrome. See
 [TypeScript verification](../typescript/README.md#verification). Its asynchronous
 reader runs the same cases in real workers, rather than wrapping synchronous
 calls in already-resolved Promises.
+
+Normalization cases reuse fixed lowercase catalogue expectations with uppercase and
+surrounding Unicode whitespace. Shared slot cases also cover tabs/newlines and
+known defective-verb gaps; typed cases cover metadata, homonyms and structure.

@@ -9,8 +9,7 @@ extension Conjugator {
     ) -> String? {
         let slot = RuleCatalogue.Slot(voice: voice, mode: mode, tense: tense, person: person)
         guard catalogue.slotIDs[slot] != nil else { return nil }
-        let normalized = input.trimmingCharacters(in: .whitespacesAndNewlines)
-            .lowercased().precomposedStringWithCanonicalMapping
+        let normalized = Self.normalizedInfinitive(input)
         guard !normalized.isEmpty else { return nil }
         let key = resolveKey(normalized, homonymIndex: homonymIndex)
         guard key.allSatisfy(Self.inferenceAlphabet.contains) else { return nil }
@@ -107,12 +106,12 @@ extension Conjugator {
     /// Return catalogue data for known infinitives, including missing answers;
     /// otherwise return a raw rule prediction for the requested form.
     ///
-    /// Catalogue lookup uses conjugate's exact input semantics. Only the raw
-    /// fallback normalizes input. Inferred answers can include alternatives and
+    /// All verb inputs are trimmed, lowercased and NFC-normalized before
+    /// catalogue membership is checked. Inferred answers can include alternatives and
     /// are not guaranteed to be grammatical. Known infinitives retain their
     /// catalogue gaps; only unknown infinitives are inferred.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -135,8 +134,8 @@ extension Conjugator {
     }
 
     /// Return catalogue persons for known infinitives; infer unknown infinitives.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -156,8 +155,8 @@ extension Conjugator {
     }
 
     /// Return catalogue tenses/persons for known infinitives; infer unknown infinitives.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
@@ -173,8 +172,8 @@ extension Conjugator {
     }
 
     /// Return catalogue modes for known infinitives; infer unknown infinitives.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
@@ -188,8 +187,8 @@ extension Conjugator {
     }
 
     /// Return catalogue data for known infinitives; infer unknown infinitives.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func guessConjugation(
@@ -324,8 +323,8 @@ extension Conjugator {
     /// Use catalogue data for known infinitives; infer unknown infinitives off the calling executor.
     /// Predictions may be unattested; unsupported input returns `nil` or an empty collection.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -351,8 +350,8 @@ extension Conjugator {
     /// Use catalogue data for known infinitives; infer unknown infinitives off the calling executor.
     /// Predictions may be unattested; unsupported input returns `nil` or an empty collection.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this

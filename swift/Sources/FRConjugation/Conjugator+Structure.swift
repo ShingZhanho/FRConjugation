@@ -3,8 +3,8 @@ import Foundation
 extension Conjugator {
     /// Return catalogue voices with at least one form, sorted by raw label.
     /// Unknown verbs and unavailable combinations return an empty array; no inference is performed.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func voices(_ infinitive: String, homonymIndex: Int? = nil) -> [Voice] {
@@ -20,8 +20,8 @@ extension Conjugator {
 
     /// Return catalogue moods with at least one form in this voice, sorted by raw label.
     /// Unknown verbs and unavailable combinations return an empty array; no inference is performed.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
@@ -36,8 +36,8 @@ extension Conjugator {
 
     /// Return catalogue tenses with at least one form in this voice and mood, sorted by raw label.
     /// Unknown verbs and unavailable combinations return an empty array; no inference is performed.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
@@ -55,8 +55,8 @@ extension Conjugator {
     /// Return available persons grouped by identical full spellings in source order; participles
     /// return an empty array.
     /// Unknown verbs and unavailable combinations return an empty array; no inference is performed.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this

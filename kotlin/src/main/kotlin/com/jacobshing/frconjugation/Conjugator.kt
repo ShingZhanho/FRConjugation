@@ -4,7 +4,7 @@ import java.text.Normalizer
 
 /** Selects exact catalogue lookup, raw inference, or catalogue-first guessing. */
 enum class Prediction {
-    /** NFC catalogue lookup without trimming or case folding. */
+    /** Trimmed, lowercase, NFC-normalized catalogue lookup. */
     CATALOGUE,
 
     /** Trim, lowercase and infer supported input, including unknown verbs. Predictions may be unattested. */
@@ -50,7 +50,7 @@ data class VerbEntry(
  * Async-suffixed suspend extensions run on the shared worker pool without cancellation.
  * Slot labels use voice|mode|tense|person, with "-" for participles.
  * Null means missing. An empty prefix is a valid result.
- * Inference trims, lowercases and NFC-normalizes input, then permits only space,
+ * All verb inputs are trimmed, lowercased and NFC-normalized. Inference permits space,
  * apostrophe, hyphen, 1, 2, semicolon, underscore, a-z and âçèéêîïôûœ.
  * No custom catalogue can be supplied. Resource-loading failures propagate.
  * @constructor Creates a reader sharing the lazily loaded bundled catalogue.
@@ -72,22 +72,23 @@ class Conjugator {
             }.distinct()
             .sortedWith(compareBy<String> { frenchSortKey(it) }.thenBy { it })
 
-    /** Tests exact NFC catalogue membership, accepting either base infinitives or indexed homonym keys.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+    /** Tests normalized catalogue membership, accepting either base infinitives or indexed homonym keys.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      */
     fun hasVerb(verb: String): Boolean =
-        catalogue.entries.containsKey(nfc(verb)) || catalogue.homonyms.containsKey(nfc(verb))
+        catalogue.entries.containsKey(verbKey(verb)) ||
+            catalogue.homonyms.containsKey(verbKey(verb))
 
     /** Returns ascending indices for a base infinitive, or an empty list when no indexed group exists.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      */
     fun homonymIndices(verb: String): List<Int> =
-        catalogue.homonyms[nfc(verb)]?.toList() ?: emptyList()
+        catalogue.homonyms[verbKey(verb)]?.toList() ?: emptyList()
 
     /** Returns one form, or null for an unknown slot, unsupported input, or unavailable catalogue form.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      * @param slot Supported voice|mode|tense|person label from [slots], with - for participles.
-     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
+     * @param prediction All modes trim, lowercase and NFC-normalize verb inputs; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @param spelling Catalogue spelling selection. Inferred output retains all semicolon-separated alternatives.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
@@ -110,8 +111,8 @@ class Conjugator {
     }
 
     /** Returns supported slots mapped to forms; missing results are omitted. Catalogue spellings are primary.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
-     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
+     * @param prediction All modes trim, lowercase and NFC-normalize verb inputs; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
      */
@@ -126,7 +127,7 @@ class Conjugator {
             }.toMap()
 
     /** Returns shared spelling across all catalogue forms and alternatives, excluding auxiliaries and attached pronouns.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @return null for no usable forms; empty is valid. Shared spelling is not a grammatical stem.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
@@ -137,7 +138,7 @@ class Conjugator {
     ): String? = prefix(verb, homonymIndex, Prediction.CATALOGUE)
 
     /** Returns shared spelling across raw inferred forms and alternatives, excluding auxiliaries and attached pronouns.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @return null for no usable forms; empty is valid. Shared spelling is not a grammatical stem.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
@@ -148,7 +149,7 @@ class Conjugator {
     ): String? = prefix(verb, homonymIndex, Prediction.INFERRED)
 
     /** Returns the catalogue prefix for known infinitives, otherwise an inferred prefix.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @return null for no usable forms; empty is valid. Shared spelling is not a grammatical stem.
      * @throws IllegalArgumentException if a supplied homonym index is not positive.
@@ -178,8 +179,8 @@ class Conjugator {
     }
 
     /** Prefixes the underlying participle with en; predictions repeat en for each alternative. Missing forms return null.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
-     * @param prediction Catalogue uses exact lookup; Inferred trims and lowercases supported input; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
+     * @param prediction All modes trim, lowercase and NFC-normalize verb inputs; Guess infers only infinitives absent from the catalogue. Predictions can be unattested.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @param voice Catalogue voice label, such as voix_active_avoir or voix_prono.
      * @param tense gerondif_present or gerondif_passe_sm, gerondif_passe_sf, gerondif_passe_pm, gerondif_passe_pf.
@@ -199,7 +200,7 @@ class Conjugator {
     }
 
     /** Returns a catalogue subject prefix with its trailing space or apostrophe, including subjunctive que/qu’. Imperatives, participles and unavailable forms return null.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      * @param slot Supported voice|mode|tense|person label from [slots], with - for participles.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @param spelling PRIMARY or ALTERNATIVE. ALL is invalid.
@@ -218,7 +219,7 @@ class Conjugator {
     }
 
     /** Returns a catalogue form with its subject prefix; imperatives and participles remain bare. Missing forms return null.
-     * @param verb Infinitive or exact indexed key. Catalogue lookup is NFC-normalized but case-sensitive and untrimmed.
+     * @param verb Infinitive or exact indexed key. Verb input is trimmed, lowercased and NFC-normalized before lookup.
      * @param slot Supported voice|mode|tense|person label from [slots], with - for participles.
      * @param homonymIndex Positive homonym index, or null for the first available index. An exact entry key takes precedence.
      * @param spelling PRIMARY or ALTERNATIVE. ALL is invalid.
@@ -245,7 +246,7 @@ class Conjugator {
         val parts = slot.split('|')
         if (parts.size != 4 || parts[1] in listOf("imperatif", "participe")) return null
         val base = subjects[parts[3]] ?: return null
-        val entry = catalogue.entries[catalogue.resolve(nfc(verb), homonym)]?.metadata
+        val entry = catalogue.entries[catalogue.resolve(verbKey(verb), homonym)]?.metadata
         val first = form.firstOrNull()?.lowercaseChar()
         var vowel = first != null && first in "aeiouàâéèêëîïôùûüœæy"
         if (first == 'h') vowel = entry?.isHAspire != true
@@ -344,3 +345,14 @@ internal fun lemmaIndex(value: String): Pair<String, String> {
         value to ""
     }
 }
+
+internal fun verbKey(value: String): String =
+    nfc(
+        value
+            .trim {
+                it.isWhitespace() ||
+                    Character.isSpaceChar(
+                        it,
+                    )
+            }.lowercase(java.util.Locale.ROOT),
+    )

@@ -56,8 +56,8 @@ extension Conjugator {
     }
 
     /// All available primary participles in this voice.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.

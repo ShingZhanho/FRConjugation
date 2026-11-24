@@ -217,3 +217,31 @@ id	operation	verb	voice	mode	tense	person	homonym	prediction	expected
 216	has_alternative_participle	croître	voix_active_avoir	-	passe_sm	-	0	catalogue	0
 217	finite	ressortir	voix_active_avoir	indicatif	present	1pm	2	catalogue	ressortissons
 218	blocking	ululer	-	-	-	-	0	catalogue	1
+219	has_verb	  MANGER  	-	-	-	-	0	catalogue	1
+220	voices	  MANGER  	-	-	-	-	0	catalogue	voix_active_avoir,voix_passive,voix_prono
+221	modes	  MANGER  	voix_active_avoir	-	-	-	0	catalogue	conditionnel,imperatif,indicatif,participe,subjonctif
+222	tenses	  MANGER  	voix_active_avoir	indicatif	-	-	0	catalogue	futur_anterieur,futur_simple,imparfait,passe_anterieur,passe_compose,passe_simple,plus_que_parfait,present
+223	persons	  MANGER  	voix_active_avoir	indicatif	present	-	0	catalogue	1sm,1sf,3sm,3sf,2sm,2sf,1pm,1pf,2pm,2pf,3pm,3pf
+224	h_aspire	  HAÏR  	-	-	-	-	0	catalogue	1
+225	blocking	  HAÏR  	-	-	-	-	0	catalogue	1
+226	has_homonyms	  RESSORTIR  	-	-	-	-	0	catalogue	1
+227	homonym_count	  RESSORTIR  	-	-	-	-	0	catalogue	2
+228	homonym_indices	  RESSORTIR  	-	-	-	-	0	catalogue	1,2
+229	has_verb	  RESSORTIR_2  	-	-	-	-	0	catalogue	1
+230	blocking	  ULULER  	-	-	-	-	0	catalogue	1
+231	finite	  MANGER  	voix_active_avoir	indicatif	present	1pm	0	catalogue	mangeons
+232	finite	  MANGER  	voix_active_avoir	indicatif	present	1pm	0	guess	mangeons
+233	finite	  PLEUVOIR  	voix_active_avoir	indicatif	present	1pm	0	guess	\N
+234	participle	  PLEUVOIR  	voix_active_avoir	-	passe_pf	-	0	guess	plu
+235	gerondif	  PLEUVOIR  	voix_active_avoir	-	gerondif_present	-	0	guess	en pleuvant
+236	participles	  BLORPER  	voix_active_avoir	-	-	-	0	guess	passe_compound_pf=ayant blorpé\npasse_compound_pm=ayant blorpé\npasse_compound_sf=ayant blorpé\npasse_compound_sm=ayant blorpé\npasse_pf=blorpées\npasse_pm=blorpés\npasse_sf=blorpée\npasse_sm=blorpé\npresent=blorpant
+237	participle	  BLORPER  	voix_active_avoir	-	passe_pf	-	0	guess	blorpées
+238	gerondif	  BLORPER  	voix_active_avoir	-	gerondif_present	-	0	guess	en blorpant
+239	alternative	  PAYER  	voix_active_avoir	indicatif	futur_simple	1sm	0	catalogue	payerai
+240	has_alternative	  PAYER  	voix_active_avoir	indicatif	futur_simple	1sm	0	catalogue	1
+241	pronoun	  PAYER  	voix_active_avoir	indicatif	futur_simple	1sm	0	catalogue	je 
+242	with_pronoun	  PAYER  	voix_active_avoir	indicatif	futur_simple	1sm	0	catalogue	je paierai
+243	alternative_with_pronoun	  PAYER  	voix_active_avoir	indicatif	futur_simple	1sm	0	catalogue	je payerai
+244	participle_alternative	  CROÎTRE  	voix_active_avoir	-	passe_sm	-	0	catalogue	crû
+245	has_alternative_participle	  CROÎTRE  	voix_active_avoir	-	passe_sm	-	0	catalogue	0
+246	finite	  RESSORTIR  	voix_active_avoir	indicatif	present	1pm	2	catalogue	ressortissons

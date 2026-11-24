@@ -15,7 +15,7 @@ namespace ShingZhanho.FRConjugation {
         /// <summary>Homonym count, or one without an indexed group, including unknown verbs.</summary>
         public int HomonymCount(string verb) => Math.Max(1, HomonymIndices(verb).Count);
         private VerbEntry? Metadata(string verb, int? homonym = null, bool resolve = false) {
-            string key = verb.Normalize(NormalizationForm.FormC);
+            string key = Catalogue.VerbKey(verb);
             if (resolve)
                 key = catalogue.Resolve(key, homonym);
             return catalogue.Entries.TryGetValue(key, out var entry) ? entry.Metadata : null;

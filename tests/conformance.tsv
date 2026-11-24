@@ -47,9 +47,9 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 46	prefix	catalogue	_		0	primary	\N
 47	prefix	inferred	_		0	primary	
 48	prefix	guess	_		0	primary	
-49	prefix	catalogue	  CÉDER  		0	primary	\N
+49	prefix	catalogue	  CÉDER  		0	primary	c
 50	prefix	inferred	  CÉDER  		0	primary	
-51	prefix	guess	  CÉDER  		0	primary	
+51	prefix	guess	  CÉDER  		0	primary	c
 52	prefix	catalogue	céder		0	primary	c
 53	prefix	inferred	céder		0	primary	
 54	prefix	guess	céder		0	primary	c
@@ -78,7 +78,7 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 77	form	inferred	😀	voix_active_avoir|indicatif|present|1pm	0	primary	\N
 78	form	inferred		voix_active_avoir|indicatif|present|1pm	0	primary	\N
 79	form	catalogue	céder	voix_active_avoir|indicatif|present|1pm	0	primary	cédons
-80	form	catalogue	CÉDER	voix_active_avoir|indicatif|present|1pm	0	primary	\N
+80	form	catalogue	CÉDER	voix_active_avoir|indicatif|present|1pm	0	primary	cédons
 81	form	catalogue	céder	voix_active_avoir|indicatif|present|1pm	0	primary	cédons
 82	form	catalogue	manger	nonsense	0	primary	\N
 83	form	catalogue	aller	voix_active_etre|indicatif|present|1sm	0	primary	vais
@@ -103,3 +103,10 @@ id	operation	mode	verb	selector	homonym	spelling	expected
 102	form	guess	falloir	voix_active_avoir|indicatif|present|1sm	0	primary	\N
 103	form	guess	entre-nuire	voix_prono|participe|present|-	0	primary	\N
 104	gerondif	guess	entre-nuire	voix_prono|gerondif_present	0	primary	\N
+105	form	catalogue	\t MANGER \n	voix_active_avoir|indicatif|present|1pm	0	primary	mangeons
+106	form	catalogue	\t CÉDER \n	voix_active_avoir|indicatif|present|1pm	0	primary	cédons
+107	form	catalogue	\t ALLER \n	voix_active_etre|indicatif|present|1sm	0	primary	vais
+108	gerondif	catalogue	\t MANGER \n	voix_active_avoir|gerondif_present	0	primary	en mangeant
+109	form	guess	\t FALLOIR \n	voix_active_avoir|indicatif|present|1sm	0	primary	\N
+110	form	guess	\t ENTRE-NUIRE \n	voix_prono|participe|present|-	0	primary	\N
+111	gerondif	guess	\t ENTRE-NUIRE \n	voix_prono|gerondif_present	0	primary	\N

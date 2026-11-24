@@ -52,5 +52,5 @@ Resource failures throw `ConjugationException`. Synchronous calls run on the cal
 KDoc in the sources JAR documents individual signatures and contracts.
 
 Guess APIs use catalogue data exclusively for known infinitives, preserving missing
-forms. Only unknown infinitives use raw inference. Membership uses the same exact
-lookup semantics as catalogue queries; only inference trims and lowercases input.
+forms. Only unknown infinitives use raw inference. All verb inputs are trimmed, lowercased and NFC-normalized before catalogue
+membership is checked.

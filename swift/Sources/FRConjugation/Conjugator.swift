@@ -4,8 +4,7 @@ import Foundation
 ///
 /// Instances support concurrent reads. Synchronous methods run on the caller;
 /// async overloads dispatch work to a background queue without cancellation.
-/// Catalogue lookup uses canonical Unicode equality without case folding or
-/// whitespace trimming. Inference trims, lowercases and NFC-normalizes input.
+/// All verb inputs are trimmed, lowercased and NFC-normalized before lookup.
 /// Its supported alphabet is space, apostrophe, hyphen, 1, 2, semicolon,
 /// underscore, a-z and âçèéêîïôûœ. Predictions may be grammatically unattested.
 /// Only the bundled catalogue is supported.
@@ -104,26 +103,26 @@ public final class Conjugator: @unchecked Sendable {
     /// For verbs with homonyms (e.g. *ressortir*), returns `true` for
     /// the base name even though the internal keys are suffixed
     /// (*ressortir_1*, *ressortir_2*).
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func hasVerb(_ infinitive: String) -> Bool {
-        return catalogue.entries[infinitive] != nil
-            || catalogue.homonymMap[infinitive] != nil
+        return catalogue.entries[Self.normalizedInfinitive(infinitive)] != nil
+            || catalogue.homonymMap[Self.normalizedInfinitive(infinitive)] != nil
     }
 
     /// Whether a verb beginning with *h* is h-aspiré (no elision/liaison).
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func isHAspire(_ infinitive: String) -> Bool {
-        return (catalogue.entries[infinitive]?.flags ?? 0) & 1 != 0
+        return (catalogue.entries[Self.normalizedInfinitive(infinitive)]?.flags ?? 0) & 1 != 0
     }
 
     /// Whether the source marks this verb as blocking elision and liaison.
     ///
     /// This lexical property includes non-h initials such as ululer and yoyoter.
     /// Auxiliary forms can still trigger elision (for example, j'ai ululé).
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func blocksElisionAndLiaison(_ infinitive: String, homonymIndex: Int? = nil) -> Bool {
@@ -132,17 +131,17 @@ public final class Conjugator: @unchecked Sendable {
     }
 
     /// Whether a verb has 1990 reform spelling changes.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func is1990Reform(_ infinitive: String) -> Bool {
-        return (catalogue.entries[infinitive]?.flags ?? 0) & 4 != 0
+        return (catalogue.entries[Self.normalizedInfinitive(infinitive)]?.flags ?? 0) & 4 != 0
     }
 
     /// Return the 1990 reform variant for a verb, or `nil`.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func reformVariante(_ infinitive: String) -> String? {
-        return catalogue.entries[infinitive]?.variant
+        return catalogue.entries[Self.normalizedInfinitive(infinitive)]?.variant
     }
 
     // MARK: - Homonym Queries
@@ -151,33 +150,38 @@ public final class Conjugator: @unchecked Sendable {
     ///
     ///     conjugator.hasHomonyms("ressortir")  // true
     ///     conjugator.hasHomonyms("parler")     // false
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func hasHomonyms(_ infinitive: String) -> Bool {
-        return catalogue.homonymMap[infinitive] != nil
+        return catalogue.homonymMap[Self.normalizedInfinitive(infinitive)] != nil
     }
 
     /// The number of homonym entries for a verb, or 1 if it has no homonyms.
     ///
     ///     conjugator.homonymCount("ressortir")  // 2
     ///     conjugator.homonymCount("parler")     // 1
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func homonymCount(_ infinitive: String) -> Int {
-        return catalogue.homonymMap[infinitive]?.count ?? 1
+        return catalogue.homonymMap[Self.normalizedInfinitive(infinitive)]?.count ?? 1
     }
 
     /// The available homonym indices for a verb, or an empty array if none.
     ///
     ///     conjugator.homonymIndices("ressortir")  // [1, 2]
     ///     conjugator.homonymIndices("parler")     // []
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     public func homonymIndices(_ infinitive: String) -> [Int] {
-        return catalogue.homonymMap[infinitive] ?? []
+        return catalogue.homonymMap[Self.normalizedInfinitive(infinitive)] ?? []
     }
 
     // MARK: - Homonym Key Resolution
+
+    static func normalizedInfinitive(_ input: String) -> String {
+        input.trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased().precomposedStringWithCanonicalMapping
+    }
 
     /// Resolve a user-facing infinitive + optional homonym index to the
     /// internal DB key used for lookups.
@@ -187,6 +191,7 @@ public final class Conjugator: @unchecked Sendable {
     ///   the first index (1).
     /// - If `homonymIndex` is provided, returns "`infinitive`_`index`".
     func resolveKey(_ infinitive: String, homonymIndex: Int?) -> String {
+        let infinitive = Self.normalizedInfinitive(infinitive)
         // Direct match — no homonyms
         if catalogue.entries[infinitive] != nil {
             return infinitive

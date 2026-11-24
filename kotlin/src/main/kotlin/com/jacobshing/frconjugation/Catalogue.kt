@@ -1,7 +1,5 @@
 package com.jacobshing.frconjugation
 
-import java.util.Locale
-
 internal class Catalogue {
     data class Entry(
         val metadata: VerbEntry,
@@ -158,24 +156,15 @@ internal class Catalogue {
         prediction: Prediction,
     ): String? {
         if (prediction != Prediction.INFERRED) {
-            val key = resolve(nfc(input), homonym)
+            val key = resolve(verbKey(input), homonym)
             entries[key]?.let { render(it.model, slot, lemmaIndex(key).first) }?.let { return it }
             if (prediction == Prediction.CATALOGUE ||
-                entries.containsKey(resolve(nfc(input), null))
+                entries.containsKey(resolve(verbKey(input), null))
             ) {
                 return null
             }
         }
-        val normalized =
-            nfc(
-                input
-                    .trim {
-                        it.isWhitespace() ||
-                            Character.isSpaceChar(
-                                it,
-                            )
-                    }.lowercase(Locale.ROOT),
-            )
+        val normalized = verbKey(input)
         if (normalized.isEmpty() ||
             normalized.any { it !in " '-12;_abcdefghijklmnopqrstuvwxyzâçèéêîïôûœ" }
         ) {

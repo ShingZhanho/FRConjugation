@@ -57,7 +57,7 @@ std::string nfc(const std::string &value) {
         throw std::runtime_error("Unicode normalization failed");
     return utf8(result);
 }
-Text normalized_input(const std::string &value) {
+std::string verb_key(const std::string &value) {
     auto input = unicode(value);
     int32_t begin = 0, end = input.length();
     while (begin < end && u_isUWhiteSpace(input.char32At(begin)))
@@ -67,7 +67,10 @@ Text normalized_input(const std::string &value) {
     input.truncate(end);
     input.remove(0, begin);
     input.toLower(icu::Locale::getRoot());
-    auto result = nfc(utf8(input));
+    return nfc(utf8(input));
+}
+Text normalized_input(const std::string &value) {
+    auto result = verb_key(value);
     auto scalars = unicode(result);
     const auto alphabet = unicode(" '-12;_abcdefghijklmnopqrstuvwxyzâçèéêîïôûœ");
     if (result.empty())
@@ -307,14 +310,14 @@ struct Catalogue {
     }
     Text raw(const std::string &input, size_t slot, int homonym, frc_mode mode) const {
         if (mode != FRC_INFERRED) {
-            auto key = resolve(nfc(input), homonym);
+            auto key = resolve(verb_key(input), homonym);
             auto entry = entries.find(key);
             if (entry != entries.end()) {
                 auto answer = render(entry->second.model, slot, lemma_index(key).first);
                 if (answer)
                     return answer;
             }
-            if (mode == FRC_CATALOGUE || entries.count(resolve(nfc(input), 0)))
+            if (mode == FRC_CATALOGUE || entries.count(resolve(verb_key(input), 0)))
                 return {};
         }
         auto normalized = normalized_input(input);
@@ -358,7 +361,7 @@ struct Catalogue {
         auto subject = subjects.find(parts[3]);
         if (subject == subjects.end())
             return {};
-        auto found = entries.find(resolve(nfc(input), homonym));
+        auto found = entries.find(resolve(verb_key(input), homonym));
         uint32_t flags = found == entries.end() ? 0 : found->second.flags;
         auto text = unicode(form);
         UChar32 first = text.isEmpty() ? 0 : u_tolower(text.char32At(0));

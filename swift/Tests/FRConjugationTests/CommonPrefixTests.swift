@@ -14,7 +14,7 @@ final class CommonPrefixTests: XCTestCase {
         }
         XCTAssertNil(conjugator.commonPrefix("blorper"))
         XCTAssertNil(conjugator.commonPrefix(""))
-        XCTAssertNil(conjugator.commonPrefix(" MANGER "))
+        XCTAssertEqual(conjugator.commonPrefix(" MANGER "), "mang")
     }
 
     func testMainVerbExtraction() {

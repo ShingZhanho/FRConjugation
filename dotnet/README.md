@@ -51,5 +51,5 @@ Synchronous methods run on the caller; no API interrupts already running work.
 Resource failures throw `ConjugationException` with the underlying cause.
 
 Guess APIs use catalogue data exclusively for known infinitives, preserving missing
-forms. Only unknown infinitives use raw inference. Membership uses the same exact
-lookup semantics as catalogue queries; only inference trims and lowercases input.
+forms. Only unknown infinitives use raw inference. All verb inputs are trimmed, lowercased and NFC-normalized before catalogue
+membership is checked.

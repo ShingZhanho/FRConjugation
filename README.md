@@ -21,6 +21,8 @@ builds require neither training nor another language's toolchain.
 - **Common prefixes** identify shared spelling for highlighting across forms,
   excluding auxiliaries and pronouns. They are not grammatical stems.
 
+All verb inputs are trimmed, lowercased, and NFC-normalized before lookup.
+
 Typed APIs expose single forms and collections, grammatical structure, pronouns,
 spelling alternatives, homonyms, and lexical metadata. Each language also offers
 asynchronous operations. The bundled catalogue is immutable; custom model

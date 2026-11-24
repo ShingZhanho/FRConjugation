@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- All verb-taking APIs trim surrounding Unicode whitespace, lowercase input, and normalize Unicode before catalogue lookup, metadata queries, homonym resolution, and inference. Capitalized or padded known verbs now preserve catalogue gaps when guessing.
+
 ## v5.2.0 — 2026-11-24
 
 - Guess APIs now preserve catalogue gaps for known infinitives and infer only unknown infinitives across all language ports. This intentionally changes behavior without changing signatures. [Compatibility details](releases/v5.2.0.md).

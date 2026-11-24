@@ -75,8 +75,7 @@ c.conjugate("ressortir", undefined, undefined, undefined, undefined, 2);
 c.conjugate("ressortir_2");
 ```
 
-Catalogue lookups use exact NFC-normalized spelling. Raw inference trims Unicode
-whitespace and lowercases supported input. Guessing uses catalogue data for known infinitives, preserving missing forms,
+All verb inputs are trimmed, lowercased and NFC-normalized before lookup. Guessing uses catalogue data for known infinitives, preserving missing forms,
 and infers only unknown infinitives. Predictions may be
 unattested. Catalogue methods select primary spellings; alternative methods fall
 back to primary when no alternative exists. Raw predictions preserve semicolon
@@ -119,7 +118,7 @@ use `Conjugator` without starting a worker.
 
 ## Verification
 
-`npm test` checks all 104 shared and 218 typed Swift-authored cases through both
+`npm test` checks all shared and typed parity cases through both
 sync and Node worker APIs, worker lifecycle behavior, and compile-time types.
 
 ```sh

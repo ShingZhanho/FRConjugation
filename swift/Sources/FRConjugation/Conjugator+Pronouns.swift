@@ -50,8 +50,8 @@ extension Conjugator {
     /// - Returns: The pronoun string (with trailing space or apostrophe),
     ///   or `nil` for imperatif, participe, unknown verbs, or invalid
     ///   combinations.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -140,8 +140,8 @@ extension Conjugator {
     ///
     /// - Returns: The pronoun + form string, or `nil` if the verb is
     ///   unknown or the combination is invalid.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this
@@ -193,8 +193,8 @@ extension Conjugator {
     ///
     /// - Returns: The pronoun + alternative form string, or `nil` if the
     ///   verb is unknown or the combination is invalid.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter voice: The grammatical voice.
     /// - Parameter mode: The grammatical mood.
     /// - Parameter tense: The tense or gendered participle/gérondif form appropriate to this

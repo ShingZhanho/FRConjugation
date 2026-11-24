@@ -14,6 +14,15 @@ def nfc(value: str) -> str:
     return unicodedata.normalize("NFC", value)
 
 
+def verb_key(value: str) -> str:
+    # Unicode White_Space, excluding Python-only C0 information separators.
+    return nfc(
+        value.strip(
+            "\t\n\v\f\r \u0085\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000"
+        ).lower()
+    )
+
+
 def lemma_index(value: str) -> tuple[str, str]:
     lemma, separator, index = value.rpartition("_")
     if separator and lemma and index and all("0" <= c <= "9" for c in index):
@@ -127,20 +136,15 @@ class Catalogue:
 
     def raw(self, value: str, slot: int, homonym: int | None, mode: str) -> str | None:
         if mode != "inferred":
-            key = self.resolve(nfc(value), homonym)
+            key = self.resolve(verb_key(value), homonym)
             entry = self.entries.get(key)
             if entry is not None:
                 result = self.render(entry[2], slot, lemma_index(key)[0])
                 if result is not None:
                     return result
-            if mode == "catalogue" or self.resolve(nfc(value), None) in self.entries:
+            if mode == "catalogue" or self.resolve(verb_key(value), None) in self.entries:
                 return None
-        # Unicode White_Space, excluding Python-only C0 information separators.
-        value = nfc(
-            value.strip(
-                "\t\n\v\f\r \u0085\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000"
-            ).lower()
-        )
+        value = verb_key(value)
         if not value or not set(value) <= _ALPHABET:
             return None
         key = self.resolve(value, homonym)

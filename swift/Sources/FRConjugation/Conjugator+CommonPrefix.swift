@@ -5,8 +5,8 @@ extension Conjugator {
     /// Includes participles and all voices. Auxiliaries and pronouns are excluded.
     /// Accents are significant. This is a display aid, not a grammatical stem.
     /// Returns nil for unavailable forms, or an empty string for no common prefix.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func commonPrefix(_ infinitive: String, homonymIndex: Int? = nil) -> String? {
@@ -30,8 +30,8 @@ extension Conjugator {
 
     /// Use the catalogue prefix for known infinitives, preserving missing slots.
     /// Infer a prefix only for infinitives absent from the catalogue.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     public func guessCommonPrefix(_ infinitive: String, homonymIndex: Int? = nil) -> String? {
@@ -78,8 +78,8 @@ extension Conjugator {
 
     /// Compute the prefix off the calling executor.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -112,8 +112,8 @@ extension Conjugator {
 
     /// Compute the prefix off the calling executor.
     /// Work runs off the calling executor. Cancellation does not interrupt the queued operation.
-    /// - Parameter infinitive: The infinitive or exact homonym key. Catalogue lookup preserves case
-    ///   and surrounding whitespace.
+    /// - Parameter infinitive: The infinitive or exact homonym key. Verb inputs are trimmed, lowercased,
+    ///   and NFC-normalized before lookup.
     /// - Parameter homonymIndex: An indexed homonym, or `nil` for the first available index. Exact
     ///   catalogue keys take precedence.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)

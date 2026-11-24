@@ -1,5 +1,6 @@
 #include "frconjugation_api.h"
 #include <unicode/normalizer2.h>
+#include <unicode/locid.h>
 #include <unicode/uchar.h>
 #include <algorithm>
 #include <map>
@@ -51,6 +52,16 @@ std::string normalize(const std::string &s, bool fold = false) {
     auto normalizer =
         fold ? icu::Normalizer2::getNFKDInstance(error) : icu::Normalizer2::getNFCInstance(error);
     auto value = icu::UnicodeString::fromUTF8(s);
+    if (!fold) {
+        int32_t begin = 0, end = value.length();
+        while (begin < end && u_isUWhiteSpace(value.char32At(begin)))
+            begin = value.moveIndex32(begin, 1);
+        while (end > begin && u_isUWhiteSpace(value.char32At(value.moveIndex32(end, -1))))
+            end = value.moveIndex32(end, -1);
+        value.truncate(end);
+        value.remove(0, begin);
+        value.toLower(icu::Locale::getRoot());
+    }
     if (fold) {
         value.findAndReplace(icu::UnicodeString::fromUTF8("œ"), "oe");
         value.findAndReplace(icu::UnicodeString::fromUTF8("æ"), "ae");

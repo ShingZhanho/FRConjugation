@@ -3,6 +3,8 @@ import { Prediction } from "./types.js";
 
 const missing = 0xffffffff;
 export const nfc = (value: string): string => value.normalize("NFC");
+export const verbKey = (value: string): string =>
+    nfc(value.replace(/^\p{White_Space}+|\p{White_Space}+$/gu, "").toLowerCase());
 export function lemmaIndex(value: string): [string, string] {
     const match = /^(.+)_([0-9]+)$/u.exec(value);
     return match ? [match[1], match[2]] : [value, ""];
@@ -131,7 +133,7 @@ export class Catalogue {
     }
     raw(value: string, slot: number, homonym: number | undefined, mode: Prediction): string | null {
         if (mode !== Prediction.Inferred) {
-            const key = this.resolve(nfc(value), homonym);
+            const key = this.resolve(verbKey(value), homonym);
             const entry = this.entries.get(key);
             if (entry) {
                 const result = this.render(entry[2], slot, lemmaIndex(key)[0]);
@@ -139,11 +141,11 @@ export class Catalogue {
             }
             if (
                 mode === Prediction.Catalogue ||
-                this.entries.has(this.resolve(nfc(value), undefined))
+                this.entries.has(this.resolve(verbKey(value), undefined))
             )
                 return null;
         }
-        value = nfc(value.replace(/^\p{White_Space}+|\p{White_Space}+$/gu, "").toLowerCase());
+        value = verbKey(value);
         if (!value || /[^ '\-12;_abcdefghijklmnopqrstuvwxyzâçèéêîïôûœ]/u.test(value)) return null;
         const key = this.resolve(value, homonym);
         const lemma = lemmaIndex(key)[0];

@@ -1,7 +1,7 @@
 """French conjugation from bundled FCR rules, with no runtime dependencies.
 
-Catalogue queries use exact, NFC-normalized input. Inference additionally trims
-Unicode whitespace and lowercases input, accepting space, apostrophe, hyphen,
+All verb queries trim Unicode whitespace, lowercase and NFC-normalize input.
+Inference accepts space, apostrophe, hyphen,
 1, 2, semicolon, underscore, a-z and âçèéêîïôûœ. Predictions can be unattested.
 Only the bundled model is supported. Methods ending in _async run work off the
 event loop. Other calls are synchronous; immutable shared
@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from ._api import _API
-from ._catalogue import bundled, lemma_index, nfc
+from ._catalogue import bundled, lemma_index, nfc, verb_key
 from .types import Mode, Person, Tense, Voice
 
 __all__ = [
@@ -39,7 +39,7 @@ class Prediction(str, Enum):
     """Select exact lookup, rule prediction, or catalogue-first guessing."""
 
     CATALOGUE = "catalogue"
-    """Exact NFC lookup without case folding or whitespace trimming."""
+    """Trimmed, lowercase, NFC-normalized catalogue lookup."""
     INFERRED = "inferred"
     """Normalize and predict supported input, including unknown verbs."""
     GUESS = "guess"
@@ -164,15 +164,15 @@ class Conjugator(_API):
         return tuple(sorted({lemma_index(key)[0] for key in self._catalogue.entries}, key=sort_key))
 
     def has_verb(self, verb: str) -> bool:
-        """Test exact NFC membership, accepting base names or indexed keys."""
+        """Test normalized membership, accepting base names or indexed keys."""
         _validate(verb, None)
-        key = nfc(verb)
+        key = verb_key(verb)
         return key in self._catalogue.entries or key in self._catalogue.homonyms
 
     def homonym_indices(self, verb: str) -> tuple[int, ...]:
         """Ascending indices for a base name, or an empty tuple without a group."""
         _validate(verb, None)
-        return self._catalogue.homonyms.get(nfc(verb), ())
+        return self._catalogue.homonyms.get(verb_key(verb), ())
 
     def form(
         self,
@@ -303,7 +303,7 @@ class Conjugator(_API):
         subject = _SUBJECTS.get(parts[3])
         if subject is None:
             return None
-        entry = self._catalogue.entries.get(self._catalogue.resolve(nfc(verb), homonym))
+        entry = self._catalogue.entries.get(self._catalogue.resolve(verb_key(verb), homonym))
         flags = entry[0] if entry else 0
         first = form[:1].lower()
         vowel = bool(first) and first in "aeiouàâéèêëîïôùûüœæy"

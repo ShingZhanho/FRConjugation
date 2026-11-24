@@ -117,6 +117,8 @@ namespace ShingZhanho.FRConjugation {
             return at > 0 && index.Length > 0 && index.All(c => c >= '0' && c <= '9')
                 ? (key.Substring(0, at), index) : (key, "");
         }
+        internal static string VerbKey(string value) => value.Trim().ToLowerInvariant().Normalize(NormalizationForm.FormC);
+
         internal string Resolve(string input, int? homonym) {
             if (Entries.ContainsKey(input) || !Homonyms.TryGetValue(input, out var indices))
                 return input;
@@ -162,16 +164,16 @@ namespace ShingZhanho.FRConjugation {
         }
         internal string? Raw(string input, int slot, int? homonym, Prediction prediction) {
             if (prediction != Prediction.Inferred) {
-                string key = Resolve(input.Normalize(NormalizationForm.FormC), homonym);
+                string key = Resolve(VerbKey(input), homonym);
                 if (Entries.TryGetValue(key, out var entry)) {
                     string? value = Render(entry.Model, slot, LemmaIndex(key).Lemma);
                     if (value != null)
                         return value;
                 }
-                if (prediction == Prediction.Catalogue || Entries.ContainsKey(Resolve(input.Normalize(NormalizationForm.FormC), null)))
+                if (prediction == Prediction.Catalogue || Entries.ContainsKey(Resolve(VerbKey(input), null)))
                     return null;
             }
-            string normalized = input.Trim().ToLowerInvariant().Normalize(NormalizationForm.FormC);
+            string normalized = VerbKey(input);
             const string alphabet = " '-12;_abcdefghijklmnopqrstuvwxyzâçèéêîïôûœ";
             if (normalized.Length == 0 || normalized.Any(c => alphabet.IndexOf(c) < 0))
                 return null;
